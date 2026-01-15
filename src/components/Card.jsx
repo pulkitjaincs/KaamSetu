@@ -1,11 +1,14 @@
-const Card = ({ image, title, price, description }) => {
+import "./Card.css";
+
+const Card = ({ image, title, price, description, idx }) => {
   const clickHere = () => {
-    console.log("Button clicked");
+    
+    console.log((idx+1) + " Button clicked");
   };
   return (
     <>
       <div
-        className="card mb-3 my-auto mx-auto"
+        className="card mb-3 my-auto mx-auto "
         onClick={clickHere}
         style={{ maxWidth: "800px" }}
       >
