@@ -1,4 +1,22 @@
-const Listing = ({ job, onClose }) => {
+import { useState } from "react";
+
+const Listing = ({ job, onClose, isSwitch = false }) => {
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 350); // Match exit animation duration
+  };
+
+  // Determine animation class
+  const getAnimationClass = () => {
+    if (isClosing) return 'animate-exit-listing';
+    if (isSwitch) return 'animate-switch-listing';
+    return 'animate-entry-listing';
+  };
+
   if (!job) {
     return (
       <div className="h-100 d-flex flex-column align-items-center justify-content-center text-muted">
@@ -11,7 +29,7 @@ const Listing = ({ job, onClose }) => {
   }
 
   return (
-    <div className="card h-100 border-0 shadow-lg custom-scroll overflow-hidden fade-enter"
+    <div key={job.id} className={`card h-100 border-0 custom-scroll overflow-hidden ${getAnimationClass()}`}
       style={{
         borderRadius: "24px",
         background: "var(--bg-card)",
@@ -21,12 +39,22 @@ const Listing = ({ job, onClose }) => {
       <div className="position-relative" style={{ height: "160px", background: "linear-gradient(135deg, var(--primary-100), var(--zinc-100))" }}>
         {/* Close Button - Acts as Back on Mobile */}
         <button
-          onClick={onClose}
-          className="position-absolute top-0 start-0 m-3 btn rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center"
-          style={{ width: "36px", height: "36px", zIndex: 10, background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
+          onClick={handleClose}
+          className="position-absolute top-0 start-0 m-3 btn rounded-circle shadow-sm p-0 d-flex align-items-center justify-content-center hover-scale"
+          style={{
+            width: "40px",
+            height: "40px",
+            zIndex: 10,
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-color)",
+            color: "var(--text-main)"
+          }}
           aria-label="Back"
         >
-          <i className="bi bi-arrow-left text-primary" style={{ fontSize: "16px" }}></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
         </button>
 
         <div className="position-absolute bottom-0 start-0 p-4 translate-y-50 d-flex align-items-end gap-3" style={{ transform: "translateY(40%)" }}>
@@ -50,7 +78,7 @@ const Listing = ({ job, onClose }) => {
               <span className="d-flex align-items-center gap-1"><i className="bi bi-clock-fill text-primary"></i> Posted 2 days ago</span>
             </div>
           </div>
-          <button className="btn btn-primary-gradient px-5 py-3 rounded-pill fw-bold shadow-md">
+          <button className="btn btn-premium px-5 py-3 rounded-4 fw-bold shadow-lg text-uppercase tracking-wider">
             Apply Now
           </button>
         </div>

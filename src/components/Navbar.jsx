@@ -44,9 +44,9 @@ const Navbar = ({ name }) => {
   };
 
   return (
-    <div className="px-4 py-3">
+    <div className="px-3 px-lg-4 py-3">
       <nav
-        className={`navbar navbar-expand-lg rounded-pill px-5 transition-all duration-300 ${scrolled ? "glass-panel py-3" : "py-4"
+        className={`navbar navbar-expand-lg rounded-4 px-3 px-lg-5 transition-all duration-300 ${scrolled ? "glass-panel py-3" : "py-4"
           }`}
         style={{ transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)" }}
       >
@@ -60,9 +60,9 @@ const Navbar = ({ name }) => {
             <span style={{ letterSpacing: "-0.05em", color: "var(--text-main)" }}>KaamSetu</span>
           </a>
 
-          {/* Search Bar */}
+          {/* Desktop Search Bar (Hidden on Mobile) */}
           <div
-            className="d-flex align-items-center position-relative transition-all me-auto"
+            className="d-none d-lg-flex align-items-center position-relative transition-all me-auto"
             style={{
               width: searchActive ? "340px" : "240px",
               transition: "width 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
@@ -114,8 +114,51 @@ const Navbar = ({ name }) => {
             </div>
           </div>
 
-          <button className="navbar-toggler border-0 shadow-none bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
-            <i className="bi bi-list fs-3" style={{ color: "var(--text-main)" }}></i>
+          {/* Mobile Search Toggle */}
+          <button
+            className="btn d-lg-none ms-auto me-2 rounded-circle p-0 flex-shrink-0 d-flex align-items-center justify-content-center"
+            onClick={() => setSearchActive(!searchActive)}
+            style={{
+              width: "40px",
+              height: "40px",
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border-color)",
+              boxShadow: "var(--shadow-sm)",
+              color: "var(--text-main)"
+            }}
+          >
+            {searchActive ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            )}
+          </button>
+
+          <button
+            className="btn d-lg-none border-0 shadow-none p-0 flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navContent"
+            style={{
+              width: "40px",
+              height: "40px",
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border-color)",
+              boxShadow: "var(--shadow-sm)",
+              color: "var(--text-main)"
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
           </button>
 
           <div className="collapse navbar-collapse flex-grow-0" id="navContent">
@@ -141,7 +184,31 @@ const Navbar = ({ name }) => {
                   }}
                   title={`Current theme: ${theme}`}
                 >
-                  <i className={`bi ${getThemeIcon()}`}></i>
+                  {theme === "light" && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="5"></circle>
+                      <line x1="12" y1="1" x2="12" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="23"></line>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                      <line x1="1" y1="12" x2="3" y2="12"></line>
+                      <line x1="21" y1="12" x2="23" y2="12"></line>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                  )}
+                  {theme === "dark" && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                  )}
+                  {theme === "system" && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                  )}
                 </button>
               </li>
 
@@ -157,6 +224,25 @@ const Navbar = ({ name }) => {
                 </button>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* Mobile Search Overlay - Animated */}
+        <div className={`d-lg-none w-100 px-3 mobile-search-overlay ${searchActive ? "active" : ""}`}>
+          <div className="d-flex align-items-center rounded-pill px-3 py-2 mt-3"
+            style={{
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border-active)",
+              boxShadow: "var(--shadow-md)"
+            }}>
+            <i className="bi bi-search text-muted"></i>
+            <input
+              ref={(el) => searchActive && el?.focus()}
+              type="text"
+              className="form-control border-0 bg-transparent shadow-none"
+              placeholder="Search jobs..."
+              style={{ color: "var(--text-main)", fontWeight: "500" }}
+            />
           </div>
         </div>
       </nav>

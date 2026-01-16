@@ -1,27 +1,20 @@
 const Card = ({ job, isSelected, onClick }) => {
   return (
     <div
-      className={`card mb-4 transition-all animate-entry stagger-${(job.id % 5) + 1} ${isSelected
-        ? "shadow-md"
-        : "shadow-sm hover-shadow-md"
-        }`}
+      className={`card mb-4 shadow-sm card-hover-effect ${isSelected ? "selected" : ""}`}
       onClick={onClick}
       style={{
         cursor: "pointer",
-        transition: "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)",
-        transform: isSelected ? "scale(1.02)" : "scale(1)",
         borderRadius: "16px",
-        // Active: Tinted BG. Inactive: Card BG
-        backgroundColor: isSelected ? "var(--primary-50)" : "var(--bg-card)",
-        // Active: Bold Primary Border. Inactive: Transparent
-        border: isSelected ? "2px solid var(--primary-600)" : "2px solid transparent",
-        // Active: Primary Glow. Inactive: Shadow
-        boxShadow: isSelected
-          ? "0 0 0 4px var(--primary-100), var(--shadow-xl)"
-          : "var(--shadow-sm)"
+        // Active: Surface BG. Inactive: Card BG
+        backgroundColor: isSelected ? "var(--bg-surface)" : "var(--bg-card)",
+        // Active: Subtle Dark Border. Inactive: Transparent
+        border: isSelected ? "1px solid var(--border-active)" : "1px solid transparent",
+        // Active: Lifted. Inactive: Flat
+        boxShadow: isSelected ? "var(--shadow-md)" : "var(--shadow-sm)",
+        // Active: Magnified
+        transform: isSelected ? "scale(1.02)" : undefined
       }}
-      onMouseEnter={(e) => !isSelected && (e.currentTarget.style.transform = "translateY(-4px)")}
-      onMouseLeave={(e) => !isSelected && (e.currentTarget.style.transform = "translateY(0)")}
     >
       <div className="card-body p-4">
         <div className="d-flex align-items-center gap-3">
@@ -42,14 +35,12 @@ const Card = ({ job, isSelected, onClick }) => {
             </div>
 
             <div className="d-flex align-items-center justify-content-between">
-              <span className="badge rounded-pill fw-semibold"
-                style={{
-                  backgroundColor: "var(--primary-50)",
-                  color: "var(--primary-700)",
-                  padding: "0.5em 1em"
-                }}>
-                ₹{job.salary}
-              </span>
+              <div className="d-flex align-items-center gap-2">
+                <i className="bi bi-wallet2" style={{ color: "var(--text-muted)", fontSize: "1rem" }}></i>
+                <span className="fw-bold text-gradient" style={{ fontSize: "0.95rem" }}>
+                  ₹{job.salary}
+                </span>
+              </div>
               <small className="text-muted" style={{ fontSize: "0.75rem" }}>2d ago</small>
             </div>
           </div>

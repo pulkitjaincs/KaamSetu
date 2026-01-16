@@ -33,6 +33,18 @@ const JOBS = Array.from({ length: 10 }).map((_, i) => ({
 
 function App() {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [isSwitch, setIsSwitch] = useState(false);
+
+  // Handle Card Click
+  const handleJobClick = (job, e) => {
+    // Check if we're switching from an existing selection
+    if (selectedJob !== null && selectedJob.id !== job.id) {
+      setIsSwitch(true);
+    } else {
+      setIsSwitch(false);
+    }
+    setSelectedJob(job);
+  };
 
   // Dynamic Column Classes
   // On Mobile: If job selected, List is hidden (d-none), Detail is full width (col-12)
@@ -69,7 +81,7 @@ function App() {
                   key={job.id}
                   job={job}
                   isSelected={selectedJob?.id === job.id}
-                  onClick={() => setSelectedJob(job)}
+                  onClick={(e) => handleJobClick(job, e)}
                 />
               ))}
             </div>
@@ -77,11 +89,12 @@ function App() {
 
           {/* Job Details Column - STICKY & INDEPENDENT SCROLL */}
           <div className={`${detailColumnClass} layout-transition sticky-top`}
-            style={{ height: "calc(100vh - 40px)", overflowY: "hidden", top: "20px", borderRadius: "24px" }}>
+            style={{ height: "calc(100vh - 40px)", overflowY: "hidden", top: "20px", borderRadius: "24px", zIndex: 100 }}>
             {selectedJob && (
               <Listing
                 job={selectedJob}
-                onClose={() => setSelectedJob(null)}
+                onClose={() => { setSelectedJob(null); setIsSwitch(false); }}
+                isSwitch={isSwitch}
               />
             )}
           </div>

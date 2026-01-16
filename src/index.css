@@ -113,7 +113,22 @@ h6 {
 .text-gradient {
     background: linear-gradient(135deg, var(--text-main) 0%, var(--zinc-500) 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+    color: #ffffff;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary-gradient:hover {
+    background: linear-gradient(135deg, var(--primary-700), var(--primary-600));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    color: #ffffff;
 }
 
 /* Keyframe Animations */
@@ -129,10 +144,7 @@ h6 {
     }
 }
 
-.animate-entry {
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
-}
+
 
 .stagger-1 {
     animation-delay: 50ms;
@@ -177,7 +189,158 @@ h6 {
     background: var(--zinc-500);
 }
 
-/* Layout Transitions */
-.layout-transition {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+/* Premium Card Hover Effect */
+.card-hover-effect {
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* Smooth Apple-like hover */
+    backface-visibility: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.card-hover-effect:hover {
+    transform: translateY(-4px) scale(1.05);
+    /* Moderated scale per user request */
+    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
+    z-index: 20 !important;
+    border-radius: 16px;
+}
+
+/* Ensure no conflict with selected state */
+.card-hover-effect.selected,
+.selected {
+    transform: scale(1.02);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Premium Listing Animations - Apple/Linear/Stripe inspired */
+
+@keyframes listingEnter {
+    0% {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+@keyframes listingExit {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.95) translateY(8px);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+@keyframes contentReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-entry-listing {
+    animation: listingEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity, box-shadow;
+    z-index: 1000;
+    position: relative;
+}
+
+.animate-entry-listing>* {
+    animation: contentReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    opacity: 0;
+}
+
+.animate-exit-listing {
+    animation: listingExit 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+    will-change: transform, opacity, box-shadow;
+    z-index: 1000;
+    position: relative;
+}
+
+/* Subtle switch animation - for when already viewing a listing */
+@keyframes listingSwitch {
+    0% {
+        opacity: 0.5;
+        transform: translateX(15px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-switch-listing {
+    animation: listingSwitch 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
+    z-index: 1000;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.animate-switch-listing>* {
+    animation: contentReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+/* Premium Monochrome Button */
+.btn-premium {
+    background: var(--text-main);
+    color: var(--bg-body);
+    border: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
+    color: var(--bg-body);
+    opacity: 0.9;
+}
+
+.mobile-search-overlay {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(-10px);
+}
+
+.mobile-search-overlay.active {
+    max-height: 80px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.rotate-enter {
+    animation: rotateIn 0.3s ease forwards;
+}
+
+@keyframes rotateIn {
+    from {
+        transform: rotate(-90deg) scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: rotate(0) scale(1);
+        opacity: 1;
+    }
 }
