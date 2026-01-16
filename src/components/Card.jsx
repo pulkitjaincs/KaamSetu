@@ -41,7 +41,7 @@ const Card = ({ job, isSelected, onClick }) => {
                   ₹{job.salary}
                 </span>
               </div>
-              <small className="text-muted" style={{ fontSize: "0.75rem" }}>2d ago</small>
+              <small style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>2d ago</small>
             </div>
           </div>
         </div>
