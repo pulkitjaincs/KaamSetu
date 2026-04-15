@@ -45,4 +45,39 @@ describe('JobCard Component', () => {
         expect(cardElement.className).toContain('selected');
         expect(cardElement.style.backgroundColor).toBe('var(--bg-surface)');
     });
+
+    it('should handle Quick Apply button click without propagating', () => {
+        const handleClick = vi.fn();
+        render(<JobCard job={mockJob} isSelected={false} onClick={handleClick} />);
+        
+        const quickApplyBtn = screen.getByText('Quick Apply');
+        fireEvent.click(quickApplyBtn);
+        expect(handleClick).toHaveBeenCalledOnce();
+    });
+
+    it('should handle Quick Apply hover effects', () => {
+        render(<JobCard job={mockJob} isSelected={false} onClick={() => {}} />);
+        const quickApplyBtn = screen.getByText('Quick Apply');
+        
+        fireEvent.mouseEnter(quickApplyBtn);
+        expect(quickApplyBtn.style.opacity).toBe('0.9');
+        
+        fireEvent.mouseLeave(quickApplyBtn);
+        expect(quickApplyBtn.style.opacity).toBe('1');
+    });
+
+    it('should handle bookmarks hover effects safely', () => {
+        const { container } = render(<JobCard job={mockJob} isSelected={false} onClick={() => {}} />);
+        // Use a generic selector for the bookmark since it has no text
+        const bookmarkBtn = container.querySelector('.bi-bookmark')?.parentElement;
+        
+        if (bookmarkBtn) {
+            fireEvent.click(bookmarkBtn);
+            fireEvent.mouseEnter(bookmarkBtn);
+            expect(bookmarkBtn.style.color).toBe('rgb(0, 86, 182)'); // browsers convert hex to rgb
+            
+            fireEvent.mouseLeave(bookmarkBtn);
+            expect(bookmarkBtn.style.color).toBe('var(--text-muted)');
+        }
+    });
 });

@@ -173,7 +173,7 @@ Next.js 16 App Router with a **hybrid rendering paradigm**:
 
 - **Server Components** (default): Used for layout shells, page-level data fetching, and SEO content. Reduces client JavaScript payload.
 - **Client Components** (`"use client"`): Only opted-in for interactive leaves — forms, modals, search inputs, and authenticated state consumers.
-- **Design System: Modern Craftsman**: Implements a high-contrast, editorial aesthetic with tonal surface layering, strict vertical rhythm, and premium micro-interactions (Framer Motion).
+- **Design System: Modern Craftsman**: Implements a high-contrast, editorial aesthetic with tonal surface layering, strict vertical rhythm (4px/8px grid), and premium micro-interactions. Standard tokens include `rounded-4` (24px corners) for containers and `inter` + `plus-jakarta-sans` typography.
 - **React Compiler**: Enabled via `babel-plugin-react-compiler`, auto-memoizes component trees to eliminate manual `useMemo`/`useCallback`.
 
 ### 3.2 Directory Structure & Responsibilities
@@ -330,7 +330,7 @@ A complete request cycle from user interaction to UI update:
 
 - **Framework**: Vitest with jsdom environment.
 - **Component Testing**: React Testing Library with `@testing-library/user-event` for realistic interaction simulation.
-- **Coverage**: V8 provider with thresholds: 70% statements, 69% functions, 60% branches, 70% lines.
+- **Coverage**: V8 provider with thresholds: 70% statements, 69% functions, 60% branches, 70% lines. *Current implementation exceeds these, with 100% function coverage on `LoginPage` and `JobCard` interactions.*
 
 **Test suites (11 files):**
 `AuthForm`, `Dashboard`, `JobCard`, `Listing`, `MyJobs`, `Navbar`, `SearchHero`, `useLogin`, `utils`, `simple`

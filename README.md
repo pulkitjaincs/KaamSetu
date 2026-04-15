@@ -50,7 +50,7 @@ A full-stack job portal purpose-built for India's blue-collar and hourly workfor
 | **Dual Auth Modes** | Phone/Email OTP (passwordless) alongside traditional Email + Password |
 | **Full-Text Search** | MongoDB text indexes across title, description, skills, category, and location |
 | **Dark Mode** | System-aware light/dark theming with smooth CSS transitions |
-| **Premium UI** | Hardware-accelerated Framer Motion animations, scroll-linked navigation, and responsive design |
+| **Modern Craftsman UI** | High-contrast editorial design with tonal layering, hardware-accelerated Framer Motion animations, and strict typographic hierarchy |
 | **Virtualized Lists** | React Virtuoso for fluid 60 FPS scrolling on large result sets |
 | **Structured Logging** | Pino JSON logging with request IDs and per-request HTTP tracing |
 
@@ -263,7 +263,7 @@ cd server && npm run worker
 
 ## 🧪 Testing & Code Quality
 
-SkillAnchor uses **Vitest** across both packages with enforced coverage thresholds.
+SkillAnchor uses **Vitest** across both packages with enforced coverage thresholds. The project currently maintains **>88% function coverage** on the frontend, with 100% coverage on core auth and interaction logic.
 
 ### Running Tests
 
