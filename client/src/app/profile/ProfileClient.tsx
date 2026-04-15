@@ -102,20 +102,20 @@ export default function ProfileClient() {
     }
 
     return (
-        <div className="container py-4">
+        <div className="container py-5">
             {fromJobId && (
-                <div className="mb-4">
-                    <Link href={`/jobs/${fromJobId}/applicants`} className="text-decoration-none d-inline-flex align-items-center"
-                        style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                        ← Back to Applicants
+                <div className="mb-5">
+                    <Link href={`/jobs/${fromJobId}/applicants`} className="text-decoration-none d-inline-flex align-items-center fw-bold"
+                        style={{ color: 'var(--text-muted)', fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                        <i className="bi bi-arrow-left me-2"></i> Applicants
                     </Link>
                 </div>
             )}
             {fromTeam && (
-                <div className="mb-4">
-                    <Link href="/my-team" className="text-decoration-none d-inline-flex align-items-center"
-                        style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                        ← Back to My Team
+                <div className="mb-5">
+                    <Link href="/my-team" className="text-decoration-none d-inline-flex align-items-center fw-bold"
+                        style={{ color: 'var(--text-muted)', fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                        <i className="bi bi-arrow-left me-2"></i> My Team
                     </Link>
                 </div>
             )}
@@ -128,9 +128,15 @@ export default function ProfileClient() {
                 getAge={getAge}
             />
 
-            <div className="row g-4">
+            <div className="row g-5">
                 <div className="col-lg-8">
-                    {!isEmployer && <SkillsSection skills={profile.skills} isOwnProfile={isOwnProfile} />}
+                    {!isEmployer && (
+                        <SkillsSection
+                            skills={profile.skills}
+                            languages={profile.languages}
+                            isOwnProfile={isOwnProfile}
+                        />
+                    )}
                     {isEmployer && <EmployerQuickActions />}
                     {!isEmployer && (
                         <WorkHistorySection

@@ -7,8 +7,8 @@ describe('SearchHero Component', () => {
         const mockOnSearch = vi.fn();
         render(<SearchHero onSearch={mockOnSearch} />);
 
-        expect(screen.getByPlaceholderText(/Search job titles/i)).toBeInTheDocument();
-        expect(screen.getByPlaceholderText(/City or state/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/Job title or skill/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/Location/i)).toBeInTheDocument();
         expect(screen.getByText('Search')).toBeInTheDocument();
         // Check for 'All' category chip
         expect(screen.getByText('All')).toBeInTheDocument();
@@ -18,8 +18,8 @@ describe('SearchHero Component', () => {
         const mockOnSearch = vi.fn();
         render(<SearchHero onSearch={mockOnSearch} />);
 
-        const keywordInput = screen.getByPlaceholderText(/Search job titles/i);
-        const locationInput = screen.getByPlaceholderText(/City or state/i);
+        const keywordInput = screen.getByPlaceholderText(/Job title or skill/i);
+        const locationInput = screen.getByPlaceholderText(/Location/i);
         const searchButton = screen.getByText('Search');
 
         fireEvent.change(keywordInput, { target: { value: 'Software Engineer' } });

@@ -1,47 +1,83 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
 
+const shimmerBg = "var(--bg-surface)";
+
 const JobSkeleton = memo(() => {
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={`card shadow-sm mb-3`}
-            style={{ 
+            style={{
                 borderRadius: "16px",
                 backgroundColor: "var(--bg-card)",
                 border: "1px solid transparent",
+                padding: "24px",
                 overflow: 'hidden'
             }}
         >
-            <div className="card-body p-3 p-sm-4">
-                <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3">
-                    {/* Logo Skeleton */}
-                    <div className="d-flex flex-shrink-0 placeholder-glow">
-                        <div 
-                            className="placeholder rounded-4" 
-                            style={{ width: "56px", height: "56px", backgroundColor: "var(--bg-surface)" }} 
+            {/* Header skeleton: logo + text */}
+            <div className="d-flex gap-3 mb-4" style={{ alignItems: "flex-start" }}>
+                {/* Logo */}
+                <div className="placeholder-glow" style={{ flexShrink: 0 }}>
+                    <div
+                        className="placeholder"
+                        style={{ width: "56px", height: "56px", borderRadius: "12px", backgroundColor: shimmerBg }}
+                    />
+                </div>
+                {/* Company name + title */}
+                <div className="flex-grow-1 placeholder-glow" style={{ minWidth: 0 }}>
+                    <div
+                        className="placeholder mb-2"
+                        style={{ width: "35%", height: "12px", borderRadius: "6px", backgroundColor: shimmerBg, display: "block" }}
+                    />
+                    <div
+                        className="placeholder"
+                        style={{ width: "70%", height: "18px", borderRadius: "6px", backgroundColor: shimmerBg, display: "block" }}
+                    />
+                </div>
+            </div>
+
+            {/* Metadata grid skeleton */}
+            <div
+                className="placeholder-glow"
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr",
+                    gap: "16px",
+                    borderTop: "1px solid var(--border-color)",
+                    borderBottom: "1px solid var(--border-color)",
+                    padding: "16px 0",
+                    marginBottom: "16px",
+                }}
+            >
+                {[1, 2, 3].map((i) => (
+                    <div key={i} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                        <div
+                            className="placeholder"
+                            style={{ width: "50%", height: "8px", borderRadius: "4px", backgroundColor: shimmerBg }}
+                        />
+                        <div
+                            className="placeholder"
+                            style={{ width: "70%", height: "14px", borderRadius: "4px", backgroundColor: shimmerBg }}
                         />
                     </div>
+                ))}
+            </div>
 
-                    <div className="flex-grow-1 min-w-0 w-100 placeholder-glow">
-                        {/* Title Skeleton */}
-                        <div className="placeholder col-8 mb-2 rounded" style={{ height: "20px", backgroundColor: "var(--bg-surface)" }} />
-                        
-                        {/* Meta Info Skeleton */}
-                        <div className="d-flex align-items-center gap-2 mb-3">
-                            <span className="placeholder col-3 rounded" style={{ height: "14px", backgroundColor: "var(--bg-surface)" }} />
-                            <span className="placeholder col-2 rounded" style={{ height: "14px", backgroundColor: "var(--bg-surface)" }} />
-                        </div>
-
-                        {/* Bottom Row Skeleton */}
-                        <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                            <span className="placeholder col-4 rounded" style={{ height: "16px", backgroundColor: "var(--bg-surface)" }} />
-                            <span className="placeholder col-2 rounded" style={{ height: "12px", backgroundColor: "var(--bg-surface)" }} />
-                        </div>
-                    </div>
-                </div>
+            {/* CTA skeleton */}
+            <div className="placeholder-glow">
+                <div
+                    className="placeholder"
+                    style={{
+                        width: "100%",
+                        height: "48px",
+                        borderRadius: "12px",
+                        backgroundColor: shimmerBg,
+                        display: "block"
+                    }}
+                />
             </div>
         </motion.div>
     );

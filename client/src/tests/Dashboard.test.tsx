@@ -29,8 +29,8 @@ describe('Dashboard Stats (ProfileHeader)', () => {
         );
 
         expect(screen.getByText('65%')).toBeInTheDocument();
-        expect(screen.getByText(/Complete your profile/i)).toBeInTheDocument();
-        expect(screen.getByText(/Complete Now/i)).toBeInTheDocument();
+        expect(screen.getByText(/Profile Completion/i)).toBeInTheDocument();
+        expect(screen.getByText(/Pro Tip/i)).toBeInTheDocument();
     });
 
     it('should hide completion alert when profile is 100% complete', () => {
@@ -44,7 +44,7 @@ describe('Dashboard Stats (ProfileHeader)', () => {
             />
         );
 
-        expect(screen.queryByText(/Complete your profile/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Profile Completion/i)).not.toBeInTheDocument();
     });
 
     it('should hide completion alert when viewing someone else\'s profile', () => {
@@ -58,7 +58,7 @@ describe('Dashboard Stats (ProfileHeader)', () => {
             />
         );
 
-        expect(screen.queryByText(/Complete your profile/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Profile Completion/i)).not.toBeInTheDocument();
     });
 
     it('should display the correct name and role-specific details', () => {

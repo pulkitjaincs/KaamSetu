@@ -27,15 +27,6 @@ button[title*="theme"] {
     border-color: transparent !important;
 }
 
-/* Exempt category chips from the transparent border purge */
-.dark .category-chip:not(.active) {
-    border-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-.dark .category-chip.active {
-    border-color: #4f46e5 !important; /* indigo-600 */
-}
-
 /* Force Auth Page Input Glow - kill Bootstrap's blue ring + browser outline */
 .auth-form-control:focus,
 .form-control.auth-form-control:focus {
@@ -79,41 +70,94 @@ button[title*="theme"] {
     --primary-600: #4f46e5;
     --primary-700: #4338ca;
 
-    /* LIGHT THEME (Default) */
-    --bg-body: var(--zinc-50);
+    /* LIGHT THEME (Default) - Stitch 'The Modern Craftsman' */
+    --bg-body: #fcf9f8;
     --bg-card: #ffffff;
-    --bg-surface: var(--zinc-100);
-    --text-main: var(--zinc-950);
-    --text-muted: var(--zinc-500);
+    --bg-surface: #f6f3f2;
+    --text-main: #1c1b1b;
+    --text-muted: #545e76;
     --icon-filter: none;
 
-    --border-color: var(--zinc-200);
-    --border-active: var(--zinc-900);
-    --ring-overlay: var(--zinc-200);
-    --shadow-color: 0, 0, 0;
-    --dot-color: #e4e4e7;
+    /* Surface Hierarchy (Stitch) */
+    --surface: #fcf9f8;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #f6f3f2;
+    --surface-container: #f0edec;
+    --surface-container-high: #ebe7e7;
+    --surface-container-highest: #e5e2e1;
 
-    --shadow-sm: 0 1px 2px 0 rgba(var(--shadow-color), 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(var(--shadow-color), 0.05), 0 2px 4px -1px rgba(var(--shadow-color), 0.03);
-    --shadow-lg: 0 10px 15px -3px rgba(var(--shadow-color), 0.05), 0 4px 6px -2px rgba(var(--shadow-color), 0.03);
+    /* Semantic Colors — Stitch 'The Modern Craftsman' */
+    --primary-main: #0056b6;
+    --primary-container: #006ee5;
+    --on-primary: #ffffff;
+
+    /* Tertiary — Verification / Success system */
+    --tertiary: #006466;
+    --tertiary-container: #007f81;
+    --on-tertiary: #ffffff;
+    --on-tertiary-container: #ffffff; /* White text on teal — Stitch spec */
+
+    /* Surface variants */
+    --on-surface: #1c1b1b;
+    --on-surface-variant: #424656;
+    --outline: #727687;
+    --outline-variant: #c2c6d8;
+    --inverse-surface: #313030;
+    --inverse-on-surface: #f3f0ef;
+
+    /* Secondary */
+    --secondary: #545e76;
+    --secondary-container: #d7e2ff;
+    --on-secondary-container: #5a647c;
+
+    /* Error */
+    --error: #ba1a1a;
+    --on-error: #ffffff;
+    --error-container: #ffdad6;
+    --on-error-container: #93000a;
+
+    --border-color: #e5e2e1;
+    --border-active: #0056b6;
+    --ring-overlay: rgba(0, 86, 182, 0.1);
+    --shadow-color: 0, 86, 182;
+    --dot-color: #f0edec;
+    --header-glass-bg: rgba(252, 249, 248, 0.8);
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(var(--shadow-color), 0.06);
+    --shadow-lg: 0 20px 40px rgba(var(--shadow-color), 0.08);
 }
 
 [data-theme="dark"] {
     color-scheme: dark;
-    --bg-body: var(--zinc-950);
-    --bg-card: var(--zinc-900);
-    --bg-surface: #202022;
-    /* slightly lighter than 900 for elevation */
-    --text-main: var(--zinc-50);
-    --text-muted: var(--zinc-400);
-    --border-color: var(--zinc-800);
-    --border-active: var(--zinc-600);
-    --ring-overlay: var(--zinc-800);
-    --primary-50: rgba(79, 70, 229, 0.1);
-    --primary-100: rgba(79, 70, 229, 0.2);
-    --shadow-color: 0, 0, 0;
+    --bg-body: #121212;
+    --bg-card: #1c1b1b;
+    --bg-surface: #27272a;
+    
+    --surface: #121212;
+    --surface-container-lowest: #1c1b1b;
+    --surface-container-low: #232222;
+    --surface-container: #2b2a2a;
+    --surface-container-high: #323131;
+    --surface-container-highest: #3a3939;
+
+    --text-main: #fcf9f8;
+    --text-muted: #a1a1aa;
+    --border-color: #313030;
+    --border-active: #4f46e5;
+    --ring-overlay: rgba(99, 102, 241, 0.2);
     --dot-color: #1a1a1a;
     --icon-filter: invert(1) grayscale(100%) brightness(200%);
+    --header-glass-bg: rgba(18, 18, 18, 0.8);
+
+    --tertiary: #5af8fb;
+    --tertiary-container: #004f51;
+    --on-tertiary: #003738;
+    --on-tertiary-container: #5af8fb;
+}
+
+.glass-header {
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 body {
@@ -328,7 +372,7 @@ body {
 
 /* Custom Brand Buttons */
 .btn-primary-gradient {
-    background: linear-gradient(135deg, var(--primary-500), #8b5cf6) !important;
+    background: linear-gradient(135deg, #0056b6 0%, #006ee5 100%) !important;
     color: white !important;
     border: none;
     font-weight: 700 !important;

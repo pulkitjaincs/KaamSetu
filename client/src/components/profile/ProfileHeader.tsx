@@ -4,13 +4,6 @@ import Image from 'next/image';
 import { getInitials } from '@/utils/index';
 import { Profile } from '@/types';
 
-const avatarContainerStyle = {
-    width: '120px', height: '120px',
-    background: 'linear-gradient(135deg, var(--primary-100), var(--zinc-100))'
-};
-const verifiedBadgeStyle = { width: '32px', height: '32px' };
-const editBtnStyle = { background: 'var(--text-main)', color: 'var(--bg-body)' };
-
 interface ProfileHeaderProps {
     profile: Profile;
     isOwnProfile: boolean;
@@ -19,94 +12,155 @@ interface ProfileHeaderProps {
     getAge: (dob: string) => number;
 }
 
-const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPercent, getAge }: ProfileHeaderProps) => (
-    <>
-        {isOwnProfile && !isEmployer && completionPercent < 100 && (
-            <div className="alert mb-4 d-flex align-items-center justify-content-between"
-                style={{ background: 'linear-gradient(135deg, var(--primary-100), var(--zinc-100))', border: 'none', borderRadius: '16px' }}>
-                <div className="d-flex align-items-center gap-3">
-                    <div className="d-flex align-items-center justify-content-center rounded-circle"
-                        style={{ width: '48px', height: '48px', background: 'var(--bg-card)' }}>
-                        <span className="fw-bold" style={{ color: 'var(--text-main)' }}>{completionPercent}%</span>
-                    </div>
-                    <div>
-                        <p className="mb-0 fw-semibold" style={{ color: 'var(--text-main)' }}>Complete your profile</p>
-                        <p className="mb-0 small" style={{ color: 'var(--text-muted)' }}>A complete profile increases your chances of getting hired</p>
-                    </div>
-                </div>
-                <Link href="/profile/edit" className="btn btn-dark rounded-pill px-4">Complete Now</Link>
-            </div>
-        )}
+const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPercent, getAge }: ProfileHeaderProps) => {
+    const avatarSrc = profile.avatarUrl || profile.avatar;
+    const isVerified = !!profile.documents?.aadhaar?.verified;
+    const roleSubtitle = isEmployer
+        ? profile.designation || 'Employer'
+        : [profile.skills?.[0] || 'Worker', profile.totalExperienceYears ? `${profile.totalExperienceYears}+ Years Exp.` : null]
+            .filter(Boolean).join(' • ');
 
-        <div className="card border-0 shadow-sm mb-4" style={{ borderRadius: '20px', background: 'var(--bg-card)' }}>
-            <div className="card-body p-4">
-                <div className="d-flex flex-column flex-md-row align-items-start gap-4">
-                    <div className="position-relative">
-                        <div className="rounded-circle d-flex align-items-center justify-content-center overflow-hidden position-relative" style={avatarContainerStyle}>
-                            {(() => {
-                                const src = profile.avatarUrl || profile.avatar;
-                                return src?.startsWith('http') ? (
-                                    <Image src={src} alt={profile.name} fill sizes="120px" className="rounded-circle" style={{ objectFit: 'cover' }} />
+    return (
+        <>
+            {/* Profile Identity Block */}
+            <section className="mb-6" style={{ marginBottom: '2rem' }}>
+                <div className="d-flex align-items-start justify-content-between gap-4 flex-wrap mb-5">
+                    <div className="d-flex align-items-center gap-4">
+                        {/* Avatar */}
+                        <div className="position-relative flex-shrink-0"
+                            style={{ width: '80px', height: '80px' }}>
+                            <div className="w-100 h-100 rounded-4 overflow-hidden d-flex align-items-center justify-content-center position-relative"
+                                style={{ background: 'var(--surface-container-low)', borderRadius: '24px' }}>
+                                {avatarSrc?.startsWith('http') ? (
+                                    <Image
+                                        src={avatarSrc}
+                                        alt={profile.name}
+                                        fill
+                                        sizes="80px"
+                                        style={{ objectFit: 'cover' }}
+                                        unoptimized={true}
+                                    />
                                 ) : (
-                                    <span className="fw-bold" style={{ fontSize: '48px', color: 'var(--text-main)' }}>
+                                    <span className="fw-bold fs-3" style={{ color: 'var(--primary-main)' }}>
                                         {getInitials(profile.name)}
                                     </span>
-                                );
-                            })()}
-                        </div>
-                        {profile.documents?.aadhaar?.verified && (
-                            <div className="position-absolute bottom-0 end-0 bg-success rounded-circle d-flex align-items-center justify-content-center"
-                                style={verifiedBadgeStyle} title="Aadhaar Verified">
-                                <i className="bi bi-patch-check-fill text-white"></i>
+                                )}
                             </div>
-                        )}
+                            {isVerified && (
+                                <div className="position-absolute bottom-0 end-0 rounded-circle border border-3 border-white d-flex align-items-center justify-content-center"
+                                    style={{ width: '22px', height: '22px', background: 'var(--tertiary-container)' }}>
+                                    <i className="bi bi-check-lg text-white" style={{ fontSize: '10px' }}></i>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Name + Badge + Subtitle */}
+                        <div>
+                            <div className="d-flex align-items-center gap-3 mb-1">
+                                <h1 className="fw-extrabold mb-0"
+                                    style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', letterSpacing: '-0.03em', color: 'var(--text-main)' }}>
+                                    {profile.name}
+                                </h1>
+                                {isVerified && (
+                                    <span className="d-flex align-items-center gap-1 px-3 py-1 rounded-pill"
+                                        style={{
+                                            background: 'var(--tertiary-container)',
+                                            color: '#ffffff',
+                                            fontSize: '0.625rem',
+                                            fontWeight: 700,
+                                            letterSpacing: '0.08em',
+                                            textTransform: 'uppercase',
+                                            lineHeight: 1
+                                        }}>
+                                        <i className="bi bi-patch-check-fill" style={{ fontSize: '0.75rem' }}></i>
+                                        Verified
+                                    </span>
+                                )}
+                            </div>
+                            <p className="mb-0 fw-medium" style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+                                {roleSubtitle}
+                            </p>
+                            {(profile.city || profile.state) && (
+                                <p className="mb-0 small mt-1" style={{ color: 'var(--text-muted)' }}>
+                                    <i className="bi bi-geo-alt me-1"></i>
+                                    {[profile.city, profile.state].filter(Boolean).join(', ')}
+                                    {profile.dob ? ` • ${getAge(profile.dob)} yrs` : ''}
+                                </p>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="flex-grow-1">
-                        <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <h2 className="fw-bold mb-0" style={{ color: 'var(--text-main)' }}>{profile.name}</h2>
-                            {profile.documents?.aadhaar?.verified && (
-                                <span className="badge bg-success-subtle text-success rounded-pill">
-                                    <i className="bi bi-patch-check-fill me-1"></i>Verified
-                                </span>
-                            )}
-                        </div>
-                        <p className="mb-2" style={{ color: 'var(--text-muted)' }}>
-                            {isEmployer ? (
-                                <>
-                                    {profile.company?.name && <><i className="bi bi-building me-1"></i>{profile.company.name}<span className="mx-2">•</span></>}
-                                    <i className="bi bi-telephone me-1"></i>{profile.phone}
-                                    {profile.phoneVerified && <i className="bi bi-patch-check-fill ms-1 text-success" title="Verified"></i>}
-                                </>
-                            ) : (
-                                <>
-                                    <i className="bi bi-geo-alt me-1"></i>{profile.city}, {profile.state}
-                                    <span className="mx-2">•</span>
-                                    <i className="bi bi-calendar3 me-1"></i>{getAge(profile.dob ?? '')} years old
-                                </>
-                            )}
-                            <span className="mx-2">•</span>
-                            <i className="bi bi-briefcase me-1"></i>
-                            {isEmployer ? (profile.designation || 'Employer') : `${profile.totalExperienceYears || 0} years exp`}
-                        </p>
-                        <p className="mb-3" style={{ color: 'var(--text-muted)' }}>{profile.bio}</p>
-
-                        <div className="d-flex flex-wrap gap-2">
-                            {isOwnProfile && (
-                                <Link href="/profile/edit" className="btn rounded-pill px-4" style={editBtnStyle}>
-                                    <i className="bi bi-pencil me-2"></i>Edit Profile
-                                </Link>
-                            )}
-                            <button className="btn btn-outline-secondary rounded-pill px-4">
-                                <i className="bi bi-share me-2"></i>Share
-                            </button>
-                        </div>
+                    {/* Action Buttons */}
+                    <div className="d-flex gap-3 align-items-center">
+                        {isOwnProfile && (
+                            <Link href="/profile/edit"
+                                className="btn px-5 py-2 fw-bold"
+                                style={{
+                                    background: 'linear-gradient(135deg, #0056b6 0%, #006ee5 100%)',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    fontSize: '0.75rem',
+                                    letterSpacing: '0.08em',
+                                    textTransform: 'uppercase',
+                                    boxShadow: '0 20px 40px rgba(0,86,182,0.15)'
+                                }}>
+                                Edit Profile
+                            </Link>
+                        )}
+                        <button
+                            className="btn px-4 py-2"
+                            style={{
+                                background: 'var(--surface-container-low)',
+                                color: 'var(--text-main)',
+                                border: 'none',
+                                borderRadius: '12px',
+                                fontSize: '0.85rem',
+                                fontWeight: 600
+                            }}>
+                            <i className="bi bi-share me-2"></i>Share
+                        </button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </>
-));
+
+                {/* Bio */}
+                {profile.bio && (
+                    <p className="mb-0" style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.7, maxWidth: '680px' }}>
+                        {profile.bio}
+                    </p>
+                )}
+            </section>
+
+            {/* Profile Completion Card — only own profile, incomplete */}
+            {isOwnProfile && !isEmployer && completionPercent < 100 && (
+                <div className="p-4 rounded-4 mb-5"
+                    style={{ background: 'var(--surface-container-lowest)', border: 'none' }}>
+                    <div className="d-flex justify-content-between align-items-end mb-3">
+                        <span className="fw-bold small" style={{ color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            Profile Completion
+                        </span>
+                        <span className="fw-extrabold" style={{ fontSize: '1.75rem', color: 'var(--primary-main)', letterSpacing: '-0.03em', lineHeight: 1 }}>
+                            {completionPercent}%
+                        </span>
+                    </div>
+                    <div className="w-100 rounded-pill overflow-hidden mb-3" style={{ height: '10px', background: 'var(--surface-container)' }}>
+                        <div className="h-100 rounded-pill"
+                            style={{
+                                width: `${completionPercent}%`,
+                                background: 'linear-gradient(135deg, #0056b6 0%, #006ee5 100%)',
+                                transition: 'width 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                            }}
+                        />
+                    </div>
+                    <p className="small mb-0 p-3 rounded-3" style={{ background: 'rgba(0,86,182,0.06)', color: 'var(--text-muted)' }}>
+                        <span className="fw-bold" style={{ color: 'var(--primary-main)' }}>Pro Tip:</span>
+                        {' '}Add your PAN Card to reach up to 100% and get priority job listings.
+                    </p>
+                </div>
+            )}
+        </>
+    );
+});
 
 ProfileHeader.displayName = 'ProfileHeader';
 export default ProfileHeader;

@@ -173,6 +173,7 @@ Next.js 16 App Router with a **hybrid rendering paradigm**:
 
 - **Server Components** (default): Used for layout shells, page-level data fetching, and SEO content. Reduces client JavaScript payload.
 - **Client Components** (`"use client"`): Only opted-in for interactive leaves — forms, modals, search inputs, and authenticated state consumers.
+- **Design System: Modern Craftsman**: Implements a high-contrast, editorial aesthetic with tonal surface layering, strict vertical rhythm, and premium micro-interactions (Framer Motion).
 - **React Compiler**: Enabled via `babel-plugin-react-compiler`, auto-memoizes component trees to eliminate manual `useMemo`/`useCallback`.
 
 ### 3.2 Directory Structure & Responsibilities

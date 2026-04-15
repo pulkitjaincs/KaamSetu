@@ -163,41 +163,41 @@ function NavbarContent() {
               showCompactSearch ? "max-w-[480px] opacity-100 pl-4" : "max-w-0 opacity-0 pointer-events-none"
             }`}
           >
-            <div className="flex items-center rounded-2xl h-[42px] min-w-[320px] bg-white/50 dark:bg-black/50 backdrop-blur-md border border-white/40 dark:border-white/10 overflow-hidden shadow-sm">
-              <div className="flex items-center flex-grow px-3">
-                <Search size={14} className="text-slate-500 dark:text-slate-400 shrink-0" />
+            <div className="flex items-center rounded-full h-[38px] min-w-[340px] bg-white/40 dark:bg-black/40 backdrop-blur-lg border border-slate-200/50 dark:border-white/10 overflow-hidden shadow-sm transition-all hover:bg-white/50 dark:hover:bg-black/50">
+              <div className="flex items-center flex-grow pl-4 pr-3">
+                <Search size={13} className="text-slate-500 dark:text-slate-400 shrink-0" />
                 <input
                   ref={compactSearchRef}
                   type="text"
                   value={compactSearch}
                   onChange={(e) => setCompactSearch(e.target.value)}
                   onKeyDown={handleCompactSearch}
-                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-slate-900 dark:text-white pl-2"
+                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-xs font-semibold text-slate-800 dark:text-white pl-2"
                   placeholder="Search jobs..."
                 />
               </div>
 
-              <div className="w-[1px] h-[22px] bg-slate-300 dark:bg-slate-700 shrink-0"></div>
+              <div className="w-[1px] h-[16px] bg-slate-300 dark:bg-slate-700/50 shrink-0 mx-1"></div>
 
-              <div className="flex items-center px-3 min-w-[120px]">
-                <MapPin size={14} className="text-indigo-500 shrink-0" />
+              <div className="flex items-center px-3 min-w-[110px]">
+                <MapPin size={13} className="text-indigo-500 shrink-0" />
                 <input
                   type="text"
                   value={compactLocation}
                   onChange={(e) => setCompactLocation(e.target.value)}
                   onKeyDown={handleCompactSearch}
-                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-slate-900 dark:text-white pl-2"
+                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-xs font-semibold text-slate-800 dark:text-white pl-2"
                   placeholder="Location..."
                 />
               </div>
 
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1, filter: "brightness(1.05)" }}
+                whileTap={{ scale: 0.98 }}
                 onClick={executeCompactSearch}
-                className="flex items-center justify-center shrink-0 h-8 px-3 mr-1 rounded-xl text-white text-xs font-bold border-none bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md"
+                className="flex items-center justify-center shrink-0 h-full px-3.5 rounded-none text-white text-[11px] font-bold border-none bg-indigo-600 shadow-sm transition-all"
               >
-                <Search size={12} className="mr-1" /> Go
+                Search
               </motion.button>
             </div>
           </div>

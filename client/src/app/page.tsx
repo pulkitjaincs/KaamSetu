@@ -95,11 +95,11 @@ function HomePageContent() {
   }, [selectedJob]);
 
   const listColumnClass = selectedJob
-    ? "d-none d-lg-flex col-lg-4"
-    : "col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3";
+    ? "d-none d-lg-flex col-lg-5"
+    : "col-12";
 
   const detailColumnClass = selectedJob
-    ? "col-12 col-lg-8"
+    ? "col-12 col-lg-7"
     : "d-none";
 
   const handleHeroSearch = ({ search, location, category }: { search?: string, location?: string, category?: string }) => {
@@ -118,9 +118,14 @@ function HomePageContent() {
     </div>
   );
 
+  // Section header label
+  const sectionTitle = (searchQuery || locationQuery || categoryQuery)
+    ? `Results${searchQuery ? ` for "${searchQuery}"` : ''}${locationQuery ? ` in ${locationQuery}` : ''}`
+    : 'Opportunities';
+
   return (
     <PageTransitions>
-      <div className="container-fluid flex-grow-1 px-4 px-lg-5" style={{ maxWidth: "1600px" }}>
+      <div className="container-fluid flex-grow-1 px-4 px-lg-5" style={{ maxWidth: "1400px" }}>
 
         <SearchHero
           onSearch={handleHeroSearch}
@@ -129,45 +134,72 @@ function HomePageContent() {
           initialCategory={categoryQuery}
         />
 
-        <div className="row g-4" style={{ paddingTop: '10px' }}>
+        <div className="row g-4" style={{ paddingTop: '0px' }}>
 
           <div className={`${listColumnClass} d-flex flex-column layout-transition`}
-            style={{ paddingTop: "20px", paddingBottom: "20px" }}>
-            {!(searchQuery || locationQuery || categoryQuery) && (
-              <div className="d-flex align-items-center mb-4"
-                style={{
-                  position: 'sticky',
-                  top: '80px',
-                  zIndex: 100,
-                  background: 'var(--bg-body)',
-                  paddingTop: '12px',
-                  paddingBottom: '16px',
-                  marginLeft: '-2rem',
-                  marginRight: '-2rem',
-                  paddingLeft: '2rem',
-                  paddingRight: '2rem',
-                  boxShadow: '0 4px 0 0 var(--bg-body)',
-                }}>
-                <h4 className="fw-bolder mb-0 tracking-tight" style={{ color: "var(--text-main)" }}>Recent Jobs</h4>
-              </div>
-            )}
-            <div className="pe-3 pb-5">
+            style={{ paddingTop: "0px", paddingBottom: "20px" }}>
+
+            {/* Section header — Stitch "Premium Opportunities / See All" style */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '32px 0 24px 0',
+              }}
+            >
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: 'var(--text-main)',
+                margin: 0,
+              }}>
+                {sectionTitle}
+              </h3>
+              {!selectedJob && allJobs.length > 0 && (
+                <button
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#0056b6',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: 0,
+                  }}
+                >
+                  See All <i className="bi bi-arrow-right" style={{ fontSize: '0.85rem' }}></i>
+                </button>
+              )}
+            </div>
+
+            {/* Job cards grid or list */}
+            <div style={{ position: 'relative', zIndex: 1 }}>
               <AnimatePresence mode="popLayout">
                 {isLoading ? (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: selectedJob ? '1fr' : 'repeat(auto-fill, minmax(min(100%, 420px), 1fr))',
+                      gap: '20px',
+                    }}
                   >
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(4)].map((_, i) => (
                       <JobSkeleton key={`skeleton-${i}`} />
                     ))}
                   </motion.div>
                 ) : allJobs.length === 0 ? (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                     className="py-5 text-center d-flex flex-column align-items-center"
                   >
                     <div className="p-4 rounded-circle mb-3 mb-4" style={{ background: "var(--bg-surface)" }}>
-                        <i className="bi bi-search fs-1" style={{ color: "var(--text-muted)" }}></i>
+                      <i className="bi bi-search fs-1" style={{ color: "var(--text-muted)" }}></i>
                     </div>
                     <h5 className="fw-bold mb-2">No jobs found</h5>
                     <p className="text-muted" style={{ maxWidth: "300px" }}>Try adjusting your search filters or exploring a different category.</p>
@@ -178,21 +210,25 @@ function HomePageContent() {
                       initial="hidden"
                       animate="visible"
                       variants={{
-                          hidden: { opacity: 0 },
-                          visible: {
-                              opacity: 1,
-                              transition: { staggerChildren: 0.1 }
-                          }
+                        hidden: { opacity: 0 },
+                        visible: {
+                          opacity: 1,
+                          transition: { staggerChildren: 0.08 }
+                        }
+                      }}
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: selectedJob ? '1fr' : 'repeat(auto-fill, minmax(min(100%, 420px), 1fr))',
+                        gap: '20px',
                       }}
                     >
                       {allJobs.map((job: Job) => (
-                        <div key={job._id} className="pb-3 px-1">
-                          <JobCard
-                            job={job}
-                            isSelected={selectedJob?._id === job._id}
-                            onClick={() => handleJobClick(job)}
-                          />
-                        </div>
+                        <JobCard
+                          key={job._id}
+                          job={job}
+                          isSelected={selectedJob?._id === job._id}
+                          onClick={() => handleJobClick(job)}
+                        />
                       ))}
                     </motion.div>
 
@@ -200,8 +236,13 @@ function HomePageContent() {
                     <div ref={loadMoreRef} style={{ height: '1px' }} />
 
                     {isFetchingNextPage && (
-                      <div className="py-2">
-                          <JobSkeleton />
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: selectedJob ? '1fr' : 'repeat(auto-fill, minmax(min(100%, 420px), 1fr))',
+                        gap: '20px',
+                        paddingTop: '20px',
+                      }}>
+                        <JobSkeleton />
                       </div>
                     )}
                     {!hasNextPage && allJobs.length > 0 && (
