@@ -18,7 +18,7 @@ const EmployerQuickActions = memo(() => (
             </h5>
             <div className="d-flex flex-column gap-3">
                 {actions.map(action => (
-                    <Link key={action.href} href={action.href} className="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none" style={actionBgStyle}>
+                    <Link key={action.href} href={action.href} className="d-flex align-items-center gap-3 p-3 rounded-2xl text-decoration-none" style={actionBgStyle}>
                         <div className="d-flex align-items-center justify-content-center rounded-circle"
                             style={{ width: '44px', height: '44px', background: action.iconBg }}>
                             <i className={`bi ${action.icon}`} style={{ color: action.iconColor }}></i>

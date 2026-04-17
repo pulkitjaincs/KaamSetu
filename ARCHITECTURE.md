@@ -92,7 +92,7 @@ Request ──▶ Route ──▶ Middleware ──▶ Controller ──▶ Serv
 | `EmployerProfile` | `employerprofiles` | Links to Company. Tracks designation, hiring manager status. One-to-one with User. |
 | `Company` | `companies` | Multi-location entity with GSTIN, industry, size, verification status. Text index on name. |
 | `Job` | `jobs` | Composite text index across 7 fields for full-text search. Search queries use `$and` composition to prevent filter clobbering when combining search + location. Virtual `isExpired` getter. Compound indexes for status + category + location queries. |
-| `Application` | `applications` | Status pipeline enum: `pending → viewed → shortlisted → rejected → hired → employment-ended`. Maintains a `statusHistory` array for audit trail. Unique compound index on `(job, applicant)`. |
+| `Application` | `applications` | Status pipeline enum: `pending → reviewed → shortlisted → rejected → hired → employment-ended`. Maintains a `statusHistory` array for audit trail. Unique compound index on `(job, applicant)`. |
 | `WorkExperience` | `workexperiences` | Can be added by worker or employer. Links to Application (when created via hire flow). Supports ratings, reviews, and verification status. |
 | `SavedJob` | `savedjobs` | Simple junction table with unique `(user, job)` index. |
 
@@ -173,7 +173,7 @@ Next.js 16 App Router with a **hybrid rendering paradigm**:
 
 - **Server Components** (default): Used for layout shells, page-level data fetching, and SEO content. Reduces client JavaScript payload.
 - **Client Components** (`"use client"`): Only opted-in for interactive leaves — forms, modals, search inputs, and authenticated state consumers.
-- **Design System: Modern Craftsman**: Implements a high-contrast, editorial aesthetic with tonal surface layering, strict vertical rhythm (4px/8px grid), and premium micro-interactions. Standard tokens include `rounded-4` (24px corners) for containers and `inter` + `plus-jakarta-sans` typography.
+- **Design System: Modern Craftsman**: Implements a high-contrast, editorial aesthetic with tonal surface layering, strict vertical rhythm (4px/8px grid), and premium micro-interactions. Standard tokens include `rounded-3xl` (24px corners) for containers, `rounded-xl` (12px) for sub-elements, and `rounded-full` (pill-shape) for interactive buttons. Uses `inter` + `plus-jakarta-sans` typography.
 - **React Compiler**: Enabled via `babel-plugin-react-compiler`, auto-memoizes component trees to eliminate manual `useMemo`/`useCallback`.
 
 ### 3.2 Directory Structure & Responsibilities

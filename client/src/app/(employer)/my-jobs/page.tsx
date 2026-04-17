@@ -51,7 +51,7 @@ export default function MyJobsPage() {
                     ← Back to Jobs
                 </Link>
                 <h2 className="fw-bold" style={{ color: 'var(--text-main)' }}>My Posted Jobs</h2>
-                <Link href="/post-job" className="btn rounded-pill px-4 py-2 fw-semibold post-job-btn"
+                <Link href="/post-job" className="btn rounded-full px-4 py-2 fw-semibold post-job-btn"
                     style={{ background: 'var(--text-main)', color: 'var(--bg-body)' }}>
                     <i className="bi bi-plus-lg me-1"></i> Post New Job
                 </Link>
@@ -73,7 +73,7 @@ export default function MyJobsPage() {
                             <div className="p-4 position-relative mb-3"
                                 style={{
                                     background: 'var(--bg-card)',
-                                    borderRadius: '16px',
+                                    borderRadius: '24px',
                                     border: '1px solid var(--border-color)'
                                 }}>
 
@@ -84,7 +84,7 @@ export default function MyJobsPage() {
                                     transform: 'translateY(-50%)',
                                     width: '4px',
                                     height: '60%',
-                                    borderRadius: '0 4px 4px 0',
+                                    borderRadius: '0 8px 8px 0',
                                     background: job.status === 'active'
                                         ? 'linear-gradient(180deg, #22c55e, #16a34a)'
                                         : 'linear-gradient(180deg, var(--zinc-400), var(--zinc-500))'
@@ -94,7 +94,7 @@ export default function MyJobsPage() {
                                     <div className="row align-items-center g-3">
                                         <div className="col-lg-6">
                                             <div className="d-flex align-items-start gap-3">
-                                                <div className="d-none d-md-flex align-items-center justify-content-center rounded-3 shadow-sm"
+                                                <div className="d-none d-md-flex align-items-center justify-content-center rounded-xl shadow-sm"
                                                     style={{
                                                         width: '48px',
                                                         height: '48px',
@@ -118,7 +118,7 @@ export default function MyJobsPage() {
                                             </div>
                                         </div>
                                         <div className="col-lg-3 text-lg-center">
-                                            <span className="badge rounded-pill px-3 py-2" style={{
+                                            <span className="badge rounded-full px-3 py-2" style={{
                                                 background: job.status === 'active' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(156, 163, 175, 0.1)',
                                                 color: job.status === 'active' ? '#22c55e' : 'var(--text-muted)',
                                                 border: `1px solid ${job.status === 'active' ? 'rgba(34, 197, 94, 0.2)' : 'var(--border-color)'}`,
@@ -132,20 +132,20 @@ export default function MyJobsPage() {
                                         <div className="col-lg-3">
                                             <div className="d-flex gap-2 justify-content-start justify-content-lg-end flex-wrap">
                                                 <Link href={`/jobs/${job._id}/applicants`}
-                                                    className="btn btn-sm rounded-pill px-3 py-2 d-flex align-items-center gap-1 shadow-sm"
+                                                    className="btn btn-sm rounded-full px-3 py-2 d-flex align-items-center gap-1 shadow-sm"
                                                     style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
                                                     <i className="bi bi-people-fill"></i>
                                                     <span className="fw-bold">{job.applicationsCount || 0}</span>
                                                 </Link>
                                                 <div className="d-flex gap-2">
                                                     <Link href={`/jobs/${job._id}`}
-                                                        className="btn btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm"
+                                                        className="btn btn-sm rounded-full p-0 d-flex align-items-center justify-content-center shadow-sm"
                                                         style={{ width: '34px', height: '34px', background: 'var(--bg-surface)', color: 'var(--text-main)', border: '1px solid var(--border-color)' }}
                                                         title="View job">
                                                         <i className="bi bi-eye-fill"></i>
                                                     </Link>
                                                     <Link href={`/edit-job/${job._id}`}
-                                                        className="btn btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm"
+                                                        className="btn btn-sm rounded-full p-0 d-flex align-items-center justify-content-center shadow-sm"
                                                         style={{ width: '34px', height: '34px', background: 'var(--primary-500)', color: 'white', border: 'none' }}
                                                         title="Edit job">
                                                         <i className="bi bi-pencil-fill"></i>
@@ -153,7 +153,7 @@ export default function MyJobsPage() {
                                                     <button
                                                         onClick={() => handleDelete(job._id)}
                                                         disabled={deleteMutation.isPending && deleteMutation.variables === job._id}
-                                                        className="btn btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm"
+                                                        className="btn btn-sm rounded-full p-0 d-flex align-items-center justify-content-center shadow-sm"
                                                         style={{ width: '34px', height: '34px', background: '#fee2e2', color: '#dc2626', border: '1px solid #fecaca' }}
                                                         title="Delete job">
                                                         {deleteMutation.isPending && deleteMutation.variables === job._id ? (

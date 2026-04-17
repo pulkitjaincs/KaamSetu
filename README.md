@@ -30,7 +30,7 @@ A full-stack job portal purpose-built for India's blue-collar and hourly workfor
 |---|---|
 | **Quick Apply** | One-tap job applications with optional cover notes |
 | **Rich Profile** | Skills, languages, bio, work history, expected salary, and S3-hosted avatar |
-| **Application Tracking** | Real-time status pipeline: `Pending → Viewed → Shortlisted → Hired` |
+| **Application Tracking** | Real-time status pipeline: `Pending → Reviewed → Shortlisted → Hired` |
 | **Verified Work History** | Employer-verified experience entries with ratings and reviews |
 | **Document Management** | Aadhaar, PAN, and driving license storage with verification tracking |
 | **Secure Contact Updates** | OTP-verified modifications to email and phone number |

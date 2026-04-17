@@ -53,19 +53,19 @@ function LoginPageContent() {
                         <div className="card-body p-4 p-md-5">
 
                             {/* Phone / Email Toggle */}
-                            <div className="d-flex gap-2 mb-4 p-1 rounded-pill auth-toggle-group">
+                            <div className="d-flex gap-2 mb-4 p-1 rounded-full auth-toggle-group">
                                 <button type="button" onClick={() => { setLoginMethod('phone'); resetState(); }}
-                                    className={`btn flex-grow-1 rounded-pill py-2 fw-medium auth-toggle-btn ${loginMethod === 'phone' ? 'active shadow-sm' : ''}`}>
+                                    className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${loginMethod === 'phone' ? 'active shadow-sm' : ''}`}>
                                     <i className="bi bi-phone me-2"></i>Phone
                                 </button>
                                 <button type="button" onClick={() => { setLoginMethod('email'); resetState(); }}
-                                    className={`btn flex-grow-1 rounded-pill py-2 fw-medium auth-toggle-btn ${loginMethod === 'email' ? 'active shadow-sm' : ''}`}>
+                                    className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${loginMethod === 'email' ? 'active shadow-sm' : ''}`}>
                                     <i className="bi bi-envelope me-2"></i>Email
                                 </button>
                             </div>
 
                             {error && (
-                                <div className="mb-4 p-3 rounded-3 d-flex align-items-center gap-2 auth-error-box">
+                                <div className="mb-4 p-3 rounded-xl d-flex align-items-center gap-2 auth-error-box">
                                     <i className="bi bi-exclamation-circle auth-error-icon"></i>
                                     <span className="small fw-medium auth-error-text">{error}</span>
                                 </div>
@@ -153,11 +153,11 @@ function LoginPageContent() {
                                         {!otpSent && (
                                             <div className="d-flex gap-2 mb-4">
                                                 <button type="button" onClick={() => { setEmailMethod('password'); setOtp(''); }}
-                                                    className={`btn flex-grow-1 py-2 fw-medium rounded-3 auth-sub-toggle-btn ${emailMethod === 'password' ? 'active' : ''}`}>
+                                                    className={`btn flex-grow-1 py-2 fw-medium rounded-xl auth-sub-toggle-btn ${emailMethod === 'password' ? 'active' : ''}`}>
                                                     <i className="bi bi-lock me-1"></i>Password
                                                 </button>
                                                 <button type="button" onClick={() => { setEmailMethod('otp'); setPassword(''); }}
-                                                    className={`btn flex-grow-1 py-2 fw-medium rounded-3 auth-sub-toggle-btn ${emailMethod === 'otp' ? 'active' : ''}`}>
+                                                    className={`btn flex-grow-1 py-2 fw-medium rounded-xl auth-sub-toggle-btn ${emailMethod === 'otp' ? 'active' : ''}`}>
                                                     <i className="bi bi-shield-lock me-1"></i>OTP
                                                 </button>
                                             </div>
@@ -225,7 +225,7 @@ function LoginPageContent() {
                                     </>
                                 )}
 
-                                <button type="submit" className="btn w-100 py-3 fw-bold rounded-pill shadow-lg auth-submit-btn" disabled={loading}>
+                                <button type="submit" className="btn w-100 py-3 fw-bold rounded-full shadow-lg auth-submit-btn" disabled={loading}>
                                     {loading ? 'Please wait...' : getButtonText()}
                                 </button>
                             </form>

@@ -16,7 +16,7 @@ export default function ApplicationDetailModal({ selectedApp, onClose, getStatus
     return (
         <div className="modal d-block show" style={{ zIndex: 2000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose}>
             <div className="modal-dialog modal-dialog-centered" onClick={e => e.stopPropagation()}>
-                <div className="modal-content position-relative" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '16px' }}>
+                <div className="modal-content position-relative" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
                     <button onClick={onClose}
                         className="btn position-absolute p-0"
                         style={{ top: '12px', right: '12px', color: 'var(--text-muted)', background: 'transparent', border: 'none', fontSize: '1.5rem', fontWeight: 'bold', lineHeight: 1, transition: 'color 0.2s ease', zIndex: 10 }}
@@ -42,7 +42,7 @@ export default function ApplicationDetailModal({ selectedApp, onClose, getStatus
 
                         <div className="mb-3">
                             <small style={{ color: 'var(--text-muted)' }}>Your Cover Note</small>
-                            <div className="p-3 mt-1 rounded-3" style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }}>
+                            <div className="p-3 mt-1 rounded-xl" style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }}>
                                 {selectedApp.coverNote || <em style={{ color: 'var(--text-muted)' }}>No cover note provided</em>}
                             </div>
                         </div>
@@ -55,7 +55,7 @@ export default function ApplicationDetailModal({ selectedApp, onClose, getStatus
                         </div>
                     </div>
                     <div className="modal-footer border-0 pt-0">
-                        <Link href={`/jobs/${selectedApp.job?._id}`} className="btn rounded-pill px-4 w-100"
+                        <Link href={`/jobs/${selectedApp.job?._id}`} className="btn rounded-full px-4 w-100"
                             style={{ background: 'var(--primary-500)', color: 'white', textDecoration: 'none', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
                             onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.4)'; }}
                             onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>

@@ -19,7 +19,7 @@ function ApplyModal({ show, onClose, onApply, applying }: ApplyModalProps) {
     return (
         <div className="modal d-block show" style={{ zIndex: 2000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
             <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '16px' }}>
+                <div className="modal-content" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
                     <div className="modal-header border-0">
                         <h5 className="modal-title fw-bold" style={{ color: 'var(--text-main)' }}>
                             <i className="bi bi-send-fill me-2" style={{ color: 'var(--primary-500)' }}></i>
@@ -42,12 +42,12 @@ function ApplyModal({ show, onClose, onApply, applying }: ApplyModalProps) {
                         <small style={{ color: 'var(--text-muted)' }}>{coverNote.length}/500</small>
                     </div>
                     <div className="modal-footer border-0">
-                        <button onClick={onClose} className="btn rounded-pill px-4"
+                        <button onClick={onClose} className="btn rounded-full px-4"
                             style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }}>
                             Cancel
                         </button>
                         <button onClick={() => onApply(coverNote)} disabled={applying}
-                            className="btn rounded-pill px-4"
+                            className="btn rounded-full px-4"
                             style={{ background: 'var(--primary-500)', color: 'white' }}>
                             {applying ? 'Submitting...' : 'Submit Application'}
                         </button>

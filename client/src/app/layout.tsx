@@ -6,6 +6,7 @@ import "./globals.css";
 import Providers from "@/providers/Providers";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,10 +42,11 @@ export default function RootLayout({
         <div className="d-flex flex-column" style={{ minHeight: "100vh", backgroundColor: "var(--bg-body)" }}>
           <Providers>
             <Navbar />
-            <main className="flex-grow-1" style={{ paddingTop: '88px' }}>
+            <main className="flex-grow-1 pb-[80px] lg:pb-0" style={{ paddingTop: '88px' }}>
               {children}
             </main>
             <Footer />
+            <MobileBottomNav />
           </Providers>
         </div>
       </body>

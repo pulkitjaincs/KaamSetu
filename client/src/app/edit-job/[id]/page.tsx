@@ -120,7 +120,7 @@ export default function EditJobPage() {
 
                         <div className="card-body p-4 p-lg-5">
                             {error && (
-                                <div className="alert alert-danger rounded-3 d-flex align-items-center">
+                                <div className="alert alert-danger rounded-xl d-flex align-items-center">
                                     <i className="bi bi-exclamation-triangle-fill me-2"></i>{error}
                                 </div>
                             )}

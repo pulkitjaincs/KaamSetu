@@ -43,7 +43,7 @@ export default function JobApplicantsPage() {
     const getStatusBadge = (status: string) => {
         const styles: Record<string, { bg: string, color: string, icon: string }> = {
             pending: { bg: 'rgba(251, 191, 36, 0.1)', color: '#f59e0b', icon: 'bi-clock-fill' },
-            viewed: { bg: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', icon: 'bi-eye-fill' },
+            reviewed: { bg: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', icon: 'bi-eye-fill' },
             shortlisted: { bg: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', icon: 'bi-star-fill' },
             rejected: { bg: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', icon: 'bi-x-circle-fill' },
             hired: { bg: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', icon: 'bi-trophy-fill' },
@@ -51,7 +51,7 @@ export default function JobApplicantsPage() {
         };
         const s = styles[status] || styles.pending;
         return (
-            <span className="badge rounded-pill px-3 py-2" style={{ background: s.bg, color: s.color }}>
+            <span className="badge rounded-full px-3 py-2" style={{ background: s.bg, color: s.color }}>
                 <i className={`bi ${s.icon} me-1`}></i>
                 {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
@@ -100,13 +100,13 @@ export default function JobApplicantsPage() {
                             <div className="p-4 mb-3"
                                 style={{
                                     background: 'var(--bg-card)',
-                                    borderRadius: '16px',
+                                    borderRadius: '24px',
                                     border: '1px solid var(--border-color)'
                                 }}>
                                 <div className="row align-items-center">
                                     <div className="col-lg-5 mb-3 mb-lg-0">
                                         <div className="d-flex align-items-center gap-3">
-                                            <div className="d-flex align-items-center justify-content-center rounded-circle overflow-hidden"
+                                            <div className="d-flex align-items-center justify-content-center rounded-full overflow-hidden"
                                                 style={{
                                                     width: '48px',
                                                     height: '48px',
@@ -157,7 +157,7 @@ export default function JobApplicantsPage() {
                                                 disabled={(updateStatusMutation.isPending && (updateStatusMutation.variables as { appId: string })?.appId === app._id) ||
                                                     app.status === 'hired' ||
                                                     app.status === 'employment-ended'}
-                                                className="form-select form-select-sm rounded-3"
+                                                className="form-select form-select-sm rounded-xl"
                                                 style={{
                                                     background: 'var(--bg-surface)',
                                                     color: 'var(--text-main)',
@@ -165,7 +165,7 @@ export default function JobApplicantsPage() {
                                                     maxWidth: '150px'
                                                 }}>
                                                 <option value="pending">Pending</option>
-                                                <option value="viewed">Viewed</option>
+                                                <option value="reviewed">Reviewed</option>
                                                 <option value="shortlisted">Shortlisted</option>
                                                 <option value="hired">Hired</option>
                                                 <option value="rejected">Rejected</option>
@@ -175,7 +175,7 @@ export default function JobApplicantsPage() {
                                 </div>
                                 {
                                     app.coverNote && (
-                                        <div className="mt-3 p-3 rounded-3" style={{ background: 'var(--bg-surface)' }}>
+                                        <div className="mt-3 p-3 rounded-xl" style={{ background: 'var(--bg-surface)' }}>
                                             <small style={{ color: 'var(--text-muted)' }}>Cover Note:</small>
                                             <p className="mb-0 mt-1" style={{ color: 'var(--text-main)', fontSize: '0.9rem' }}>
                                                 {app.coverNote}

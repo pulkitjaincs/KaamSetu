@@ -146,7 +146,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                 <div className="modal-content" style={{
                     background: 'var(--bg-card)',
                     border: '1px solid var(--border-color)',
-                    borderRadius: '20px'
+                    borderRadius: '24px'
                 }}>
                     <div className="modal-header border-0 pb-0">
                         <h5 className="modal-title fw-bold" style={{ color: 'var(--text-main)' }}>
@@ -163,7 +163,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
 
                         {/* Visibility Toggle - always shown for existing experiences */}
                         {!isAddMode && (
-                            <div className="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3"
+                            <div className="d-flex align-items-center justify-content-between p-3 mb-3 rounded-xl"
                                 style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
                                 <div>
                                     <p className="mb-0 fw-semibold" style={{ color: 'var(--text-main)', fontSize: '0.9rem' }}>
@@ -192,7 +192,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
 
                         {/* Verified Badge & End Employment */}
                         {isVerified && (
-                            <div className="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3"
+                            <div className="d-flex align-items-center justify-content-between p-3 mb-3 rounded-xl"
                                 style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981' }}>
                                 <div className="d-flex align-items-center gap-2">
                                     <i className="bi bi-patch-check-fill" style={{ color: '#10b981' }}></i>
@@ -291,9 +291,9 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                     <div className="modal-footer border-0 pt-0">
                         {/* Delete button - only for unverified */}
                         {!isAddMode && canEdit && (
-                            <button
-                                className="btn btn-outline-danger me-auto"
-                                style={{ borderRadius: '10px' }}
+                                <button
+                                    className="btn btn-outline-danger me-auto rounded-full"
+                                    style={{ padding: '8px 20px', fontSize: '0.9rem' }}
                                 onClick={handleDelete}
                                 disabled={loading}
                             >
@@ -302,7 +302,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                         )}
                         <button className="btn" style={{ color: 'var(--text-muted)' }} onClick={onClose}>Cancel</button>
                         {(canEdit || isAddMode) && (
-                            <Button onClick={handleSave} loading={loading} style={{ borderRadius: '10px' }}>
+                            <Button onClick={handleSave} loading={loading} className="rounded-full px-4">
                                 {isAddMode ? 'Add Experience' : 'Save Changes'}
                             </Button>
                         )}

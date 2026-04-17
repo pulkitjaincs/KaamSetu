@@ -104,7 +104,11 @@ const SearchHero = ({
                             <button
                                 key={cat.name}
                                 onClick={() => handleCategoryClick(cat.name)}
-                                className={`category-chip ${isActive ? 'active' : ''}`}
+                                className={`flex flex-shrink-0 items-center gap-1.5 px-4 py-2 rounded-full font-semibold text-sm whitespace-nowrap cursor-pointer transition-all duration-200 border-none outline-none ${
+                                    isActive 
+                                        ? 'bg-[#0056b6] text-white shadow-md shadow-[#0056b6]/30 ring-1 ring-[#0056b6]' 
+                                        : 'bg-white dark:bg-[#1a1c23] text-slate-600 dark:text-slate-300 ring-1 ring-slate-900/5 dark:ring-white/5 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-[#0056b6] dark:hover:text-[#6ea8fe]'
+                                }`}
                             >
                                 <i className={`bi ${cat.icon}`}></i>
                                 {cat.name}

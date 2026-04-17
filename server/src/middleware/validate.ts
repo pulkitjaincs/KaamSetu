@@ -107,7 +107,7 @@ export const updateStatusSchema = z.object({
         id: z.string().min(1, "Application ID is required"),
     }),
     body: z.object({
-        status: z.enum(["pending", "viewed", "shortlisted", "rejected", "hired", "employment-ended"],
+        status: z.enum(["pending", "reviewed", "shortlisted", "rejected", "hired", "employment-ended"],
             { message: "Invalid status value" }),
     })
 });

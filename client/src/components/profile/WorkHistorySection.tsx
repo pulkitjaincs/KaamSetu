@@ -11,7 +11,7 @@ interface WorkHistorySectionProps {
 
 const sectionCardStyle = {
     background: 'var(--surface-container-lowest)',
-    borderRadius: '20px',
+    borderRadius: '24px',
     position: 'relative' as const,
     overflow: 'hidden'
 };
@@ -23,16 +23,14 @@ const verifiedBadgeStyle = {
     fontWeight: 700,
     letterSpacing: '0.06em',
     textTransform: 'uppercase' as const,
-    border: 'none',
-    borderRadius: '999px'
+    border: 'none'
 };
 
 const hiddenBadgeStyle = {
     background: 'transparent',
     color: 'var(--text-muted)',
     fontSize: '0.65rem',
-    border: '1px solid var(--border-color)',
-    borderRadius: '999px'
+    border: '1px solid var(--border-color)'
 };
 
 function StarRating({ rating }: { rating?: number }) {
@@ -49,7 +47,7 @@ function StarRating({ rating }: { rating?: number }) {
                     <i key={i} className="bi bi-star" style={{ fontSize: '0.75rem' }}></i>
                 ))}
             </div>
-            <span className="fw-bold rounded"
+            <span className="fw-bold rounded-md"
                 style={{
                     fontSize: '0.65rem',
                     background: 'var(--surface-container-high)',
@@ -96,13 +94,13 @@ const WorkHistorySection = memo(({ workHistory, isOwnProfile, onAddClick, onExpC
                             {/* Verified badge — top-right absolute */}
                             <div className="position-absolute top-0 end-0 p-3 d-flex flex-column align-items-end gap-2">
                                 {exp.isVerified && (
-                                    <span className="d-flex align-items-center gap-1 px-3 py-1" style={verifiedBadgeStyle}>
+                                    <span className="d-flex align-items-center gap-1 px-3 py-1 rounded-full" style={verifiedBadgeStyle}>
                                         <i className="bi bi-patch-check-fill" style={{ fontSize: '0.75rem' }}></i>
                                         Verified
                                     </span>
                                 )}
                                 {exp.isVisible === false && isOwnProfile && (
-                                    <span className="d-flex align-items-center gap-1 px-3 py-1" style={hiddenBadgeStyle}>
+                                    <span className="d-flex align-items-center gap-1 px-3 py-1 rounded-full" style={hiddenBadgeStyle}>
                                         <i className="bi bi-eye-slash" style={{ fontSize: '0.75rem' }}></i>
                                         Hidden
                                     </span>
@@ -153,7 +151,7 @@ const WorkHistorySection = memo(({ workHistory, isOwnProfile, onAddClick, onExpC
                         </div>
                     ))
             ) : (
-                <div className="p-4 rounded-4 text-center"
+                <div className="p-4 rounded-3xl text-center"
                     style={{ background: 'var(--surface-container-low)', border: '2px dashed var(--border-color)' }}>
                     <p className="text-muted mb-0 small">Your work journey starts here. Add your first experience.</p>
                 </div>

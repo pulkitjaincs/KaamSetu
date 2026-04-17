@@ -88,7 +88,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
     if (!job) {
         return (
             <div className="h-100 d-flex flex-column align-items-center justify-content-center px-4" style={{ gap: '1.5rem' }}>
-                <div className="rounded-4 d-flex align-items-center justify-content-center"
+                <div className="rounded-3xl d-flex align-items-center justify-content-center"
                     style={{ width: 80, height: 80, background: 'var(--bg-card)', border: '1.5px solid var(--border-color)' }}>
                     <i className="bi bi-briefcase fs-2" style={{ color: 'var(--text-muted)' }}></i>
                 </div>
@@ -153,7 +153,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
 
                         {/* Job type badge */}
                         <div className="position-absolute bottom-0 end-0 m-3 z-2">
-                            <span className="badge rounded-pill fw-bold text-uppercase"
+                            <span className="badge rounded-full fw-bold text-uppercase"
                                 style={{
                                     background: 'rgba(255,255,255,0.15)',
                                     backdropFilter: 'blur(8px)',
@@ -169,7 +169,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
 
                         {/* Floating logo — bottom left, bleeds out */}
                         <div className="position-absolute" style={{ bottom: '-36px', left: '24px', zIndex: 5 }}>
-                            <div className="rounded-4 overflow-hidden shadow-lg border border-3"
+                            <div className="rounded-3xl overflow-hidden shadow-lg border border-3"
                                 style={{
                                     width: 72, height: 72,
                                     borderColor: 'var(--bg-body)',
@@ -213,7 +213,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                             </div>
 
                             {/* Quick stats bar */}
-                            <div className="d-flex rounded-3 overflow-hidden mb-5" style={{ border: '1px solid var(--border-color)' }}>
+                            <div className="d-flex rounded-xl overflow-hidden mb-5" style={{ border: '1px solid var(--border-color)' }}>
                                 {[
                                     { icon: 'bi-cash-coin', label: 'Salary', value: formatSalary(job.salaryMin, job.salaryMax, job.salaryType) },
                                     { icon: 'bi-award', label: 'Exp', value: (job.experienceMin ?? 0) > 0 ? `${job.experienceMin}+ yr` : 'Fresher' },
@@ -252,7 +252,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                                     <div className="d-flex flex-wrap gap-2">
                                         {job.skills.map((skill, index) => (
                                             <span key={index}
-                                                className="fw-semibold rounded-pill px-3 py-1"
+                                                className="fw-semibold rounded-full px-3 py-1"
                                                 style={{
                                                     background: 'var(--bg-surface)',
                                                     color: 'var(--text-main)',
@@ -302,7 +302,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                                         : router.push(`/login?redirect=/?openJob=${job._id}`)
                                     }
                                     disabled={applied}
-                                    className="btn py-3 fw-black rounded-pill"
+                                    className="btn py-3 fw-black rounded-full"
                                     style={{
                                         fontSize: '0.95rem',
                                         letterSpacing: '-0.01em',
@@ -320,7 +320,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                             )}
                             <button
                                 onClick={() => router.push(`/jobs/${job._id}`)}
-                                className="btn py-2 fw-semibold rounded-pill d-flex align-items-center justify-content-center gap-2"
+                                className="btn py-2 fw-semibold rounded-full d-flex align-items-center justify-content-center gap-2"
                                 style={{
                                     background: 'var(--bg-surface)',
                                     color: 'var(--text-muted)',

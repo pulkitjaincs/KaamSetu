@@ -5,8 +5,11 @@ import { Virtuoso } from 'react-virtuoso';
 import Link from 'next/link';
 import { formatDate, formatSalary } from '@/utils/index';
 import { Application, PaginatedApplicationsResponse } from '@/types';
+import { Eye, XCircle, FileCheck } from 'lucide-react';
 
 import { useApplications, useWithdrawApplication } from '@/hooks/queries/useApplications';
+import ApplicationStats from '@/components/worker/ApplicationStats';
+import ApplicationPipeline from '@/components/worker/ApplicationPipeline';
 
 const ApplicationDetailModal = lazy(() => import('@/components/modals/ApplicationDetailModal'));
 
@@ -41,51 +44,50 @@ export default function MyApplicationsPage() {
         }
     };
 
-    const getStatusBadge = (status: string) => {
-        const styles: Record<string, { bg: string, color: string, icon: string }> = {
-            pending: { bg: 'rgba(251, 191, 36, 0.1)', color: '#f59e0b', icon: 'bi-clock-fill' },
-            viewed: { bg: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', icon: 'bi-eye-fill' },
-            shortlisted: { bg: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', icon: 'bi-star-fill' },
-            rejected: { bg: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', icon: 'bi-x-circle-fill' },
-            hired: { bg: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', icon: 'bi-trophy-fill' },
-            "employment-ended": { bg: 'rgba(107, 114, 128, 0.1)', color: '#6b7280', icon: 'bi-slash-circle-fill' }
-        };
-        const s = styles[status] || styles.pending;
-        return (
-            <span className="badge rounded-pill px-3 py-2" style={{ background: s.bg, color: s.color }}>
-                <i className={`bi ${s.icon} me-1`}></i>
-                {status.charAt(0).toUpperCase() + status.slice(1)}
-            </span>
-        );
-    };
-
     if (loading) {
         return (
-            <div className="container py-5 text-center">
-                <div className="spinner-border" role="status"></div>
+            <div className="container py-8 md:py-12">
+                <div className="flex flex-col gap-6 animate-pulse">
+                    <div className="h-10 w-48 bg-slate-100 dark:bg-slate-800 rounded-lg"></div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {[1, 2, 3, 4].map(i => <div key={i} className="h-32 bg-slate-100 dark:bg-slate-800 rounded-3xl"></div>)}
+                    </div>
+                </div>
             </div>
         );
-    } return (
-        <div className="container py-5">
-            <Link href="/" className="text-decoration-none d-inline-flex align-items-center mb-3"
-                style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                ← Back to Jobs
-            </Link>
-            <h2 className="fw-bold mb-4" style={{ color: 'var(--text-main)' }}>
-                <i className="bi bi-file-text me-2" style={{ color: 'var(--primary-500)' }}></i>
-                My Applications
-            </h2>
+    }
+
+    return (
+        <div className="container py-8 md:py-12">
+            <div className="mb-10">
+                <Link href="/" className="text-slate-500 hover:text-indigo-600 no-underline inline-flex items-center gap-2 mb-6 transition-colors font-medium">
+                    ← Back to Jobs
+                </Link>
+                <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">
+                    Application Tracker
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400">
+                    Track and manage your career journey in one place.
+                </p>
+            </div>
+
+            <ApplicationStats applications={applications} />
+
             {applications.length === 0 ? (
-                <div className="text-center py-5" style={{ color: 'var(--text-muted)' }}>
-                    <i className="bi bi-inbox fs-1 mb-3 d-block"></i>
-                    <p>You haven&apos;t applied to any jobs yet.</p>
-                    <Link href="/" className="btn rounded-pill px-4 py-2"
-                        style={{ background: 'var(--primary-500)', color: 'white' }}>
-                        Browse Jobs
+                <div className="text-center py-20 bg-slate-50 dark:bg-slate-900/50 rounded-[40px] border-none ring-1 ring-slate-900/10 dark:ring-white/10 border-dashed">
+                    <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-500/10 rounded-3xl flex items-center justify-center mx-auto mb-6 text-indigo-500">
+                        <FileCheck size={40} />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No applications yet</h3>
+                    <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm mx-auto">
+                        Start your journey by applying to jobs that match your skills.
+                    </p>
+                    <Link href="/" className="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold no-underline hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20">
+                        Browse Opportunities
                     </Link>
                 </div>
             ) : (
-                <div className="d-flex flex-column">
+                <div className="flex flex-col gap-6">
                     <Virtuoso
                         useWindowScroll
                         data={applications}
@@ -93,70 +95,82 @@ export default function MyApplicationsPage() {
                             if (hasNextPage) fetchNextPage();
                         }}
                         itemContent={(_index: number, app: Application) => (
-                            <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center p-3 p-sm-4 gap-3 mb-3"
-                                style={{
-                                    background: 'var(--bg-card)',
-                                    borderRadius: '24px',
-                                    border: '1px solid var(--border-color)'
-                                }}>
-                                <div className="flex-grow-1 w-100">
-                                    <div className="row align-items-center g-2">
-                                        <div className="col-md-7">
-                                            <h5 className="fw-bold mb-1 text-truncate" style={{ color: 'var(--text-main)', fontSize: '1.05rem' }}>
-                                                {app.job?.title || 'Job Deleted'}
-                                            </h5>
-                                            <div className="d-flex flex-wrap gap-x-3 gap-y-1" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                                                <span className="text-truncate"><i className="bi bi-geo-alt me-1"></i>{app.job?.city}, {app.job?.state}</span>
-                                                <span><i className="bi bi-currency-rupee me-1"></i>{formatSalary(app.job?.salaryMin, app.job?.salaryMax)}</span>
+                            <div className="p-5 md:p-6 bg-white dark:bg-slate-900 rounded-[32px] ring-1 ring-slate-900/5 dark:ring-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all mb-6 overflow-hidden">
+                                <div className="flex flex-col lg:flex-row gap-6 items-start">
+                                    <div className="flex-grow w-full">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div>
+                                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
+                                                    {app.job?.title || 'Job Deleted'}
+                                                </h3>
+                                                <div className="flex flex-wrap gap-4 text-slate-500 dark:text-slate-400 font-medium text-sm">
+                                                    <span className="flex items-center gap-1">
+                                                        <i className="bi bi-geo-alt"></i> {app.job?.city}, {app.job?.state}
+                                                    </span>
+                                                    <span className="flex items-center gap-1 text-indigo-500">
+                                                        <i className="bi bi-calendar3"></i> Applied {formatDate(app.appliedAt)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="hidden md:flex gap-2">
+                                                <button
+                                                    onClick={() => setSelectedApp(app)}
+                                                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 transition-all border-none cursor-pointer"
+                                                    title="View Details"
+                                                >
+                                                    <Eye size={20} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleWithdraw(app._id)}
+                                                    disabled={withdrawMutation.isPending || !['pending', 'reviewed'].includes(app.status)}
+                                                    className={`p-2.5 rounded-xl transition-all border-none ${
+                                                        ['pending', 'reviewed'].includes(app.status) 
+                                                        ? 'bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 cursor-pointer' 
+                                                        : 'bg-slate-50 dark:bg-slate-800 text-slate-300 cursor-not-allowed'
+                                                    }`}
+                                                    title="Withdraw Application"
+                                                >
+                                                    <XCircle size={20} />
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="col-md-5">
-                                            <div className="d-flex gap-3 align-items-center flex-wrap">
-                                                {getStatusBadge(app.status)}
-                                                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                                                    <i className="bi bi-calendar3 me-1"></i>
-                                                    {formatDate(app.appliedAt)}
-                                                </span>
-                                            </div>
-                                        </div>
+
+                                        <ApplicationPipeline status={app.status} />
                                     </div>
                                 </div>
-                                <div className="d-flex gap-2 w-100 w-md-auto justify-content-start justify-content-md-end">
+                                
+                                <div className="flex md:hidden gap-3 mt-6">
                                     <button
                                         onClick={() => setSelectedApp(app)}
-                                        className="d-flex align-items-center justify-content-center rounded-pill px-3 py-2 btn-action-view flex-grow-1 flex-md-grow-0"
-                                        style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', border: '1px solid var(--border-color)', fontSize: '0.85rem', transition: 'background-color 0.2s ease, color 0.2s ease', cursor: 'pointer' }}>
-                                        <i className="bi bi-eye-fill me-1"></i> View
+                                        className="flex-grow py-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-sm border-none cursor-pointer"
+                                    >
+                                        View Details
                                     </button>
                                     <button
                                         onClick={() => handleWithdraw(app._id)}
-                                        disabled={withdrawMutation.isPending || !['pending', 'viewed'].includes(app.status)}
-                                        className="d-flex align-items-center justify-content-center rounded-pill px-3 py-2 border-0 flex-grow-1 flex-md-grow-0"
-                                        style={{
-                                            background: ['pending', 'viewed'].includes(app.status) ? 'rgba(239, 68, 68, 0.15)' : 'var(--bg-surface)',
-                                            color: ['pending', 'viewed'].includes(app.status) ? '#ef4444' : 'var(--text-muted)',
-                                            fontSize: '0.85rem', transition: 'background-color 0.2s ease, color 0.2s ease',
-                                            cursor: ['pending', 'viewed'].includes(app.status) ? 'pointer' : 'not-allowed'
-                                        }}>
-                                        {withdrawMutation.isPending && withdrawMutation.variables === app._id ? (
-                                            <span className="spinner-border spinner-border-sm"></span>
-                                        ) : (
-                                            <><i className="bi bi-x-lg me-1"></i> {
-                                                app.status === 'hired' ? 'Hired' :
-                                                    app.status === 'employment-ended' ? 'Ended' :
-                                                        app.status === 'rejected' ? 'Rejected' :
-                                                            app.status === 'shortlisted' ? 'Shortlisted' :
-                                                                'Withdraw'
-                                            }</>
-                                        )}
+                                        disabled={withdrawMutation.isPending || !['pending', 'reviewed'].includes(app.status)}
+                                        className={`px-4 py-2 rounded-xl font-bold text-sm border-none ${
+                                            ['pending', 'reviewed'].includes(app.status) 
+                                            ? 'bg-red-50 text-red-500' 
+                                            : 'bg-slate-50 text-slate-300'
+                                        }`}
+                                    >
+                                        Withdraw
                                     </button>
                                 </div>
                             </div>
                         )}
                         components={{
-                            Footer: () => isFetchingNextPage ? (
-                                <div className="text-center py-3 text-muted">Loading more...</div>
-                            ) : null
+                            Footer: () => (
+                                <div className="pb-20">
+                                    {isFetchingNextPage && (
+                                        <div className="text-center py-6">
+                                            <div className="spinner-border spinner-border-sm text-slate-300"></div>
+                                        </div>
+                                    )}
+                                </div>
+                            )
                         }}
                     />
                 </div>
@@ -166,7 +180,7 @@ export default function MyApplicationsPage() {
                     <ApplicationDetailModal
                         selectedApp={selectedApp}
                         onClose={() => setSelectedApp(null)}
-                        getStatusBadge={getStatusBadge}
+                        getStatusBadge={() => null} // No longer used in modernized UI
                     />
                 </Suspense>
             )}

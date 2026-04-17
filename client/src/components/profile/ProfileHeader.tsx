@@ -29,8 +29,8 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                         {/* Avatar */}
                         <div className="position-relative flex-shrink-0"
                             style={{ width: '80px', height: '80px' }}>
-                            <div className="w-100 h-100 rounded-4 overflow-hidden d-flex align-items-center justify-content-center position-relative"
-                                style={{ background: 'var(--surface-container-low)', borderRadius: '24px' }}>
+                            <div className="w-100 h-100 rounded-3xl overflow-hidden d-flex align-items-center justify-content-center position-relative"
+                                style={{ background: 'var(--surface-container-low)' }}>
                                 {avatarSrc?.startsWith('http') ? (
                                     <Image
                                         src={avatarSrc}
@@ -47,7 +47,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                                 )}
                             </div>
                             {isVerified && (
-                                <div className="position-absolute bottom-0 end-0 rounded-circle border border-3 border-white d-flex align-items-center justify-content-center"
+                                <div className="position-absolute bottom-0 end-0 rounded-full border border-3 border-white d-flex align-items-center justify-content-center"
                                     style={{ width: '22px', height: '22px', background: 'var(--tertiary-container)' }}>
                                     <i className="bi bi-check-lg text-white" style={{ fontSize: '10px' }}></i>
                                 </div>
@@ -62,7 +62,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                                     {profile.name}
                                 </h1>
                                 {isVerified && (
-                                    <span className="d-flex align-items-center gap-1 px-3 py-1 rounded-pill"
+                                    <span className="d-flex align-items-center gap-1 px-3 py-1 rounded-full"
                                         style={{
                                             background: 'var(--tertiary-container)',
                                             color: '#ffffff',
@@ -94,12 +94,11 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                     <div className="d-flex gap-3 align-items-center">
                         {isOwnProfile && (
                             <Link href="/profile/edit"
-                                className="btn px-5 py-2 fw-bold"
+                                className="btn px-5 py-2 fw-bold rounded-xl"
                                 style={{
                                     background: 'linear-gradient(135deg, #0056b6 0%, #006ee5 100%)',
                                     color: '#ffffff',
                                     border: 'none',
-                                    borderRadius: '12px',
                                     fontSize: '0.75rem',
                                     letterSpacing: '0.08em',
                                     textTransform: 'uppercase',
@@ -109,12 +108,11 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                             </Link>
                         )}
                         <button
-                            className="btn px-4 py-2"
+                            className="btn px-4 py-2 rounded-xl"
                             style={{
                                 background: 'var(--surface-container-low)',
                                 color: 'var(--text-main)',
                                 border: 'none',
-                                borderRadius: '12px',
                                 fontSize: '0.85rem',
                                 fontWeight: 600
                             }}>
@@ -133,7 +131,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
 
             {/* Profile Completion Card — only own profile, incomplete */}
             {isOwnProfile && !isEmployer && completionPercent < 100 && (
-                <div className="p-4 rounded-4 mb-5"
+                <div className="p-4 rounded-3xl mb-5"
                     style={{ background: 'var(--surface-container-lowest)', border: 'none' }}>
                     <div className="d-flex justify-content-between align-items-end mb-3">
                         <span className="fw-bold small" style={{ color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -143,8 +141,8 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                             {completionPercent}%
                         </span>
                     </div>
-                    <div className="w-100 rounded-pill overflow-hidden mb-3" style={{ height: '10px', background: 'var(--surface-container)' }}>
-                        <div className="h-100 rounded-pill"
+                    <div className="w-100 rounded-full overflow-hidden mb-3" style={{ height: '10px', background: 'var(--surface-container)' }}>
+                        <div className="h-100 rounded-full"
                             style={{
                                 width: `${completionPercent}%`,
                                 background: 'linear-gradient(135deg, #0056b6 0%, #006ee5 100%)',
@@ -152,7 +150,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                             }}
                         />
                     </div>
-                    <p className="small mb-0 p-3 rounded-3" style={{ background: 'rgba(0,86,182,0.06)', color: 'var(--text-muted)' }}>
+                    <p className="small mb-0 p-3 rounded-xl" style={{ background: 'rgba(0,86,182,0.06)', color: 'var(--text-muted)' }}>
                         <span className="fw-bold" style={{ color: 'var(--primary-main)' }}>Pro Tip:</span>
                         {' '}Add your PAN Card to reach up to 100% and get priority job listings.
                     </p>

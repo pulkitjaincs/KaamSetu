@@ -32,7 +32,7 @@ export default function EditProfile_Basics({ formData, handleChange, user, isEmp
                     <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAvatar}
                         style={{
                             background: 'var(--bg-surface)', border: '1px solid var(--border-color)',
-                            borderRadius: '10px', padding: '8px 16px', fontSize: '0.85rem', fontWeight: 500,
+                            borderRadius: '12px', padding: '8px 16px', fontSize: '0.85rem', fontWeight: 500,
                             color: 'var(--text-main)', cursor: 'pointer'
                         }}>
                         {uploadingAvatar ? <><span className="spinner-border spinner-border-sm me-2"></span>Uploading...</> : <><i className="bi bi-camera me-2"></i>Upload Photo</>}
@@ -77,7 +77,7 @@ export default function EditProfile_Basics({ formData, handleChange, user, isEmp
                 <label className="form-label fw-semibold mb-2" style={{ color: 'var(--text-main)', fontSize: '0.9rem' }}>
                     Phone Number
                     {user?.phoneVerified ? (
-                        <span className="badge bg-success-subtle text-success ms-2 rounded-pill">
+                        <span className="badge bg-success-subtle text-success ms-2 rounded-full">
                             <i className="bi bi-patch-check-fill me-1"></i>Verified
                         </span>
                     ) : (

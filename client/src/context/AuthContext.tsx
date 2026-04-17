@@ -27,12 +27,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const queryClient = useQueryClient();
 
     useEffect(() => {
+        const cached = localStorage.getItem('skillanchor_user_cache');
+        if (cached) {
+            try {
+                setUser(JSON.parse(cached));
+            } catch (e) {
+                // ignore parse error
+            }
+        }
+
         const restoreSession = async () => {
             try {
                 const res = await authAPI.getMe();
                 setUser(res.data.user);
+                localStorage.setItem('skillanchor_user_cache', JSON.stringify(res.data.user));
             } catch {
                 setUser(null);
+                localStorage.removeItem('skillanchor_user_cache');
             } finally {
                 setLoading(false);
             }
@@ -50,11 +61,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (newUser: User) => {
         setUser(newUser);
+        localStorage.setItem('skillanchor_user_cache', JSON.stringify(newUser));
     };
 
     const updateUserData = (userData: Partial<User>) => {
         if (!user) return;
-        setUser({ ...user, ...userData });
+        const updatedUser = { ...user, ...userData };
+        setUser(updatedUser);
+        localStorage.setItem('skillanchor_user_cache', JSON.stringify(updatedUser));
     };
 
     const logout = async () => {
@@ -64,6 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             console.error("Logout error:", err);
         } finally {
             setUser(null);
+            localStorage.removeItem('skillanchor_user_cache');
             queryClient.clear();
         }
     };

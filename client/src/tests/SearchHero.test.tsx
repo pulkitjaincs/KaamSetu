@@ -63,7 +63,7 @@ describe('SearchHero Component', () => {
         expect(screen.getByDisplayValue('Mumbai')).toBeInTheDocument();
         
         const logisticsChip = screen.getByText('Logistics');
-        expect(logisticsChip.className).toContain('active');
+        expect(logisticsChip.className).toContain('bg-[#0056b6]');
     });
 
 });

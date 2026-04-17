@@ -44,7 +44,7 @@ export const InputField = ({
                     background: 'var(--bg-surface)',
                     color: 'var(--text-main)',
                     border: error ? '1px solid var(--danger)' : '1px solid var(--border-color)',
-                    borderRadius: sm ? '10px' : '12px',
+                    borderRadius: '12px',
                     padding: sm ? '10px 14px' : '12px 16px',
                     paddingLeft: icon ? '40px' : undefined,
                     ...style
@@ -141,7 +141,7 @@ export const TextAreaField = ({
                 background: 'var(--bg-surface)',
                 color: 'var(--text-main)',
                 border: error ? '1px solid var(--danger)' : '1px solid var(--border-color)',
-                borderRadius: sm ? '10px' : '12px',
+                borderRadius: '12px',
                 padding: sm ? '10px 14px' : '12px 16px',
                 resize: 'vertical'
             }}
@@ -177,7 +177,7 @@ export const Button = ({
             className={`btn ${fullWidth ? 'w-100' : ''} ${className}`}
             style={{
                 ...variants[variant],
-                borderRadius: '12px',
+                borderRadius: '9999px',
                 padding: '12px 24px',
                 fontWeight: 600,
                 opacity: disabled ? 0.6 : 1,

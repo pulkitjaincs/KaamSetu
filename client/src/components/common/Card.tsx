@@ -45,7 +45,7 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
             className={`card ${isSelected ? 'selected' : ''}`}
             style={{
                 cursor: "pointer",
-                borderRadius: "16px",
+                borderRadius: "24px",
                 backgroundColor: isSelected ? "var(--bg-surface)" : "var(--bg-card)",
                 border: isSelected ? "1px solid var(--border-active)" : "1px solid transparent",
                 padding: "24px",

@@ -3,7 +3,7 @@ import { formatSalary } from '@/utils/index';
 import { Profile } from '@/types';
 
 const cardStyle = {
-    borderRadius: '20px',
+    borderRadius: '24px',
     background: 'var(--surface-container-lowest)'
 };
 
@@ -42,7 +42,7 @@ const ProfileSidebar = memo(({ profile, isEmployer, isOwnProfile }: ProfileSideb
                 <div className="d-flex flex-column gap-3">
                     {profile.phone && (
                         <div className="d-flex align-items-center gap-3">
-                            <div className="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                            <div className="d-flex align-items-center justify-content-center rounded-full flex-shrink-0"
                                 style={iconContainerStyle}>
                                 <i className="bi bi-telephone"></i>
                             </div>
@@ -54,7 +54,7 @@ const ProfileSidebar = memo(({ profile, isEmployer, isOwnProfile }: ProfileSideb
                     )}
                     {profile.whatsapp && (
                         <div className="d-flex align-items-center gap-3">
-                            <div className="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                            <div className="d-flex align-items-center justify-content-center rounded-full flex-shrink-0"
                                 style={{ width: '40px', height: '40px', background: 'rgba(37,211,102,0.1)', flexShrink: 0 }}>
                                 <i className="bi bi-whatsapp" style={{ color: '#25d366' }}></i>
                             </div>
@@ -66,7 +66,7 @@ const ProfileSidebar = memo(({ profile, isEmployer, isOwnProfile }: ProfileSideb
                     )}
                     {profile.email && (
                         <div className="d-flex align-items-center gap-3">
-                            <div className="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                            <div className="d-flex align-items-center justify-content-center rounded-full flex-shrink-0"
                                 style={iconContainerStyle}>
                                 <i className="bi bi-envelope"></i>
                             </div>
@@ -89,7 +89,7 @@ const ProfileSidebar = memo(({ profile, isEmployer, isOwnProfile }: ProfileSideb
                             <h5 className="fw-bold mb-3 d-flex align-items-center gap-2" style={{ color: 'var(--text-main)' }}>
                                 <i className="bi bi-currency-rupee text-primary"></i> Expected Salary
                             </h5>
-                            <div className="p-3 rounded-4" style={{ background: 'var(--surface-container-low)' }}>
+                            <div className="p-3 rounded-3xl" style={{ background: 'var(--surface-container-low)' }}>
                                 <p className="mb-0 fw-extrabold"
                                     style={{ fontSize: '1.75rem', color: 'var(--primary-main)', letterSpacing: '-0.02em', lineHeight: 1 }}>
                                     {formatSalary(profile.expectedSalary?.min ?? 0, profile.expectedSalary?.max, profile.expectedSalary?.type)}
@@ -131,13 +131,13 @@ const DocumentsCard = memo(({ profile, isOwnProfile }: { profile: Profile; isOwn
 
                     return (
                         <div key={doc.key}
-                            className="d-flex align-items-center justify-content-between p-3 rounded-4"
+                            className="d-flex align-items-center justify-content-between p-3 rounded-3xl"
                             style={{
                                 background: 'var(--surface-container-low)',
                                 border: isError ? '2px dashed rgba(186,26,26,0.2)' : 'none'
                             }}>
                             <div className="d-flex align-items-center gap-3">
-                                <div className="p-2 rounded-3 d-flex align-items-center justify-content-center"
+                                <div className="p-2 rounded-xl d-flex align-items-center justify-content-center"
                                     style={{ background: 'var(--surface-container-lowest)' }}>
                                     <i className={`bi ${doc.icon} ${isError ? 'text-danger' : 'text-primary'}`}></i>
                                 </div>
@@ -147,7 +147,7 @@ const DocumentsCard = memo(({ profile, isOwnProfile }: { profile: Profile; isOwn
                             </div>
 
                             {isVerified ? (
-                                <span className="badge rounded-pill px-3 py-1"
+                                <span className="badge rounded-full px-3 py-1"
                                     style={{
                                         background: 'rgba(0,100,102,0.1)',
                                         color: 'var(--tertiary)',
@@ -159,7 +159,7 @@ const DocumentsCard = memo(({ profile, isOwnProfile }: { profile: Profile; isOwn
                                     Verified
                                 </span>
                             ) : hasPending ? (
-                                <span className="badge rounded-pill px-3 py-1"
+                                <span className="badge rounded-full px-3 py-1"
                                     style={{
                                         background: 'var(--surface-container-highest)',
                                         color: 'var(--text-muted)',
@@ -172,7 +172,7 @@ const DocumentsCard = memo(({ profile, isOwnProfile }: { profile: Profile; isOwn
                                 </span>
                             ) : isOwnProfile ? (
                                 <button
-                                    className="badge rounded-pill px-3 py-1"
+                                    className="badge rounded-full px-3 py-1"
                                     style={{
                                         background: 'rgba(186,26,26,0.1)',
                                         color: '#ba1a1a',

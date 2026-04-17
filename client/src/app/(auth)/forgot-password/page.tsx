@@ -116,27 +116,27 @@ export default function ForgotPasswordPage() {
                         <div className="card-body p-4 p-md-5">
 
                             {step === 1 && (
-                                <div className="d-flex gap-2 mb-4 p-1 rounded-pill auth-toggle-group">
+                                <div className="d-flex gap-2 mb-4 p-1 rounded-full auth-toggle-group">
                                     <button type="button" onClick={() => setMethod('phone')}
-                                        className={`btn flex-grow-1 rounded-pill py-2 fw-medium auth-toggle-btn ${method === 'phone' ? 'active shadow-sm' : ''}`}>
+                                        className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${method === 'phone' ? 'active shadow-sm' : ''}`}>
                                         <i className="bi bi-phone me-2"></i>Phone
                                     </button>
                                     <button type="button" onClick={() => setMethod('email')}
-                                        className={`btn flex-grow-1 rounded-pill py-2 fw-medium auth-toggle-btn ${method === 'email' ? 'active shadow-sm' : ''}`}>
+                                        className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${method === 'email' ? 'active shadow-sm' : ''}`}>
                                         <i className="bi bi-envelope me-2"></i>Email
                                     </button>
                                 </div>
                             )}
 
                             {error && (
-                                <div className="mb-4 p-3 rounded-3 d-flex align-items-center gap-2" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                                <div className="mb-4 p-3 rounded-xl d-flex align-items-center gap-2" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
                                     <i className="bi bi-exclamation-circle" style={{ color: '#ef4444' }}></i>
                                     <span className="small fw-medium" style={{ color: '#ef4444' }}>{error}</span>
                                 </div>
                             )}
 
                             {success && (
-                                <div className="mb-4 p-3 rounded-3 d-flex align-items-center gap-2" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+                                <div className="mb-4 p-3 rounded-xl d-flex align-items-center gap-2" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
                                     <i className="bi bi-check-circle" style={{ color: '#22c55e' }}></i>
                                     <span className="small fw-medium" style={{ color: '#22c55e' }}>{success}</span>
                                 </div>
@@ -171,14 +171,14 @@ export default function ForgotPasswordPage() {
                                         </div>
                                     )}
 
-                                    <button type="submit" className="btn w-100 py-3 fw-bold rounded-pill shadow-lg" disabled={loading}
+                                    <button type="submit" className="btn w-100 py-3 fw-bold rounded-full shadow-lg" disabled={loading}
                                         style={{ background: 'var(--text-main)', color: 'var(--bg-card)', fontSize: '1rem', transition: 'opacity 0.25s ease, transform 0.25s ease' }}>
                                         {loading ? 'Sending...' : 'Send OTP'}
                                     </button>
                                 </form>
                             ) : (
                                 <form onSubmit={handleResetPassword}>
-                                    <div className="mb-3 p-3 rounded-3 d-flex align-items-center justify-content-between" style={{ background: 'var(--bg-surface)' }}>
+                                    <div className="mb-3 p-3 rounded-xl d-flex align-items-center justify-content-between" style={{ background: 'var(--bg-surface)' }}>
                                         <strong style={{ color: 'var(--text-main)' }}>{method === 'email' ? email : `+91 ${phone}`}</strong>
                                         <button type="button" className="btn btn-link p-0 text-decoration-none" onClick={() => { setStep(1); setSuccess(''); setError(''); }} style={{ color: 'var(--primary-600)', fontSize: '0.875rem' }}>
                                             Change
@@ -219,7 +219,7 @@ export default function ForgotPasswordPage() {
                                             style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', borderRadius: '12px', fontSize: '1rem' }} />
                                     </div>
 
-                                    <button type="submit" className="btn w-100 py-3 fw-bold rounded-pill shadow-lg" disabled={loading}
+                                    <button type="submit" className="btn w-100 py-3 fw-bold rounded-full shadow-lg" disabled={loading}
                                         style={{ background: 'var(--text-main)', color: 'var(--bg-card)', fontSize: '1rem', transition: 'opacity 0.25s ease, transform 0.25s ease' }}>
                                         {loading ? 'Resetting...' : 'Reset Password'}
                                     </button>

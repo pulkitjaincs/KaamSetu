@@ -9,6 +9,8 @@ import {
     buildConditions,
     checkContactUniqueness
 } from "../services/auth.service.js";
+import { getAvatarForUser } from "../services/profile.service.js";
+import { cacheAside } from "../utils/cache.js";
 import { AppError } from "../types/error.js";
 
 export const sendOTP = asyncHandler(async (req: Request, res: Response) => {
@@ -40,10 +42,14 @@ export const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
         await user.save();
     }
 
-    const safeUser = await User.findById(user._id).select("-password -__v").lean();
+    const [safeUser, avatar] = await Promise.all([
+        User.findById(user._id).select("-password -__v").lean(),
+        getAvatarForUser(user._id, user.role)
+    ]);
+
     const token = generateToken(user._id.toString());
     setAuthCookie(res, token);
-    res.json({ user: safeUser });
+    res.json({ user: { ...safeUser, avatar } });
 });
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
@@ -54,10 +60,13 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
         email, password: hashedPassword, authType: "email", role, name, emailVerified: true
     });
 
-    const safeUser = await User.findById(user._id).select("-password -__v").lean();
+    const [safeUser, avatar] = await Promise.all([
+        User.findById(user._id).select("-password -__v").lean(),
+        getAvatarForUser(user._id, user.role)
+    ]);
     const token = generateToken(user._id.toString());
     setAuthCookie(res, token);
-    res.json({ user: safeUser });
+    res.json({ user: { ...safeUser, avatar } });
 });
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
@@ -77,10 +86,14 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
         throw new AppError("Invalid Credentials", 400);
     }
 
-    const safeUser = await User.findById(user._id).select("-password -__v").lean();
+    const [safeUser, avatar] = await Promise.all([
+        User.findById(user._id).select("-password -__v").lean(),
+        getAvatarForUser(user._id, user.role)
+    ]);
+    
     const token = generateToken(user._id.toString());
     setAuthCookie(res, token);
-    res.json({ user: safeUser });
+    res.json({ user: { ...safeUser, avatar } });
 });
 
 export const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
@@ -166,6 +179,19 @@ export const verifyUpdateOTP = asyncHandler(async (req: Request, res: Response) 
 });
 
 export const getMe = asyncHandler(async (req: Request, res: Response) => {
-    const user = await User.findById(req.user._id).select("-password -__v");
-    res.json({ user });
+    const cacheKey = `user:session:${req.user._id}`;
+
+    // Only pure DB fields are cached — never signed URLs (they expire in 1hr)
+    const userDoc = await cacheAside(cacheKey, 300, async () => {
+        const doc = await User.findById(req.user._id).select("-password -__v").lean();
+        return doc ?? null;
+    });
+
+    if (!userDoc) {
+        throw new AppError("User not found", 404);
+    }
+
+    // Avatar resolved outside the cache so it's always a fresh signed URL
+    const avatar = await getAvatarForUser(req.user._id, req.user.role);
+    res.json({ user: { ...userDoc, avatar } });
 });

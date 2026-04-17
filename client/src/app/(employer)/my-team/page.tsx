@@ -64,7 +64,7 @@ export default function MyTeamPage() {
                         </Link>
                         <h2 className="fw-bold mb-0" style={{ color: 'var(--text-main)', fontSize: '2rem' }}>
                             My Team
-                            <span className="badge ms-3 rounded-pill" style={{ fontSize: '0.9rem', background: 'var(--primary-100)', color: 'var(--primary-700)', padding: '6px 16px' }}>
+                            <span className="badge ms-3 rounded-full" style={{ fontSize: '0.9rem', background: 'var(--primary-100)', color: 'var(--primary-700)', padding: '6px 16px' }}>
                                 {team.length} Members
                             </span>
                         </h2>
@@ -76,13 +76,13 @@ export default function MyTeamPage() {
                 {team.length === 0 ? (
                     <div className="row g-4">
                         <div className="col-12 text-center py-5">
-                            <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4"
+                            <div className="d-inline-flex align-items-center justify-content-center rounded-full mb-4"
                                 style={{ width: '100px', height: '100px', background: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}>
                                 <i className="bi bi-people text-muted" style={{ fontSize: '2.5rem' }}></i>
                             </div>
                             <h4 className="fw-bold mb-2">No active team members</h4>
                             <p className="text-muted">When you hire workers, they will appear here.</p>
-                            <Link href="/my-jobs" className="btn btn-primary rounded-pill px-4 mt-2" style={{ background: 'var(--primary-500)', border: 'none' }}>
+                            <Link href="/my-jobs" className="btn btn-primary rounded-full px-4 mt-2" style={{ background: 'var(--primary-500)', border: 'none' }}>
                                 View Job Applicants
                             </Link>
                         </div>
@@ -105,20 +105,20 @@ export default function MyTeamPage() {
                                     <div className="d-flex align-items-center justify-content-between mb-4">
                                         <div className="d-flex align-items-center gap-3">
                                             <div className="position-relative">
-                                                <div className="rounded-circle d-flex align-items-center justify-content-center position-relative overflow-hidden"
+                                                <div className="rounded-full d-flex align-items-center justify-content-center position-relative overflow-hidden"
                                                     style={{ width: '64px', height: '64px', background: 'linear-gradient(135deg, var(--primary-100), var(--zinc-100))' }}>
                                                     {member.worker?.avatar ? (
-                                                        <Image src={member.worker.avatar} alt={member.worker.name} fill sizes="64px" className="rounded-circle" style={{ objectFit: 'cover' }} />
+                                                        <Image src={member.worker.avatar} alt={member.worker.name} fill sizes="64px" className="rounded-full" style={{ objectFit: 'cover' }} />
                                                     ) : (
                                                         <span className="fw-bold text-primary fs-5">{getInitials(member.worker?.name ?? '')}</span>
                                                     )}
                                                 </div>
-                                                <div className="position-absolute bottom-0 end-0 bg-success rounded-circle border border-white border-2"
+                                                <div className="position-absolute bottom-0 end-0 bg-success rounded-full border border-white border-2"
                                                     style={{ width: '14px', height: '14px' }} title="Active"></div>
                                             </div>
                                             <div>
                                                 <h5 className="fw-bold mb-1" style={{ color: 'var(--text-main)', letterSpacing: '-0.02em' }}>{member.worker?.name || 'Unknown Member'}</h5>
-                                                <div className="d-inline-flex align-items-center gap-1 text-primary x-small fw-semibold px-2 py-0.5 rounded-pill" style={{ background: 'var(--primary-50)', fontSize: '0.7rem' }}>
+                                                <div className="d-inline-flex align-items-center gap-1 text-primary x-small fw-semibold px-2 py-0.5 rounded-full" style={{ background: 'var(--primary-50)', fontSize: '0.7rem' }}>
                                                     <i className="bi bi-briefcase-fill" style={{ fontSize: '0.65rem' }}></i>
                                                     {member.role || 'Worker'}
                                                 </div>
@@ -128,15 +128,15 @@ export default function MyTeamPage() {
                                             <button className="btn btn-link text-muted p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i className="bi bi-three-dots-vertical fs-5"></i>
                                             </button>
-                                            <ul className="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2" style={{ borderRadius: '16px' }}>
+                                            <ul className="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2" style={{ borderRadius: '24px' }}>
                                                 <li>
-                                                    <Link href={`/profile/${member.worker?._id}?from=team`} className="dropdown-item d-flex align-items-center gap-2 py-2" style={{ borderRadius: '10px' }}>
+                                                    <Link href={`/profile/${member.worker?._id}?from=team`} className="dropdown-item d-flex align-items-center gap-2 py-2" style={{ borderRadius: '12px' }}>
                                                         <i className="bi bi-person text-secondary"></i> View Profile
                                                     </Link>
                                                 </li>
                                                 <li><hr className="dropdown-divider opacity-50" /></li>
                                                 <li>
-                                                    <button onClick={() => endEmployment(member._id)} className="dropdown-item text-danger d-flex align-items-center gap-2 py-2" style={{ borderRadius: '10px' }}>
+                                                    <button onClick={() => endEmployment(member._id)} className="dropdown-item text-danger d-flex align-items-center gap-2 py-2" style={{ borderRadius: '12px' }}>
                                                         <i className="bi bi-x-circle"></i> End Employment
                                                     </button>
                                                 </li>
@@ -154,11 +154,11 @@ export default function MyTeamPage() {
 
                                     {/* Actions */}
                                     <div className="d-flex gap-2 pt-2">
-                                        <a href={`tel:${member.worker?.phone}`} className="btn btn-primary rounded-pill py-1.5 px-3 flex-grow-1 d-flex align-items-center justify-content-center gap-2 btn-hover-scale"
+                                        <a href={`tel:${member.worker?.phone}`} className="btn btn-primary rounded-full py-1.5 px-3 flex-grow-1 d-flex align-items-center justify-content-center gap-2 btn-hover-scale"
                                             style={{ background: 'var(--primary-500)', border: 'none', fontWeight: '600', fontSize: '0.8rem' }}>
                                             <i className="bi bi-telephone-fill" style={{ fontSize: '0.75rem' }}></i> Call Now
                                         </a>
-                                        <Link href={`/profile/${member.worker?._id}?from=team`} className="btn rounded-pill border-0 py-2 px-3 d-flex align-items-center justify-content-center btn-hover-scale"
+                                        <Link href={`/profile/${member.worker?._id}?from=team`} className="btn rounded-full border-0 py-2 px-3 d-flex align-items-center justify-content-center btn-hover-scale"
                                             style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }} title="Full Profile">
                                             <i className="bi bi-arrow-right-short fs-4"></i>
                                         </Link>

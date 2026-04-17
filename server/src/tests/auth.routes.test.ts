@@ -10,7 +10,22 @@ vi.mock('../utils/email.js', () => ({
   sendEmailOTP: vi.fn().mockResolvedValue(true)
 }));
 
+// Prevent real AWS calls — auth routes now call getAvatarForUser internally
+vi.mock('../config/s3.js', () => ({
+  generateReadSignedUrl: vi.fn().mockResolvedValue('https://mock-s3.test/avatar.jpg'),
+  generatePreSignedUrl: vi.fn().mockResolvedValue({ uploadUrl: 'https://mock-s3.test/upload', key: 'mock-key', fileUrl: 'https://mock-s3.test/file' }),
+  deleteFromS3: vi.fn().mockResolvedValue({}),
+  uploadToS3: vi.fn().mockResolvedValue('https://mock-s3.test/file'),
+}));
+
 describe('Auth Routes - Integration', () => {
+  beforeEach(async () => {
+    const keys = await redis.keys('otp:*');
+    if (keys.length > 0) {
+      await redis.del(...keys);
+    }
+    vi.clearAllMocks();
+  });
 
   describe('POST /api/v1/auth/send-otp', () => {
     it('should return 400 if email or phone is missing', async () => {
@@ -52,6 +67,7 @@ describe('Auth Routes - Integration', () => {
       expect(res.status).toBe(200);
       expect(res.body.user).toBeDefined();
       expect(res.body.user.emailVerified).toBe(true);
+      expect('avatar' in res.body.user).toBe(true); // shape: avatar always present (null if no profile)
 
       const cookies = res.get('Set-Cookie');
       expect(cookies).toBeDefined();
@@ -114,6 +130,7 @@ describe('Auth Routes - Integration', () => {
         password: 'Password123!'
       });
       expect(res.status).toBe(200);
+      expect('avatar' in res.body.user).toBe(true);
       const cookies = res.get('Set-Cookie');
       expect(cookies).toBeDefined();
       expect(cookies![0]).toContain('token=');
@@ -190,6 +207,7 @@ describe('Auth Routes - Integration', () => {
       const res = await request(app).get('/api/v1/auth/get-me').set('Cookie', `token=${token}`);
       expect(res.status).toBe(200);
       expect(res.body.user.email).toBe('prot@test.com');
+      expect('avatar' in res.body.user).toBe(true); // avatar field always present, null if no profile
     });
 
     it('POST /api/v1/auth/update-password should update with correct current password', async () => {

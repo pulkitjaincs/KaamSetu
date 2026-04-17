@@ -9,7 +9,7 @@ export interface IApplicationStatusHistory {
 export interface IApplication extends Document {
     job: Types.ObjectId;
     applicant: Types.ObjectId;
-    status: "pending" | "viewed" | "shortlisted" | "rejected" | "hired" | "employment-ended";
+    status: "pending" | "reviewed" | "shortlisted" | "rejected" | "hired" | "employment-ended";
     coverNote?: string;
     appliedAt: Date;
     statusHistory: IApplicationStatusHistory[];
@@ -29,7 +29,7 @@ const ApplicationSchema = new mongoose.Schema<IApplication>({
     },
     status: {
         type: String,
-        enum: ["pending", "viewed", "shortlisted", "rejected", "hired", "employment-ended"],
+        enum: ["pending", "reviewed", "shortlisted", "rejected", "hired", "employment-ended"],
         default: "pending",
     },
     coverNote: {

@@ -57,31 +57,31 @@ export default function RegisterPage() {
                                 <label className="form-label fw-medium small text-uppercase auth-form-label">I am a</label>
                                 <div className="d-flex gap-3">
                                     <div onClick={() => setRole('worker')}
-                                        className={`flex-grow-1 p-3 rounded-4 text-center role-selector-card ${role === 'worker' ? 'active' : ''}`}>
+                                        className={`flex-grow-1 p-3 rounded-3xl text-center role-selector-card ${role === 'worker' ? 'active' : ''}`}>
                                         <i className={`bi bi-person-badge fs-3 d-block mb-2 role-icon ${role === 'worker' ? 'active' : ''}`}></i>
                                         <span className={`fw-semibold role-text ${role === 'worker' ? 'active' : ''}`}>Job Seeker</span>
                                     </div>
                                     <div onClick={() => setRole('employer')}
-                                        className={`flex-grow-1 p-3 rounded-4 text-center role-selector-card ${role === 'employer' ? 'active' : ''}`}>
+                                        className={`flex-grow-1 p-3 rounded-3xl text-center role-selector-card ${role === 'employer' ? 'active' : ''}`}>
                                         <i className={`bi bi-building fs-3 d-block mb-2 role-icon ${role === 'employer' ? 'active' : ''}`}></i>
                                         <span className={`fw-semibold role-text ${role === 'employer' ? 'active' : ''}`}>Employer</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="d-flex gap-2 mb-4 p-1 rounded-pill auth-toggle-group">
+                            <div className="d-flex gap-2 mb-4 p-1 rounded-full auth-toggle-group">
                                 <button type="button" onClick={() => setRegisterMethod('phone')}
-                                    className={`btn flex-grow-1 rounded-pill py-2 fw-medium auth-toggle-btn ${registerMethod === 'phone' ? 'active shadow-sm' : ''}`}>
+                                    className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${registerMethod === 'phone' ? 'active shadow-sm' : ''}`}>
                                     <i className="bi bi-phone me-2"></i>Phone
                                 </button>
                                 <button type="button" onClick={() => setRegisterMethod('email')}
-                                    className={`btn flex-grow-1 rounded-pill py-2 fw-medium auth-toggle-btn ${registerMethod === 'email' ? 'active shadow-sm' : ''}`}>
+                                    className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${registerMethod === 'email' ? 'active shadow-sm' : ''}`}>
                                     <i className="bi bi-envelope me-2"></i>Email
                                 </button>
                             </div>
 
                             {error && (
-                                <div className="mb-4 p-3 rounded-3 d-flex align-items-center gap-2 auth-error-box">
+                                <div className="mb-4 p-3 rounded-xl d-flex align-items-center gap-2 auth-error-box">
                                     <i className="bi bi-exclamation-circle auth-error-icon"></i>
                                     <span className="small fw-medium auth-error-text">{error}</span>
                                 </div>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
                                     </>
                                 )}
 
-                                <button type="submit" className="btn w-100 py-3 fw-bold rounded-pill shadow-lg auth-submit-btn" disabled={loading}>
+                                <button type="submit" className="btn w-100 py-3 fw-bold rounded-full shadow-lg auth-submit-btn" disabled={loading}>
                                     {loading ? 'Please wait...' : (registerMethod === 'phone' ? (otpSent ? 'Verify & Register' : 'Send OTP') : 'Create Account')}
                                 </button>
                             </form>

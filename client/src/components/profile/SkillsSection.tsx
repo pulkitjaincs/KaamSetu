@@ -18,7 +18,7 @@ const chipStyle = {
 
 const tileStyle = {
     background: 'var(--surface-container-low)',
-    borderRadius: '20px'
+    borderRadius: '24px'
 };
 
 const labelStyle = {
@@ -41,7 +41,7 @@ const SkillsSection = memo(({ skills, languages, isOwnProfile }: SkillsSectionPr
                 <div className="d-flex flex-wrap gap-2">
                     {skills && skills.length > 0 ? (
                         skills.map((skill, i) => (
-                            <span key={i} className="badge rounded-pill px-4 py-2" style={chipStyle}>
+                            <span key={i} className="badge rounded-full px-4 py-2" style={chipStyle}>
                                 {skill}
                             </span>
                         ))
@@ -50,7 +50,7 @@ const SkillsSection = memo(({ skills, languages, isOwnProfile }: SkillsSectionPr
                     )}
                     {isOwnProfile && (
                         <Link href="/profile/edit"
-                            className="badge rounded-pill px-4 py-2 text-decoration-none"
+                            className="badge rounded-full px-4 py-2 text-decoration-none"
                             style={{ ...chipStyle, color: 'var(--primary-main)', border: '1.5px dashed var(--primary-main)', background: 'transparent' }}>
                             <i className="bi bi-plus"></i> Add
                         </Link>
@@ -69,7 +69,7 @@ const SkillsSection = memo(({ skills, languages, isOwnProfile }: SkillsSectionPr
                 <div className="d-flex flex-wrap gap-2">
                     {languages && languages.length > 0 ? (
                         languages.map((lang, i) => (
-                            <span key={i} className="badge rounded-pill px-4 py-2" style={chipStyle}>
+                            <span key={i} className="badge rounded-full px-4 py-2" style={chipStyle}>
                                 {lang}
                             </span>
                         ))
@@ -78,7 +78,7 @@ const SkillsSection = memo(({ skills, languages, isOwnProfile }: SkillsSectionPr
                     )}
                     {isOwnProfile && (
                         <Link href="/profile/edit"
-                            className="badge rounded-pill px-4 py-2 text-decoration-none"
+                            className="badge rounded-full px-4 py-2 text-decoration-none"
                             style={{ ...chipStyle, color: 'var(--primary-main)', border: '1.5px dashed var(--primary-main)', background: 'transparent' }}>
                             <i className="bi bi-plus"></i> Add
                         </Link>

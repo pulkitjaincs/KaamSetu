@@ -136,7 +136,12 @@
     display: flex;
     gap: 12px;
     overflow-x: auto;
+    padding-top: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
     padding-bottom: 8px;
+    margin-left: -4px;
+    margin-right: -4px;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -145,48 +150,7 @@
     display: none;
 }
 
-.category-chip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: 9999px;
-    font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif;
-    font-weight: 600;
-    font-size: 0.875rem;
-    white-space: nowrap;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
-    background: var(--bg-surface);
-    color: var(--text-muted);
-}
 
-.category-chip:hover {
-    background: var(--primary-50, rgba(0, 86, 182, 0.08));
-    color: #0056b6;
-}
-
-.category-chip.active {
-    background: #0056b6;
-    color: white;
-    box-shadow: 0 4px 12px rgba(0, 86, 182, 0.3);
-}
-
-[data-theme="dark"] .category-chip {
-    background: var(--bg-surface);
-    color: var(--text-muted);
-}
-
-[data-theme="dark"] .category-chip:hover {
-    background: rgba(0, 86, 182, 0.15);
-    color: #6ea8fe;
-}
-
-[data-theme="dark"] .category-chip.active {
-    background: #0056b6;
-    color: white;
-}
 
 /* ── Animation ── */
 @keyframes fadeInUp {
