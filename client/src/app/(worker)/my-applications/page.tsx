@@ -3,7 +3,7 @@
 import { useState, useMemo, lazy, Suspense, useEffect } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import Link from 'next/link';
-import { formatDate, formatSalary } from '@/utils/index';
+import { formatDate } from '@/utils/index';
 import { Application, PaginatedApplicationsResponse } from '@/types';
 import { Eye, XCircle, FileCheck } from 'lucide-react';
 

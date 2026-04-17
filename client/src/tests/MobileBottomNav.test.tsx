@@ -16,16 +16,28 @@ vi.mock('@/context/AuthContext', () => ({
 
 describe('MobileBottomNav', () => {
   it('should not render if user is not logged in', () => {
-    (useAuth as any).mockReturnValue({ user: null });
-    (usePathname as any).mockReturnValue('/');
+    vi.mocked(useAuth).mockReturnValue({
+      user: null,
+      loading: false,
+      login: vi.fn(),
+      logout: vi.fn(),
+      updateUserData: vi.fn()
+    });
+    vi.mocked(usePathname).mockReturnValue('/');
 
     const { container } = render(<MobileBottomNav />);
     expect(container.firstChild).toBeNull();
   });
 
   it('should render navigation items for logged in user', () => {
-    (useAuth as any).mockReturnValue({ user: { role: 'worker' } });
-    (usePathname as any).mockReturnValue('/');
+    vi.mocked(useAuth).mockReturnValue({
+      user: { _id: '1', name: 'Test', role: 'worker' },
+      loading: false,
+      login: vi.fn(),
+      logout: vi.fn(),
+      updateUserData: vi.fn()
+    });
+    vi.mocked(usePathname).mockReturnValue('/');
 
     render(<MobileBottomNav />);
 
@@ -35,8 +47,14 @@ describe('MobileBottomNav', () => {
   });
 
   it('should highlight active tab based on pathname', () => {
-    (useAuth as any).mockReturnValue({ user: { role: 'worker' } });
-    (usePathname as any).mockReturnValue('/my-applications');
+    vi.mocked(useAuth).mockReturnValue({
+      user: { _id: '1', name: 'Test', role: 'worker' },
+      loading: false,
+      login: vi.fn(),
+      logout: vi.fn(),
+      updateUserData: vi.fn()
+    });
+    vi.mocked(usePathname).mockReturnValue('/my-applications');
 
     render(<MobileBottomNav />);
 

@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (cached) {
             try {
                 setUser(JSON.parse(cached));
-            } catch (e) {
+            } catch {
                 // ignore parse error
             }
         }

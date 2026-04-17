@@ -16,10 +16,18 @@ vi.mock('next/navigation', () => ({
   useSearchParams: vi.fn(() => new URLSearchParams()),
 }));
 
+interface VirtuosoProps<T> {
+  data: T[];
+  itemContent: (index: number, item: T) => React.ReactNode;
+  components?: {
+    Footer?: () => React.ReactNode;
+  };
+}
+
 vi.mock('react-virtuoso', () => ({
-  Virtuoso: ({ data, itemContent, components }: any) => (
+  Virtuoso: <T,>({ data, itemContent, components }: VirtuosoProps<T>) => (
     <div>
-      {data.map((item: any, index: number) => (
+      {data.map((item, index) => (
         <div key={index}>{itemContent(index, item)}</div>
       ))}
       {components?.Footer && components.Footer()}
@@ -43,12 +51,13 @@ describe('MyApplicationsPage integration', () => {
       }]
     };
 
-    (useApplications as any).mockReturnValue({
+    vi.mocked(useApplications).mockReturnValue({
       data: mockData,
       isLoading: false,
       hasNextPage: false,
-      fetchNextPage: vi.fn()
-    });
+      fetchNextPage: vi.fn(),
+      isFetchingNextPage: false
+    } as unknown as ReturnType<typeof useApplications>);
 
     render(<MyApplicationsPage />);
 
@@ -72,12 +81,13 @@ describe('MyApplicationsPage integration', () => {
       }]
     };
 
-    (useApplications as any).mockReturnValue({
+    vi.mocked(useApplications).mockReturnValue({
       data: mockData,
       isLoading: false,
       hasNextPage: false,
-      fetchNextPage: vi.fn()
-    });
+      fetchNextPage: vi.fn(),
+      isFetchingNextPage: false
+    } as unknown as ReturnType<typeof useApplications>);
 
     render(<MyApplicationsPage />);
 

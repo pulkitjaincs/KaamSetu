@@ -15,14 +15,7 @@ const iconContainerStyle = {
     flexShrink: 0 as const
 };
 
-const chipStyle = {
-    background: 'var(--surface-container-low)',
-    color: 'var(--text-main)',
-    fontWeight: 500,
-    boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-    border: 'none',
-    fontSize: '0.875rem'
-};
+
 
 interface ProfileSidebarProps {
     profile: Profile;

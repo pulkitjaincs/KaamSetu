@@ -14,10 +14,7 @@ describe('ApplicationPipeline', () => {
   });
 
   it('should show "Applied" as completed for pending status', () => {
-    const { container } = render(<ApplicationPipeline status="pending" />);
-    // Check for the check icon in the first step
-    // In our implementation, completed steps show the Check icon
-    const appliedStep = screen.getByText('Applied').previousSibling;
+    render(<ApplicationPipeline status="pending" />);
     // We can't easily check for the icon component deeply without better queries, 
     // but we can check if the status-aware classes are applied.
   });
