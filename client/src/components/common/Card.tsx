@@ -4,13 +4,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { Job } from '@/types';
 
-const logoStyle = { width: "56px", height: "56px", flexShrink: 0 };
-const fallbackLogoBase = {
-    width: "56px", height: "56px", flexShrink: 0,
-    background: "linear-gradient(135deg, #0056b6, #006ee5)",
-    color: "white", fontSize: "1.25rem"
-};
-
 interface CardProps {
     job: Job;
     isSelected: boolean;
@@ -35,7 +28,7 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
 
     return (
         <motion.div
-            layout
+            layout="position"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -43,69 +36,36 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
             whileHover={{ y: -4 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className={`card ${isSelected ? 'selected' : ''}`}
-            style={{
-                cursor: "pointer",
-                borderRadius: "24px",
-                backgroundColor: isSelected ? "var(--bg-surface)" : "var(--bg-card)",
-                border: isSelected ? "1px solid var(--border-active)" : "1px solid transparent",
-                padding: "24px",
-                willChange: "transform, opacity",
-                transition: "background-color 0.2s ease, border-color 0.2s ease",
-            }}
+            className={`card ${isSelected ? 'selected' : ''} group`}
         >
             {/* Header: Logo + Company + Title + Bookmark */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
-                <div style={{ display: "flex", gap: "16px", minWidth: 0 }}>
+            <div className="flex justify-between items-start mb-5">
+                <div className="flex gap-4 min-w-0">
                     {/* Company Logo */}
-                    <div style={{ ...logoStyle, borderRadius: "12px", overflow: "hidden", background: "var(--bg-surface)", flexShrink: 0 }}>
+                    <div className="card-logo">
                         {job.company?.logo ? (
                             <Image
                                 src={job.company.logo}
                                 alt={job.company?.name || job.title}
                                 width={56}
                                 height={56}
-                                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                                className="object-cover w-full h-full"
                                 unoptimized
                             />
                         ) : (
-                            <div
-                                style={{
-                                    ...fallbackLogoBase,
-                                    borderRadius: "12px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontWeight: 700,
-                                }}
-                            >
+                            <div className="card-fallback-logo">
                                 {job.company?.name?.charAt(0)?.toUpperCase() || "?"}
                             </div>
                         )}
                     </div>
                     {/* Company name + title */}
-                    <div style={{ minWidth: 0 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                            <span style={{
-                                fontSize: "0.8rem",
-                                fontWeight: 700,
-                                color: "var(--text-muted)",
-                            }}>
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="card-company">
                                 {job.company?.name || 'Company'}
                             </span>
                         </div>
-                        <h4 style={{
-                            fontSize: "1.15rem",
-                            fontWeight: 700,
-                            color: "var(--text-main)",
-                            lineHeight: 1.3,
-                            margin: 0,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                        }}>
+                        <h4 className="card-title line-clamp-2">
                             {job.title}
                         </h4>
                     </div>
@@ -113,86 +73,35 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
                 {/* Bookmark icon */}
                 <button
                     onClick={(e) => e.stopPropagation()}
-                    style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "var(--text-muted)",
-                        padding: "4px",
-                        flexShrink: 0,
-                        transition: "color 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#0056b6')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+                    className="p-1 shrink-0 text-[var(--text-muted)] hover:text-[var(--primary-main)] transition-colors border-none bg-transparent cursor-pointer"
                 >
-                    <Bookmark style={{ width: "1.2rem", height: "1.2rem" }} />
+                    <Bookmark className="w-[1.2rem] h-[1.2rem]" />
                 </button>
             </div>
 
             {/* Metadata Grid: Location / Salary / Shift */}
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gap: "16px",
-                borderTop: "1px solid var(--border-color)",
-                borderBottom: "1px solid var(--border-color)",
-                padding: "16px 0",
-                marginBottom: "16px",
-            }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                    <span style={{
-                        fontSize: "0.6rem",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.15em",
-                        color: "var(--text-muted)",
-                        opacity: 0.7,
-                    }}>
+            <div className="grid grid-cols-3 gap-4 border-y border-[var(--border-color)] py-4 mb-4">
+                <div className="flex flex-col gap-1">
+                    <span className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)] opacity-70">
                         Location
                     </span>
-                    <span style={{
-                        fontSize: "0.85rem",
-                        fontWeight: 600,
-                        color: "var(--text-main)",
-                    }}>
+                    <span className="text-[0.85rem] font-semibold text-[var(--text-main)] truncate">
                         {job.city}{job.state ? `, ${job.state}` : ''}
                     </span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                    <span style={{
-                        fontSize: "0.6rem",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.15em",
-                        color: "var(--text-muted)",
-                        opacity: 0.7,
-                    }}>
+                <div className="flex flex-col gap-1">
+                    <span className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)] opacity-70">
                         Salary
                     </span>
-                    <span style={{
-                        fontSize: "0.85rem",
-                        fontWeight: 600,
-                        color: "#0056b6",
-                    }}>
+                    <span className="text-[0.85rem] font-semibold text-[var(--primary-main)]">
                         {salaryDisplay}
                     </span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                    <span style={{
-                        fontSize: "0.6rem",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.15em",
-                        color: "var(--text-muted)",
-                        opacity: 0.7,
-                    }}>
+                <div className="flex flex-col gap-1">
+                    <span className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)] opacity-70">
                         Type
                     </span>
-                    <span style={{
-                        fontSize: "0.85rem",
-                        fontWeight: 600,
-                        color: "var(--text-main)",
-                    }}>
+                    <span className="text-[0.85rem] font-semibold text-[var(--text-main)]">
                         {shiftLabel}
                     </span>
                 </div>
@@ -204,31 +113,10 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
                     e.stopPropagation();
                     onClick();
                 }}
-                style={{
-                    width: "100%",
-                    background: "linear-gradient(135deg, #0056b6 0%, #006ee5 100%)",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "12px",
-                    padding: "14px",
-                    fontFamily: "var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif",
-                    fontWeight: 700,
-                    fontSize: "0.75rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.15em",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    boxShadow: "0 4px 12px rgba(0, 86, 182, 0.2)",
-                    transition: "transform 0.2s ease, opacity 0.2s ease",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                className="w-full bg-[var(--primary-main)] text-white rounded-xl py-3.5 font-bold text-[0.75rem] uppercase tracking-[0.15em] flex items-center justify-center gap-2 shadow-md shadow-[var(--ring-overlay)] border-none cursor-pointer transition-all hover:opacity-90 hover:-translate-y-px active:translate-y-0"
             >
                 Quick Apply
-                <Zap style={{ width: "1rem", height: "1rem", fill: "currentColor" }} />
+                <Zap className="w-4 h-4 fill-current" />
             </button>
         </motion.div>
     );

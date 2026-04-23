@@ -9,7 +9,7 @@ import { formatDate, formatSalary } from "@/utils/index";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Variants } from "framer-motion";
-import { Briefcase, X, MapPin, Banknote, Award, Users, Check, CheckCheck, ExternalLink } from "lucide-react";
+import { Briefcase, X, MapPin, Banknote, Award, Users, Check, CheckCheck, ExternalLink, Building2, Clock } from "lucide-react";
 import type { Job, Application } from '@/types';
 
 const ApplyModal = dynamic(() => import("@/components/common/ApplyModal"), { ssr: false });
@@ -27,6 +27,25 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
     const [applied, setApplied] = useState(false);
     const [showApplyModal, setShowApplyModal] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    useEffect(() => {
+        if (isMobile && job && !isClosing) {
+            document.documentElement.classList.add('lock-scroll');
+        } else {
+            document.documentElement.classList.remove('lock-scroll');
+        }
+        return () => {
+            document.documentElement.classList.remove('lock-scroll');
+        };
+    }, [isMobile, job, isClosing]);
 
     useEffect(() => {
         const checkIfApplied = async () => {
@@ -47,8 +66,8 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
 
     const handleClose = useCallback(() => {
         setIsClosing(true);
-        setTimeout(() => onClose(), 150);
-    }, [onClose]);
+        setTimeout(() => onClose(), isMobile ? 250 : 150);
+    }, [onClose, isMobile]);
 
     const handleApply = async (coverNote: string) => {
         if (!job) return;
@@ -70,32 +89,37 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
     };
 
     const variants: Variants = {
-        hidden: { opacity: 0, x: 24, scale: 0.98 },
+        hidden: isMobile 
+            ? { y: "100%", x: 0, opacity: 1 } 
+            : { opacity: 0, x: 20 },
         enter: {
-            opacity: 1, x: 0, scale: 1,
-            transition: { type: "spring", stiffness: 350, damping: 28, mass: 0.8 }
+            opacity: 1, x: 0, y: 0,
+            transition: isMobile ? { 
+                type: "spring", 
+                stiffness: 300, 
+                damping: 30, 
+                mass: 0.8 
+            } : { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
         },
         switch: {
-            opacity: 1, scale: 1, x: 0,
-            transition: { duration: 0.18, ease: "easeOut" }
+            opacity: 1, x: 0, y: 0,
+            transition: { duration: 0.25, ease: "easeOut" }
         },
-        exit: {
-            opacity: 0, x: 16, scale: 0.98,
-            transition: { duration: 0.15, ease: "easeIn" }
-        }
+        exit: isMobile
+            ? { y: "100%", transition: { duration: 0.25, ease: "easeIn" } }
+            : { opacity: 0, x: 20, transition: { duration: 0.2, ease: "easeIn" } }
     };
 
     // ── Empty state ──────────────────────────────────────────────────────────────
     if (!job) {
         return (
-            <div className="h-full flex flex-col items-center justify-center px-4" style={{ gap: '1.5rem' }}>
-                <div className="rounded-3xl flex items-center justify-center"
-                    style={{ width: 80, height: 80, background: 'var(--bg-card)', border: '1.5px solid var(--border-color)' }}>
-                    <Briefcase className="text-2xl" style={{ color: 'var(--text-muted)' }} />
+            <div className="h-full flex flex-col items-center justify-center px-4 gap-6">
+                <div className="w-20 h-20 rounded-[24px] flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)]">
+                    <Briefcase className="text-2xl text-[var(--text-muted)]" />
                 </div>
                 <div className="text-center">
-                    <h5 className="font-black mb-1" style={{ color: 'var(--text-main)', letterSpacing: '-0.02em' }}>Select a job</h5>
-                    <p className="text-sm mb-0" style={{ color: 'var(--text-muted)' }}>Click any listing to preview it here</p>
+                    <h5 className="font-bold mb-1 text-[var(--text-main)] tracking-tight">Select a job</h5>
+                    <p className="text-sm text-[var(--text-muted)]">Click any listing to preview it here</p>
                 </div>
             </div>
         );
@@ -107,159 +131,151 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
     return (
         <AnimatePresence mode="wait">
             {!isClosing && (
-                <motion.div
-                    key={job._id}
-                    initial="hidden"
-                    animate={isSwitch ? "switch" : "enter"}
-                    exit="exit"
-                    variants={variants}
-                    className="h-full flex flex-col overflow-hidden"
-                    style={{
-                        borderRadius: '20px',
-                        background: 'var(--bg-card)',
-                        boxShadow: '0 24px 64px -12px rgba(0,0,0,0.18)',
-                        willChange: 'transform, opacity',
-                        transform: 'translateZ(0)',
-                    }}
-                >
-                    {/* ── HERO HEADER ──────────────────────────────────────────────── */}
-                    <div className="relative shrink-0 overflow-hidden" style={{
-                        height: '160px',
-                        background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #4f46e5 75%, #7c3aed 100%)',
-                        borderRadius: '20px 20px 0 0',
-                    }}>
-                        {/* Radial glow overlay */}
-                        <div className="absolute w-full h-full" style={{
-                            inset: 0,
-                            backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(139,92,246,0.5) 0%, transparent 55%), radial-gradient(circle at 15% 85%, rgba(99,102,241,0.35) 0%, transparent 45%)',
-                        }}></div>
-
-                        {/* Close button — top right */}
-                        <button
+                <>
+                    {/* Backdrop for mobile */}
+                    {isMobile && (
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             onClick={handleClose}
-                            className="absolute top-3 right-3 rounded-full p-0 flex items-center justify-center"
-                            style={{
-                                width: 36, height: 36,
-                                background: 'rgba(255,255,255,0.15)',
-                                backdropFilter: 'blur(12px)',
-                                border: '1px solid rgba(255,255,255,0.25)',
-                                color: 'white',
-                                zIndex: 10,
-                                transition: 'background 0.2s ease',
-                            }}
-                            aria-label="Close"
-                        >
-                            <X style={{ width: '1.2rem', height: '1.2rem' }} />
-                        </button>
+                            className="sheet-backdrop pointer-events-auto"
+                            style={{ touchAction: 'none' }}
+                        />
+                    )}
 
-                        {/* Job type badge */}
-                        <div className="absolute bottom-3 right-3 z-[2]">
-                            <span className="rounded-full font-bold uppercase"
-                                style={{
-                                    background: 'rgba(255,255,255,0.15)',
-                                    backdropFilter: 'blur(8px)',
-                                    border: '1px solid rgba(255,255,255,0.2)',
-                                    color: 'white',
-                                    fontSize: '0.62rem',
-                                    letterSpacing: '0.08em',
-                                    padding: '5px 11px',
-                                }}>
-                                {(job.jobType || 'Full-time').replace(/-/g, ' ')}
-                            </span>
-                        </div>
-
-                        {/* Floating logo — bottom left, bleeds out */}
-                        <div className="absolute" style={{ bottom: '-36px', left: '24px', zIndex: 5 }}>
-                            <div className="rounded-3xl overflow-hidden shadow-lg border-[3px]"
-                                style={{
-                                    width: 72, height: 72,
-                                    borderColor: 'var(--bg-body)',
-                                    background: 'var(--bg-card)',
-                                    position: 'relative',
-                                }}>
-                                {job.company?.logo ? (
-                                    <Image src={job.company.logo} alt={job.company.name} fill sizes="72px" style={{ objectFit: 'cover' }} />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center font-black text-white"
-                                        style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', fontSize: '1.6rem' }}>
-                                        {job.title?.charAt(0).toUpperCase()}
+                    <motion.div
+                        layout="position"
+                        key={job._id}
+                        initial="hidden"
+                        animate={isSwitch ? "switch" : "enter"}
+                        exit="exit"
+                        variants={variants}
+                        className={`detail-panel flex flex-col z-[2001] bg-[var(--bg-card)] pointer-events-auto ${isMobile ? 'rounded-t-[32px] !rounded-b-none h-[75vh] w-full border-b-0 mb-0' : 'h-full'}`}
+                        style={{ 
+                            willChange: 'transform, opacity', 
+                            transform: 'translateZ(0)', 
+                            overscrollBehavior: 'contain',
+                            boxShadow: isMobile ? '0 -10px 40px rgba(0,0,0,0.1)' : undefined
+                        }}
+                    >
+                        {isMobile && <div className="sheet-handle shrink-0" />}
+                    {/* ── HERO HEADER ──────────────────────────────────────────────── */}
+                    {!isMobile ? (
+                        <div className="px-8 pt-8 pb-4 flex items-start justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)]">
+                             <div className="flex items-center gap-5">
+                                <div className="w-20 h-20 rounded-[22px] overflow-hidden border border-[var(--border-color)] relative shrink-0 shadow-sm bg-[var(--bg-surface)]">
+                                    {job.company?.logo ? (
+                                        <Image src={job.company.logo} alt={job.company.name} fill sizes="80px" className="object-contain p-2" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center font-bold text-white text-3xl bg-gradient-to-br from-[var(--primary-main)] to-[var(--primary-700)]">
+                                            {job.title?.charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex flex-col gap-1.5">
+                                    <div className="flex items-center gap-3">
+                                        <h2 className="font-black text-[var(--text-main)] text-2xl leading-none tracking-tight">{job.company?.name}</h2>
+                                        <span className="text-[0.7rem] uppercase font-black tracking-[0.1em] text-[var(--primary-main)] px-3 py-1 bg-[var(--primary-50)] dark:bg-[var(--primary-900)]/30 border border-[var(--primary-100)] dark:border-[var(--primary-800)] rounded-lg">{(job.jobType || 'Full-time').replace(/-/g, ' ')}</span>
                                     </div>
-                                )}
-                            </div>
+                                    <h1 className="text-[var(--text-muted)] text-lg font-medium">{job.title}</h1>
+                                </div>
+                             </div>
+
+                             <button
+                                onClick={handleClose}
+                                className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-main)] transition-all hover:bg-[var(--border-color)]/20 hover:scale-110 active:scale-95 shadow-sm"
+                                aria-label="Close"
+                            >
+                                <X size={20} />
+                            </button>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="px-6 pt-2 pb-3 flex items-center">
+                             <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 rounded-2xl overflow-hidden border border-[var(--border-color)] relative shrink-0 shadow-sm bg-[var(--bg-surface)]">
+                                    {job.company?.logo ? (
+                                        <Image src={job.company.logo} alt={job.company.name} fill sizes="56px" className="object-cover p-1.5" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center font-bold text-white text-xl bg-gradient-to-br from-[var(--primary-main)] to-[var(--primary-600)]">
+                                            {job.title?.charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex flex-col gap-0.5">
+                                    <h6 className="font-bold text-[var(--text-main)] text-lg leading-tight tracking-tight">{job.company?.name}</h6>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[0.65rem] uppercase font-extrabold tracking-[0.05em] text-[var(--primary-main)] px-2 py-0.5 bg-[var(--primary-50)] dark:bg-[var(--primary-900)]/30 rounded-md">{(job.jobType || 'Full-time').replace(/-/g, ' ')}</span>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    )}
 
                     {/* ── SCROLLABLE BODY ───────────────────────────────────────────── */}
                     <div className="grow overflow-auto custom-scroll" style={{ minHeight: 0 }}>
-                        {/* Identity block */}
-                        <div className="px-4 pt-5 pb-0 mt-3">
-                            <h4 className="font-black mb-1" style={{
-                                color: 'var(--text-main)',
-                                letterSpacing: '-0.035em',
-                                lineHeight: 1.15,
-                                fontSize: '1.3rem',
-                            }}>
+                        <div className={`px-6 pb-0 ${isMobile ? 'pt-6' : 'pt-10'}`}>
+                            {/* Identity block */}
+                            <h4 className="font-extrabold text-2xl text-[var(--text-main)] tracking-tight leading-[1.15]">
                                 {job.title}
                             </h4>
-                            <div className="flex flex-wrap items-center gap-2 mt-2 mb-4">
-                                <span className="font-bold text-sm" style={{ color: 'var(--primary-500)' }}>{job.company?.name}</span>
-                                <span style={{ color: 'var(--border-color)' }}>·</span>
-                                <span className="text-sm flex items-center" style={{ color: 'var(--text-muted)' }}>
-                                    <MapPin className="mr-1" style={{ width: '1rem', height: '1rem' }} />{job.city}, {job.state}
-                                </span>
-                                <span style={{ color: 'var(--border-color)' }}>·</span>
-                                <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 mb-8">
+                                <div className="flex items-center text-sm text-[var(--text-muted)] font-medium">
+                                    <MapPin size={14} className="mr-1.5 text-[var(--primary-main)]" />
+                                    {job.city}, {job.state}
+                                </div>
+                                <div className="w-1 h-1 rounded-full bg-[var(--border-color)]" />
+                                <div className="flex items-center text-sm text-[var(--text-muted)] font-medium">
+                                    <Clock size={14} className="mr-1.5 text-[var(--primary-main)]" />
                                     {formatDate(job.createdAt)}
-                                </span>
+                                </div>
                             </div>
 
                             {/* Quick stats bar */}
-                            <div className="flex rounded-xl overflow-hidden mb-10" style={{ border: '1px solid var(--border-color)' }}>
+                            <div className={isMobile ? "grid grid-cols-2 gap-3 mb-10" : "flex items-center gap-px rounded-2xl border border-[var(--border-color)] overflow-hidden bg-[var(--bg-surface)] shadow-sm mb-12"}>
                                 {[
-                                    { Icon: Banknote, label: 'Salary', value: formatSalary(job.salaryMin, job.salaryMax, job.salaryType) },
-                                    { Icon: Award, label: 'Exp', value: (job.experienceMin ?? 0) > 0 ? `${job.experienceMin}+ yr` : 'Fresher' },
-                                    { Icon: Users, label: 'Open', value: `${job.vacancies ?? 1}` },
-                                ].map((s, i, arr) => (
-                                    <div key={i} className="flex-1 flex flex-col items-center justify-center py-3 px-2"
-                                        style={{
-                                            background: 'var(--bg-surface)',
-                                            borderRight: i < arr.length - 1 ? '1px solid var(--border-color)' : 'none',
-                                        }}>
-                                        <s.Icon className="mb-1" style={{ color: 'var(--primary-500)', width: '1.2rem', height: '1.2rem' }} />
-                                        <div className="uppercase font-black opacity-40 mb-1" style={{ fontSize: '0.52rem', letterSpacing: '1px' }}>{s.label}</div>
-                                        <div className="font-bold truncate text-center" style={{ color: 'var(--text-main)', fontSize: '0.78rem' }}>{s.value}</div>
+                                    { Icon: Banknote, label: isMobile ? 'Annual Salary' : 'Salary Package', value: formatSalary(job.salaryMin, job.salaryMax, job.salaryType) },
+                                    { Icon: Award, label: isMobile ? 'Exp. Required' : 'Required Experience', value: (job.experienceMin ?? 0) > 0 ? `${job.experienceMin}+ years` : 'Fresher' },
+                                    { Icon: Users, label: isMobile ? 'Vacancies' : 'Positions Open', value: `${job.vacancies ?? 1} Vacancy` },
+                                    { Icon: Building2, label: 'Work Mode', value: job.workMode || 'On-site' },
+                                ].map((s, i) => (
+                                    <div key={i} className={isMobile ? "p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-color)] flex flex-col gap-1 shadow-sm" : "flex-1 flex flex-col items-center justify-center py-5 px-4 bg-[var(--bg-surface)] transition-all group"}>
+                                        <div className="flex items-center gap-2 mb-1.5">
+                                            <s.Icon className="text-[var(--primary-main)] opacity-70 group-hover:scale-110 transition-transform" size={16} />
+                                            <div className="text-[0.6rem] font-black uppercase tracking-wider text-[var(--text-muted)]">
+                                                {s.label}
+                                            </div>
+                                        </div>
+                                        <div className="text-[0.95rem] font-bold text-[var(--text-main)]">
+                                            {s.value}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Description */}
-                            <div className="mb-10">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <span className="font-black uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>About the Role</span>
-                                    <div className="grow" style={{ height: 1, background: 'var(--border-color)' }}></div>
+                            <div className="mb-12">
+                                <div className="flex items-center gap-3 mb-5">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[var(--primary-main)]" />
+                                    <span className="font-bold uppercase text-[0.7rem] tracking-[0.15em] text-[var(--text-main)] opacity-60">About the Role</span>
+                                    <div className="grow h-px bg-[var(--border-color)] opacity-50"></div>
                                 </div>
-                                <p style={{ color: 'var(--text-main)', opacity: 0.82, lineHeight: '1.75', fontSize: '0.92rem', whiteSpace: 'pre-line' }}>
+                                <p className="text-[var(--text-main)] text-[0.95rem] leading-relaxed opacity-85 whitespace-pre-line font-medium">
                                     {job.description}
                                 </p>
                             </div>
 
                             {/* Skills */}
                             {job.skills && job.skills.length > 0 && (
-                                <div className="mb-10">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="font-black uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>Skills</span>
-                                        <div className="grow" style={{ height: 1, background: 'var(--border-color)' }}></div>
+                                <div className="mb-12">
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--primary-main)]" />
+                                        <span className="font-bold uppercase text-[0.7rem] tracking-[0.15em] text-[var(--text-main)] opacity-60">Key Skills</span>
+                                        <div className="grow h-px bg-[var(--border-color)] opacity-50"></div>
                                     </div>
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-2.5">
                                         {job.skills.map((skill, index) => (
-                                            <span key={index}
-                                                className="font-semibold rounded-full px-3 py-1"
-                                                style={{
-                                                    background: 'var(--bg-surface)',
-                                                    color: 'var(--text-main)',
-                                                    border: '1.5px solid var(--border-color)',
-                                                    fontSize: '0.78rem',
-                                                }}>
+                                            <span key={index} className="text-[0.8rem] font-bold rounded-xl px-4 py-2 bg-[var(--bg-surface)] text-[var(--text-main)] border border-[var(--border-color)] shadow-sm">
                                                 {skill}
                                             </span>
                                         ))}
@@ -269,19 +285,19 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
 
                             {/* Benefits */}
                             {job.benefits && job.benefits.length > 0 && (
-                                <div className="mb-10">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="font-black uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>Perks</span>
-                                        <div className="grow" style={{ height: 1, background: 'var(--border-color)' }}></div>
+                                <div className="mb-12">
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--primary-main)]" />
+                                        <span className="font-bold uppercase text-[0.7rem] tracking-[0.15em] text-[var(--text-main)] opacity-60">Company Perks</span>
+                                        <div className="grow h-px bg-[var(--border-color)] opacity-50"></div>
                                     </div>
-                                    <div className="flex flex-col gap-2">
+                                    <div className="grid grid-cols-1 gap-4">
                                         {job.benefits.map((b: string, idx: number) => (
-                                            <div key={idx} className="flex items-center gap-2">
-                                                <div className="rounded-full flex items-center justify-center shrink-0"
-                                                    style={{ width: 20, height: 20, background: 'rgba(16,185,129,0.12)' }}>
-                                                    <Check style={{ color: '#10b981', width: '0.8rem', height: '0.8rem' }} />
+                                            <div key={idx} className="flex items-start gap-4 p-3 rounded-2xl bg-[var(--bg-surface)]/50 border border-[var(--border-color)] shadow-sm">
+                                                <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-[var(--primary-main)]/10">
+                                                    <Check size={14} className="text-[var(--primary-main)]" />
                                                 </div>
-                                                <span style={{ color: 'var(--text-main)', fontSize: '0.85rem' }}>{b}</span>
+                                                <span className="text-[var(--text-main)] text-[0.9rem] font-medium leading-snug">{b}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -290,11 +306,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                         </div>
                     </div>
 
-                    {/* ── STICKY ACTION FOOTER ──────────────────────────────────────── */}
-                    <div className="shrink-0 px-4 py-4" style={{
-                        borderTop: '1px solid var(--border-color)',
-                        background: 'var(--bg-card)',
-                    }}>
+                    <div className={`shrink-0 px-4 py-4 border-t border-[var(--border-color)] bg-[var(--bg-card)] ${isMobile ? 'pb-[calc(1rem+env(safe-area-inset-bottom))] !rounded-b-none !border-b-0' : ''}`}>
                         <div className="grid gap-2">
                             {canApply && (
                                 <button
@@ -303,32 +315,19 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                                         : router.push(`/login?redirect=/?openJob=${job._id}`)
                                     }
                                     disabled={applied}
-                                    className="py-3 font-black rounded-full"
-                                    style={{
-                                        fontSize: '0.95rem',
-                                        letterSpacing: '-0.01em',
-                                        background: applied ? 'var(--zinc-400)' : 'var(--zinc-900)',
-                                        color: '#fff',
-                                        border: 'none',
-                                        opacity: applied ? 0.65 : 1,
-                                        transition: 'opacity 0.2s ease, transform 0.2s ease',
-                                    }}>
+                                    className={`py-3.5 font-bold rounded-2xl transition-all ${applied ? 'bg-[var(--zinc-400)] opacity-60 cursor-not-allowed' : 'auth-submit-btn hover:opacity-90 active:scale-[0.98]'}`}
+                                >
                                     {applied
-                                        ? <span className="flex items-center justify-center"><CheckCheck className="mr-2" style={{ width: '1.2rem', height: '1.2rem' }} />Already Applied</span>
+                                        ? <span className="flex items-center justify-center gap-2"><CheckCheck size={20} />Already Applied</span>
                                         : <span>Apply Now &nbsp;→</span>
                                     }
                                 </button>
                             )}
                             <button
                                 onClick={() => router.push(`/jobs/${job._id}`)}
-                                className="py-2 font-semibold rounded-full flex items-center justify-center gap-2"
-                                style={{
-                                    background: 'var(--bg-surface)',
-                                    color: 'var(--text-muted)',
-                                    border: '1px solid var(--border-color)',
-                                    fontSize: '0.87rem',
-                                }}>
-                                <ExternalLink style={{ width: '1rem', height: '1rem' }} />
+                                className="py-2.5 font-semibold rounded-xl flex items-center justify-center gap-2 bg-[var(--bg-surface)] text-[var(--text-muted)] border border-[var(--border-color)] text-sm transition-colors hover:bg-[var(--border-color)]/20"
+                            >
+                                <ExternalLink size={16} />
                                 View full details
                             </button>
                         </div>
@@ -345,7 +344,8 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                             />
                         </Suspense>
                     )}
-                </motion.div>
+                    </motion.div>
+                </>
             )}
         </AnimatePresence>
     );

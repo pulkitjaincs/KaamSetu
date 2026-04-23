@@ -46,8 +46,8 @@ function LoginPageContent() {
                             <div className="inline-flex items-center justify-center mb-4 rounded-2xl w-16 h-16 bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] shadow-sm">
                                 <BrandLogo className="w-20 h-20" iconSize={64} />
                             </div>
-                            <h2 className="font-bold mb-1 text-[var(--text-main)] tracking-tight text-2xl">Welcome Back</h2>
-                            <p className="mb-0 text-[var(--text-muted)]">Sign in to find your next opportunity</p>
+                            <h2 className="font-bold mb-1 text-zinc-900 tracking-tight text-2xl">Welcome Back</h2>
+                            <p className="mb-0 text-zinc-600">Sign in to find your next opportunity</p>
                         </div>
 
                         <div className="p-6 md:p-12">
@@ -75,11 +75,11 @@ function LoginPageContent() {
                                     <>
                                         <div className="mb-4">
                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Phone Number</label>
-                                            <div className="flex relative items-stretch w-full rounded-xl overflow-hidden border border-[var(--border-color)]">
-                                                <span className="flex items-center px-4 font-medium bg-[var(--bg-surface)] text-[var(--text-main)] border-r border-[var(--border-color)]">+91</span>
+                                            <div className="auth-input-container group">
+                                                <span className="flex items-center px-4 font-medium bg-[var(--bg-surface)] text-[var(--text-main)] border-r border-[var(--border-color)] transition-colors group-focus-within:border-[#6366f1] group-focus-within:border-r-1.5">+91</span>
                                                 <input
                                                     type="tel"
-                                                    className="block w-full py-3 px-4 bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                                                    className="auth-form-control"
                                                     placeholder="Enter your phone number"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
@@ -94,37 +94,43 @@ function LoginPageContent() {
                                                     <>
                                                         <div className="mb-4">
                                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Full Name</label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                                placeholder="John Doe"
-                                                                value={name}
-                                                                onChange={(e) => setName(e.target.value)}
-                                                            />
+                                                            <div className="auth-input-container group">
+                                                                <input
+                                                                    type="text"
+                                                                    className="auth-form-control"
+                                                                    placeholder="John Doe"
+                                                                    value={name}
+                                                                    onChange={(e) => setName(e.target.value)}
+                                                                />
+                                                            </div>
                                                         </div>
                                                         <div className="mb-4">
                                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">I am a</label>
-                                                            <select
-                                                                className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                                value={role}
-                                                                onChange={(e) => setRole(e.target.value as 'worker' | 'employer')}
-                                                            >
-                                                                <option value="worker">Job Seeker (Worker)</option>
-                                                                <option value="employer">Employer / Recruiter</option>
-                                                            </select>
+                                                            <div className="auth-input-container group">
+                                                                <select
+                                                                    className="auth-form-control appearance-none"
+                                                                    value={role}
+                                                                    onChange={(e) => setRole(e.target.value as 'worker' | 'employer')}
+                                                                >
+                                                                    <option value="worker">Job Seeker (Worker)</option>
+                                                                    <option value="employer">Employer / Recruiter</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </>
                                                 )}
                                                 <div className="mb-4">
                                                     <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Enter OTP</label>
-                                                    <input
-                                                        type="text"
-                                                        className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] text-lg tracking-[0.5em] text-center outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                        placeholder="6-digit OTP"
-                                                        maxLength={6}
-                                                        value={otp}
-                                                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                                    />
+                                                    <div className="auth-input-container group">
+                                                        <input
+                                                            type="text"
+                                                            className="auth-form-control text-lg tracking-[0.5em] text-center"
+                                                            placeholder="6-digit OTP"
+                                                            maxLength={6}
+                                                            value={otp}
+                                                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                                        />
+                                                    </div>
                                                     <button type="button" className="p-0 mt-2 text-indigo-600 dark:text-indigo-400 text-sm bg-transparent border-none cursor-pointer" onClick={resetState}>Change number</button>
                                                 </div>
                                             </>
@@ -136,14 +142,16 @@ function LoginPageContent() {
                                     <>
                                         <div className="mb-4">
                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Email Address</label>
-                                            <input
-                                                type="email"
-                                                className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                placeholder="you@example.com"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                disabled={otpSent}
-                                            />
+                                            <div className="auth-input-container group">
+                                                <input
+                                                    type="email"
+                                                    className="auth-form-control"
+                                                    placeholder="you@example.com"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    disabled={otpSent}
+                                                />
+                                            </div>
                                         </div>
 
                                         {!otpSent && (
@@ -165,13 +173,15 @@ function LoginPageContent() {
                                                     <label className="block font-medium text-xs uppercase m-0 text-[var(--text-muted)] tracking-wider">Password</label>
                                                     <Link href="/forgot-password" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">Forgot?</Link>
                                                 </div>
-                                                <input
-                                                    type="password"
-                                                    className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                    placeholder="Enter your password"
-                                                    value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                />
+                                                <div className="auth-input-container group">
+                                                    <input
+                                                        type="password"
+                                                        className="auth-form-control"
+                                                        placeholder="Enter your password"
+                                                        value={password}
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                    />
+                                                </div>
                                             </div>
                                         )}
 
@@ -181,37 +191,43 @@ function LoginPageContent() {
                                                     <>
                                                         <div className="mb-4">
                                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Full Name</label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                                placeholder="John Doe"
-                                                                value={name}
-                                                                onChange={(e) => setName(e.target.value)}
-                                                            />
+                                                            <div className="auth-input-container group">
+                                                                <input
+                                                                    type="text"
+                                                                    className="auth-form-control"
+                                                                    placeholder="John Doe"
+                                                                    value={name}
+                                                                    onChange={(e) => setName(e.target.value)}
+                                                                />
+                                                            </div>
                                                         </div>
                                                         <div className="mb-4">
                                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">I am a</label>
-                                                            <select
-                                                                className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                                value={role}
-                                                                onChange={(e) => setRole(e.target.value as 'worker' | 'employer')}
-                                                            >
-                                                                <option value="worker">Job Seeker (Worker)</option>
-                                                                <option value="employer">Employer / Recruiter</option>
-                                                            </select>
+                                                            <div className="auth-input-container group">
+                                                                <select
+                                                                    className="auth-form-control appearance-none"
+                                                                    value={role}
+                                                                    onChange={(e) => setRole(e.target.value as 'worker' | 'employer')}
+                                                                >
+                                                                    <option value="worker">Job Seeker (Worker)</option>
+                                                                    <option value="employer">Employer / Recruiter</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </>
                                                 )}
                                                 <div className="mb-4">
                                                     <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Enter OTP</label>
-                                                    <input
-                                                        type="text"
-                                                        className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] text-lg tracking-[0.5em] text-center outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                        placeholder="6-digit OTP"
-                                                        maxLength={6}
-                                                        value={otp}
-                                                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                                    />
+                                                    <div className="auth-input-container group">
+                                                        <input
+                                                            type="text"
+                                                            className="auth-form-control text-lg tracking-[0.5em] text-center"
+                                                            placeholder="6-digit OTP"
+                                                            maxLength={6}
+                                                            value={otp}
+                                                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                                        />
+                                                    </div>
                                                     <button type="button" className="p-0 mt-2 text-indigo-600 dark:text-indigo-400 text-sm bg-transparent border-none cursor-pointer" onClick={resetState}>Change email</button>
                                                 </div>
                                             </>

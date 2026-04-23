@@ -81,7 +81,7 @@ describe('Listing Component', () => {
 
   it('should render job title, company, location and description', () => {
     render(<Listing job={mockJob} onClose={mockOnClose} />);
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+    expect(screen.getAllByText('Software Engineer')[0]).toBeInTheDocument();
     expect(screen.getByText('SkillAnchor')).toBeInTheDocument();
     expect(screen.getByText(/New York, NY/)).toBeInTheDocument();
     expect(screen.getByText('A great role for a software engineer.')).toBeInTheDocument();

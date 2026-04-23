@@ -22,7 +22,15 @@ function HomePageContent() {
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [isSwitch, setIsSwitch] = useState(false);
   const searchParams = useSearchParams();
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const openJobId = searchParams.get("openJob");
   const searchQuery = searchParams.get('search') || '';
@@ -95,13 +103,7 @@ function HomePageContent() {
     setSelectedJob(job);
   }, [selectedJob]);
 
-  const listColumnClass = selectedJob
-    ? "hidden lg:flex lg:w-5/12"
-    : "w-full";
 
-  const detailColumnClass = selectedJob
-    ? "w-full lg:w-7/12"
-    : "hidden";
 
   const handleHeroSearch = ({ search, location, category }: { search?: string, location?: string, category?: string }) => {
     const params = new URLSearchParams();
@@ -115,7 +117,13 @@ function HomePageContent() {
     <div className="text-center py-20 mt-20">
       <AlertCircle className="text-red-500 mx-auto" size={36} />
       <h5 className="mt-3">Failed to load jobs</h5>
-      <button className="mt-2 px-4 py-2" style={{ background: 'var(--primary-500)', color: 'white', borderRadius: '12px', fontWeight: 600 }} onClick={() => window.location.reload()}>Retry</button>
+      <button 
+        className="mt-4 px-6 py-2.5 rounded-xl font-semibold transition-opacity hover:opacity-90" 
+        style={{ background: 'var(--primary-main)', color: 'var(--on-primary)' }} 
+        onClick={() => window.location.reload()}
+      >
+        Retry
+      </button>
     </div>
   );
 
@@ -125,70 +133,43 @@ function HomePageContent() {
     : 'Opportunities';
 
   return (
-    <PageTransitions>
-      <div className="w-full grow px-4 lg:px-10" style={{ maxWidth: "1400px" }}>
+    <>
+      <PageTransitions>
+        <div className="page-container grow">
+          <SearchHero
+            onSearch={handleHeroSearch}
+            initialSearchQuery={searchQuery}
+            initialLocation={locationQuery}
+            initialCategory={categoryQuery}
+          />
 
-        <SearchHero
-          onSearch={handleHeroSearch}
-          initialSearchQuery={searchQuery}
-          initialLocation={locationQuery}
-          initialCategory={categoryQuery}
-        />
-
-        <div className="grid gap-4" style={{ paddingTop: '0px' }}>
-
-          <div className={`${listColumnClass} flex flex-col layout-transition`}
-            style={{ paddingTop: "0px", paddingBottom: "20px" }}>
-
-            {/* Section header — Stitch "Premium Opportunities / See All" style */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '32px 0 24px 0',
-              }}
+          <div className="flex flex-col lg:flex-row gap-8 items-start relative min-h-[600px] mt-8">
+            {/* Left Column: Job Cards */}
+            <motion.div 
+              layout
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className={`w-full flex flex-col ${selectedJob ? 'lg:w-[40%]' : 'w-full'}`}
             >
-              <h3 style={{
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                letterSpacing: '-0.02em',
-                color: 'var(--text-main)',
-                margin: 0,
-              }}>
-                {sectionTitle}
-              </h3>
-              {!selectedJob && allJobs.length > 0 && (
-                <button
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#0056b6',
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: 0,
-                  }}
-                >
-                  See All <ArrowRight size={14} />
-                </button>
-              )}
-            </div>
+              {/* Section header */}
+              <div className="section-header !mb-6">
+                <h3 className="section-title">
+                  {sectionTitle}
+                </h3>
+                {!selectedJob && allJobs.length > 0 && (
+                  <button className="text-link">
+                    See All <ArrowRight size={14} />
+                  </button>
+                )}
+              </div>
 
-            {/* Job cards grid or list */}
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <AnimatePresence mode="popLayout">
+              <AnimatePresence mode="wait">
                 {isLoading ? (
-                  <motion.div
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: selectedJob ? '1fr' : 'repeat(auto-fill, minmax(min(100%, 420px), 1fr))',
-                      gap: '20px',
-                    }}
+                  <motion.div 
+                    key="skeleton-grid" 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className={`job-grid ${selectedJob ? 'grid-cols-single' : 'grid-cols-dynamic'}`}
                   >
                     {[...Array(4)].map((_, i) => (
                       <JobSkeleton key={`skeleton-${i}`} />
@@ -196,32 +177,38 @@ function HomePageContent() {
                   </motion.div>
                 ) : allJobs.length === 0 ? (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="py-20 text-center flex flex-col items-center"
+                    key="empty-state"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="col-span-full py-20 text-center"
                   >
-                    <div className="p-4 rounded-full mb-4" style={{ background: "var(--bg-surface)" }}>
-                      <Search className="text-[var(--text-muted)] mx-auto" size={36} />
+                    <div className="p-4 rounded-full mb-4 mx-auto w-fit" style={{ background: "var(--bg-surface)" }}>
+                      <Search className="text-[var(--text-muted)]" size={36} />
                     </div>
                     <h5 className="font-bold mb-2">No jobs found</h5>
-                    <p className="text-[var(--text-muted)]" style={{ maxWidth: "300px" }}>Try adjusting your search filters or exploring a different category.</p>
+                    <p className="text-[var(--text-muted)]">Try adjusting your filters or search terms.</p>
                   </motion.div>
                 ) : (
-                  <>
+                  <motion.div 
+                    key="job-list-content"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
                     <motion.div
+                      layout="position"
                       initial="hidden"
                       animate="visible"
                       variants={{
                         hidden: { opacity: 0 },
                         visible: {
                           opacity: 1,
-                          transition: { staggerChildren: 0.08 }
+                          transition: { staggerChildren: 0.04 }
                         }
                       }}
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: selectedJob ? '1fr' : 'repeat(auto-fill, minmax(min(100%, 420px), 1fr))',
-                        gap: '20px',
-                      }}
+                      className={`job-grid ${selectedJob ? 'grid-cols-single' : 'grid-cols-dynamic'}`}
                     >
                       {allJobs.map((job: Job) => (
                         <JobCard
@@ -237,12 +224,7 @@ function HomePageContent() {
                     <div ref={loadMoreRef} style={{ height: '1px' }} />
 
                     {isFetchingNextPage && (
-                      <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: selectedJob ? '1fr' : 'repeat(auto-fill, minmax(min(100%, 420px), 1fr))',
-                        gap: '20px',
-                        paddingTop: '20px',
-                      }}>
+                      <div className={`job-grid pt-5 ${selectedJob ? 'grid-cols-single' : 'grid-cols-dynamic'}`}>
                         <JobSkeleton />
                       </div>
                     )}
@@ -251,27 +233,50 @@ function HomePageContent() {
                         <span className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>You&apos;ve reached the end of the list</span>
                       </div>
                     )}
-                  </>
+                  </motion.div>
                 )}
               </AnimatePresence>
-            </div>
-          </div>
+            </motion.div>
 
-          <div className={`${detailColumnClass} layout-transition`}
-            style={{ position: 'sticky', height: "calc(100vh - 120px)", overflowY: "hidden", top: "110px", borderRadius: "24px", zIndex: 1100 }}>
-            {selectedJob && (
-              <Suspense fallback={<div className="h-full flex items-center justify-center text-[var(--text-muted)]">Loading Details...</div>}>
-                <Listing
-                  job={selectedJob}
-                  onClose={() => { setSelectedJob(null); setIsSwitch(false); }}
-                  isSwitch={isSwitch}
-                />
-              </Suspense>
-            )}
+            {/* Right Column: Listing Detail */}
+            <AnimatePresence mode="wait">
+              {selectedJob && (
+                <motion.div 
+                  key="listing-panel"
+                  layout
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 30 }}
+                  transition={{ duration: 0.5, ease: [0.2, 0, 0, 1] }}
+                  className="hidden lg:block lg:w-[60%] sticky h-[calc(100vh-120px)] overflow-hidden top-[110px] rounded-[24px] border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl"
+                >
+                  <Suspense fallback={<div className="h-full flex items-center justify-center text-[var(--text-muted)]">Loading Details...</div>}>
+                    <Listing
+                      job={selectedJob}
+                      onClose={() => { setSelectedJob(null); setIsSwitch(false); }}
+                      isSwitch={isSwitch}
+                    />
+                  </Suspense>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
+      </PageTransitions>
+    
+    {/* Mobile Listing Bottom Sheet - Outside constrained containers & transitions */}
+    {isMobile && selectedJob && (
+      <div className="lg:hidden fixed inset-0 z-[2000] flex flex-col justify-end pointer-events-none">
+        <Suspense fallback={null}>
+          <Listing
+            job={selectedJob}
+            onClose={() => { setSelectedJob(null); setIsSwitch(false); }}
+            isSwitch={isSwitch}
+          />
+        </Suspense>
       </div>
-    </PageTransitions>
+    )}
+    </>
   );
 }
 

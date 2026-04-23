@@ -9,67 +9,53 @@ const JobSkeleton = memo(() => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{
-                borderRadius: "16px",
-                backgroundColor: "var(--bg-card)",
-                border: "1px solid transparent",
-                padding: "24px",
-                overflow: 'hidden'
-            }}
+            className="card pointer-events-none"
         >
             {/* Header skeleton: logo + text */}
-            <div className="flex gap-3 mb-4 items-start">
+            <div className="flex gap-4 mb-5 items-start">
                 {/* Logo */}
                 <div className="shrink-0">
                     <div
-                        className="animate-pulse"
-                        style={{ width: "56px", height: "56px", borderRadius: "12px", backgroundColor: shimmerBg }}
+                        className="animate-pulse w-14 h-14 rounded-xl"
+                        style={{ backgroundColor: shimmerBg }}
                     />
                 </div>
                 {/* Company name + title */}
                 <div className="grow min-w-0">
                     <div
-                        className="animate-pulse mb-2"
-                        style={{ width: "35%", height: "12px", borderRadius: "6px", backgroundColor: shimmerBg, display: "block" }}
+                        className="animate-pulse mb-2 w-[35%] h-3 rounded-md"
+                        style={{ backgroundColor: shimmerBg }}
                     />
                     <div
-                        className="animate-pulse"
-                        style={{ width: "70%", height: "18px", borderRadius: "6px", backgroundColor: shimmerBg, display: "block" }}
+                        className="animate-pulse w-[70%] h-5 rounded-md"
+                        style={{ backgroundColor: shimmerBg }}
                     />
                 </div>
             </div>
 
             {/* Metadata grid skeleton */}
             <div
-                className="grid grid-cols-3 gap-4 border-t border-b border-[var(--border-color)] py-4 mb-4"
+                className="grid grid-cols-3 gap-4 border-y border-[var(--border-color)] py-4 mb-4"
             >
                 {[1, 2, 3].map((i) => (
-                    <div key={i} className="flex flex-col gap-1.5">
+                    <div key={i} className="flex flex-col gap-2">
                         <div
-                            className="animate-pulse"
-                            style={{ width: "50%", height: "8px", borderRadius: "4px", backgroundColor: shimmerBg }}
+                            className="animate-pulse w-1/2 h-2 rounded-sm"
+                            style={{ backgroundColor: shimmerBg }}
                         />
                         <div
-                            className="animate-pulse"
-                            style={{ width: "70%", height: "14px", borderRadius: "4px", backgroundColor: shimmerBg }}
+                            className="animate-pulse w-[70%] h-3.5 rounded-sm"
+                            style={{ backgroundColor: shimmerBg }}
                         />
                     </div>
                 ))}
             </div>
 
             {/* CTA skeleton */}
-            <div>
-                <div
-                    className="animate-pulse"
-                    style={{
-                        width: "100%",
-                        height: "48px",
-                        borderRadius: "12px",
-                        backgroundColor: shimmerBg,
-                        display: "block"
-                    }}
-                />
-            </div>
+            <div
+                className="animate-pulse w-full h-[48px] rounded-xl"
+                style={{ backgroundColor: shimmerBg }}
+            />
         </motion.div>
     );
 });

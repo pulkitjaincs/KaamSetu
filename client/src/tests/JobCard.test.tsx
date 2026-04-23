@@ -43,7 +43,6 @@ describe('JobCard Component', () => {
         
         // Check for the "selected" class or specific styles
         expect(cardElement.className).toContain('selected');
-        expect(cardElement.style.backgroundColor).toBe('var(--bg-surface)');
     });
 
     it('should handle Quick Apply button click without propagating', () => {
@@ -60,10 +59,7 @@ describe('JobCard Component', () => {
         const quickApplyBtn = screen.getByText('Quick Apply');
         
         fireEvent.mouseEnter(quickApplyBtn);
-        expect(quickApplyBtn.style.opacity).toBe('0.9');
-        
-        fireEvent.mouseLeave(quickApplyBtn);
-        expect(quickApplyBtn.style.opacity).toBe('1');
+        expect(quickApplyBtn.className).toContain('hover:opacity-90');
     });
 
     it('should handle bookmarks hover effects safely', () => {
@@ -74,10 +70,7 @@ describe('JobCard Component', () => {
         if (bookmarkBtn) {
             fireEvent.click(bookmarkBtn);
             fireEvent.mouseEnter(bookmarkBtn);
-            expect(bookmarkBtn.style.color).toBe('rgb(0, 86, 182)'); // browsers convert hex to rgb
-            
-            fireEvent.mouseLeave(bookmarkBtn);
-            expect(bookmarkBtn.style.color).toBe('var(--text-muted)');
+            expect(bookmarkBtn.className).toContain('hover:text-[var(--primary-main)]');
         }
     });
 });

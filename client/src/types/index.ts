@@ -25,6 +25,7 @@ export interface Job {
     company?: Company;
     vacancies?: number;
     benefits?: string[];
+    workMode?: 'on-site' | 'remote' | 'hybrid';
     status?: 'active' | 'inactive' | 'closed' | 'paused';
     applicationsCount?: number;
 }

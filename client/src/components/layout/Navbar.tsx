@@ -156,48 +156,45 @@ function NavbarContent() {
           </Link>
         </motion.div>
 
-        {/* COMPACT SEARCH FOR HOMEPAGE W/ HIDDEN HERO */}
         {isHomePage && (
           <div
-            className={`hidden lg:flex items-center overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              showCompactSearch ? "max-w-[480px] opacity-100 pl-4" : "max-w-0 opacity-0 pointer-events-none"
+            className={`hidden lg:flex items-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              showCompactSearch ? "max-w-[500px] opacity-100 pl-4 py-1" : "max-w-0 opacity-0 pointer-events-none"
             }`}
           >
-            <div className="flex items-center rounded-full h-[38px] min-w-[340px] bg-white/40 dark:bg-black/40 backdrop-blur-lg border-none ring-1 ring-slate-200/50 dark:ring-white/10 overflow-hidden shadow-sm transition-all hover:bg-white/50 dark:hover:bg-black/50">
-              <div className="flex items-center flex-grow pl-4 pr-3">
-                <Search size={13} className="text-slate-500 dark:text-slate-400 shrink-0" />
+            <div className="flex items-center rounded-full h-[36px] min-w-[360px] bg-[var(--bg-surface)] dark:bg-[var(--bg-card)]/80 backdrop-blur-xl border border-[var(--border-color)] shadow-sm transition-all hover:border-[var(--primary-main)]/50">
+              <div className="flex items-center flex-grow h-full pl-4 pr-2 border-r border-[var(--border-color)]/50">
+                <Search size={12} className="text-[var(--primary-main)] shrink-0" />
                 <input
                   ref={compactSearchRef}
                   type="text"
                   value={compactSearch}
                   onChange={(e) => setCompactSearch(e.target.value)}
                   onKeyDown={handleCompactSearch}
-                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-xs font-semibold text-slate-800 dark:text-white pl-2"
+                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-[0.68rem] font-bold text-[var(--text-main)] pl-2 placeholder:text-[var(--text-muted)]"
                   placeholder="Search jobs..."
                 />
               </div>
 
-              <div className="w-[1px] h-[16px] bg-slate-300 dark:bg-slate-700/50 shrink-0 mx-1"></div>
-
-              <div className="flex items-center px-3 min-w-[110px]">
-                <MapPin size={13} className="text-indigo-500 shrink-0" />
+              <div className="flex items-center h-full px-2.5 w-[100px] shrink-0">
+                <MapPin size={12} className="text-[var(--primary-main)] shrink-0" />
                 <input
                   type="text"
                   value={compactLocation}
                   onChange={(e) => setCompactLocation(e.target.value)}
                   onKeyDown={handleCompactSearch}
-                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-xs font-semibold text-slate-800 dark:text-white pl-2"
+                  className="w-full bg-transparent border-none outline-none focus:ring-0 text-[0.68rem] font-bold text-[var(--text-main)] pl-2 placeholder:text-[var(--text-muted)]"
                   placeholder="Location..."
                 />
               </div>
 
               <motion.button
-                whileHover={{ scale: 1, filter: "brightness(1.05)" }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={executeCompactSearch}
-                className="flex items-center justify-center shrink-0 h-full px-3.5 rounded-none text-white text-[11px] font-bold border-none bg-indigo-600 shadow-sm transition-all"
+                className="flex items-center justify-center shrink-0 h-[28px] mr-1 px-3 rounded-full text-white text-[9px] font-black uppercase tracking-wider border-none bg-[var(--primary-main)] shadow-md shadow-[var(--primary-main)]/20 transition-all"
               >
-                Search
+                Go
               </motion.button>
             </div>
           </div>
@@ -236,7 +233,7 @@ function NavbarContent() {
 
       <div className="flex items-center space-x-2 md:space-x-4">
         {/* MOBILE SEARCH TOGGLE */}
-        {!isHomePage && (
+        {(!isHomePage || showCompactSearch) && (
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -313,7 +310,7 @@ function NavbarContent() {
               >
                 <div 
                   className="relative flex items-center justify-center rounded-xl w-8 h-8 font-bold text-white text-xs shadow-md shrink-0 overflow-hidden"
-                  style={{ background: user.avatar ? 'transparent' : 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+                  style={{ background: user.avatar ? 'transparent' : 'var(--primary-main)' }}
                 >
                   {user.avatar ? (
                     <Image src={user.avatar} alt={user.name} fill priority sizes="32px" className="object-cover" unoptimized />
@@ -342,7 +339,7 @@ function NavbarContent() {
                       <div className="flex items-center gap-3">
                         <div 
                           className="relative flex items-center justify-center rounded-xl w-12 h-12 font-bold text-white text-lg shadow-lg shadow-indigo-500/30 shrink-0 overflow-hidden"
-                          style={{ background: user.avatar ? 'transparent' : 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+                          style={{ background: user.avatar ? 'transparent' : 'var(--primary-main)' }}
                         >
                           {user.avatar ? (
                             <Image src={user.avatar} alt={user.name} fill priority sizes="48px" className="object-cover" unoptimized />
@@ -389,7 +386,7 @@ function NavbarContent() {
             </div>
           ) : (
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/login" className="px-4 py-2 rounded-xl font-bold text-sm tracking-tight text-white bg-slate-900 dark:bg-slate-100 dark:!text-slate-900 shadow-md shadow-slate-900/20 dark:shadow-white/10 no-underline">
+              <Link href="/login" className="px-4 py-2 rounded-xl font-bold text-sm tracking-tight !text-white !bg-black dark:!bg-white dark:!text-black shadow-md shadow-black/20 dark:shadow-white/10 no-underline">
                 Sign In
               </Link>
             </motion.div>
@@ -399,7 +396,7 @@ function NavbarContent() {
 
       {/* MOBILE SEARCH OVERLAY (Independent) */}
       <AnimatePresence>
-        {searchActive && !isHomePage && (
+        {searchActive && (
           <motion.div
             initial={{ opacity: 0, scaleY: 0.8, y: -10 }}
             animate={{ opacity: 1, scaleY: 1, y: 0 }}
@@ -475,7 +472,7 @@ function NavbarContent() {
               <Link 
                 href="/login" 
                 onClick={() => setMobileMenuOpen(false)} 
-                className="flex items-center justify-center w-full px-4 py-3 rounded-xl font-bold text-sm tracking-tight text-white bg-slate-900 dark:bg-slate-100 dark:!text-slate-900 shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98] no-underline"
+                className="flex items-center justify-center w-full px-4 py-3 rounded-xl font-bold text-sm tracking-tight !text-white !bg-black dark:!bg-white dark:!text-black shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98] no-underline"
               >
                 Sign In
               </Link>

@@ -105,10 +105,10 @@ export default function ForgotPasswordPage() {
                             <div className="inline-flex items-center justify-center mb-4 rounded-2xl bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] w-16 h-16 shadow-sm">
                                 <BrandLogo className="w-20 h-20" iconSize={64} />
                             </div>
-                            <h2 className="font-bold mb-1 text-[var(--text-main)] tracking-tight text-2xl">
+                            <h2 className="font-bold mb-1 text-zinc-900 tracking-tight text-2xl">
                                 {step === 1 ? 'Forgot Password?' : 'Reset Password'}
                             </h2>
-                            <p className="mb-0 text-[var(--text-muted)]">
+                            <p className="mb-0 text-zinc-600">
                                 {step === 1 ? "We'll send you an OTP to reset it" : 'Enter OTP and your new password'}
                             </p>
                         </div>
@@ -147,22 +147,24 @@ export default function ForgotPasswordPage() {
                                     {method === 'email' ? (
                                         <div className="mb-4">
                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Email Address</label>
-                                            <input
-                                                type="email"
-                                                className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                                placeholder="you@example.com"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                            />
+                                            <div className="auth-input-container group">
+                                                <input
+                                                    type="email"
+                                                    className="auth-form-control"
+                                                    placeholder="you@example.com"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                />
+                                            </div>
                                         </div>
                                     ) : (
                                         <div className="mb-4">
                                             <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Phone Number</label>
-                                            <div className="flex relative items-stretch w-full rounded-xl overflow-hidden border border-[var(--border-color)]">
-                                                <span className="flex items-center px-4 font-medium bg-[var(--bg-surface)] text-[var(--text-muted)] border-r border-[var(--border-color)]">+91</span>
+                                            <div className="auth-input-container group">
+                                                <span className="flex items-center px-4 font-medium bg-[var(--bg-surface)] text-[var(--text-muted)] border-r border-[var(--border-color)] transition-colors group-focus-within:border-[#6366f1] group-focus-within:border-r-1.5">+91</span>
                                                 <input
                                                     type="tel"
-                                                    className="block w-full py-3 px-4 bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                                                    className="auth-form-control"
                                                     placeholder="Enter your phone number"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
@@ -186,36 +188,42 @@ export default function ForgotPasswordPage() {
 
                                     <div className="mb-4">
                                         <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Enter OTP</label>
-                                        <input
-                                            type="text"
-                                            className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] text-lg tracking-[0.5em] text-center outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                            placeholder="6-digit OTP"
-                                            maxLength={6}
-                                            value={otp}
-                                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                        />
+                                        <div className="auth-input-container">
+                                            <input
+                                                type="text"
+                                                className="auth-form-control text-lg tracking-[0.5em] text-center"
+                                                placeholder="6-digit OTP"
+                                                maxLength={6}
+                                                value={otp}
+                                                onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                            />
+                                        </div>
                                     </div>
 
                                     <div className="mb-4">
                                         <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">New Password</label>
-                                        <input
-                                            type="password"
-                                            className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                            placeholder="At least 8 characters"
-                                            value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}
-                                        />
+                                        <div className="auth-input-container">
+                                            <input
+                                                type="password"
+                                                className="auth-form-control"
+                                                placeholder="At least 8 characters"
+                                                value={newPassword}
+                                                onChange={(e) => setNewPassword(e.target.value)}
+                                            />
+                                        </div>
                                     </div>
 
                                     <div className="mb-4">
                                         <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Confirm Password</label>
-                                        <input
-                                            type="password"
-                                            className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                                            placeholder="Re-enter password"
-                                            value={confirmPassword}
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
-                                        />
+                                        <div className="auth-input-container">
+                                            <input
+                                                type="password"
+                                                className="auth-form-control"
+                                                placeholder="Re-enter password"
+                                                value={confirmPassword}
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                            />
+                                        </div>
                                     </div>
 
                                     <button type="submit" className="w-full py-3 font-bold rounded-full shadow-lg bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] transition-opacity hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed mt-6" disabled={loading}>

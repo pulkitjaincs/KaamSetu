@@ -2,7 +2,19 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Global Scaling & Smooth Scroll */
+
+html.lock-scroll, body.lock-scroll {
+    overflow: hidden !important;
+    overscroll-behavior: none;
+    height: 100% !important;
+}
+
+.lock-scroll .detail-panel {
+    touch-action: pan-y;
+}
+
 html {
+
     scroll-behavior: smooth;
     overflow-x: hidden;
     text-size-adjust: 100%;
@@ -15,25 +27,43 @@ a, a:hover, a:focus {
 }
 
 
-/* Kill all white borders on glass cards in dark mode */
-.dark .rounded-2xl,
-.dark .rounded-xl,
-.dark .rounded-full,
-.dark .\!rounded-2xl {
+/* Kill all white borders on glass cards in dark mode, but respect focus states */
+.dark .rounded-2xl:not(:focus-within),
+.dark .rounded-xl:not(:focus-within),
+.dark .rounded-full:not(:focus-within),
+.dark .\!rounded-2xl:not(:focus-within) {
     border-color: transparent !important;
 }
 
-/* Auth Page Input Glow */
-.auth-form-control:focus {
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2) !important;
-    border-color: #6366f1 !important;
-    outline: none !important;
+/* Auth Page Input Styling */
+.auth-input-container {
+    display: flex;
+    position: relative;
+    align-items: stretch;
+    width: 100%;
+    border-radius: 0.75rem; /* rounded-xl */
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    transition: all 0.2s ease;
 }
 
-[data-theme="dark"] .auth-form-control:focus,
-.dark .auth-form-control:focus {
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.4) !important;
+.auth-input-container:focus-within {
     border-color: #6366f1 !important;
+    border-width: 1.5px !important;
+}
+
+.auth-form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.auth-form-control:focus {
     outline: none !important;
 }
 .dark .border-indigo-500,
@@ -250,6 +280,229 @@ body {
     scroll-behavior: smooth;
 }
 
+/* ─── Card Design System (Stitch) ─── */
+.card {
+    cursor: pointer;
+    border-radius: 24px;
+    padding: 24px;
+    background-color: var(--bg-card);
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+}
+
+.card:hover {
+    background-color: var(--bg-surface);
+}
+
+.card.selected {
+    background-color: var(--bg-surface);
+    border-color: var(--border-active);
+}
+
+.card-logo {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--bg-surface);
+}
+
+.card-fallback-logo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+    background: var(--primary-main);
+    color: var(--on-primary);
+}
+
+.card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.card-company {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.card-badge {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: var(--surface-container-high);
+    color: var(--text-muted);
+}
+
+/* Page Layout & Sections */
+.page-container {
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 1024px) {
+    .page-container {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 0 1.5rem 0;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.text-link {
+    background: none;
+    border: none;
+    color: var(--primary-main);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    transition: opacity 0.2s;
+}
+
+.text-link:hover {
+    opacity: 0.8;
+}
+
+.job-grid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.grid-cols-dynamic {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+}
+
+.grid-cols-single {
+    grid-template-columns: 1fr;
+}
+
+/* Detail View / Listing */
+.detail-panel {
+    background: var(--bg-card);
+    border-radius: 24px;
+    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+/* Mobile sheet handle */
+.sheet-handle {
+    width: 40px;
+    height: 5px;
+    background: var(--border-color);
+    border-radius: 10px;
+    margin: 12px auto;
+    opacity: 0.5;
+}
+
+.sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1999;
+}
+
+.detail-hero {
+    position: relative;
+    height: 120px;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 24px 24px 0 0;
+}
+
+.detail-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 55%);
+}
+
+.detail-logo-container {
+    position: absolute;
+    bottom: -36px;
+    left: 24px;
+    z-index: 5;
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    border: 4px solid var(--bg-card);
+    background: var(--bg-card);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.detail-stats-container {
+    display: flex;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+}
+
+.detail-stat-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 0.5rem;
+    background: var(--bg-surface);
+}
+
+.detail-stat-item:not(:last-child) {
+    border-right: 1px solid var(--border-color);
+}
+
+.detail-stat-label {
+    text-transform: uppercase;
+    font-weight: 800;
+    opacity: 0.5;
+    font-size: 0.55rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.detail-stat-value {
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+
 
 /* Custom Brand Buttons */
 .btn-primary-gradient {
@@ -296,4 +549,31 @@ body {
 [data-theme="dark"] .auth-submit-btn:disabled {
     background: var(--zinc-600) !important;
     color: var(--zinc-300) !important;
-}
+}
+
+/* ─── Bottom Sheet Components ─── */
+.sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+}
+
+.sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 99px;
+    margin: 12px auto 8px;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+/* Global Scroll Lock */
+.lock-scroll {
+    overflow: hidden !important;
+    height: 100% !important;
+    position: fixed !important;
+    width: 100% !important;
+}
