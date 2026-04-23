@@ -13,12 +13,13 @@ import EditProfile_Basics from '@/components/profile-edit/EditProfile_Basics';
 import EditProfile_Location from '@/components/profile-edit/EditProfile_Location';
 import EditProfile_Skills from '@/components/profile-edit/EditProfile_Skills';
 import EditProfile_Finish from '@/components/profile-edit/EditProfile_Finish';
+import { Contact, MapPin, Settings, CheckCircle, ArrowLeft, UserPlus, Save, ArrowRight, Check } from 'lucide-react';
 
 const steps = [
-    { number: 1, title: 'Basics', icon: 'bi-person-badge' },
-    { number: 2, title: 'Location', icon: 'bi-geo-alt' },
-    { number: 3, title: 'Skills', icon: 'bi-gear' },
-    { number: 4, title: 'Finish', icon: 'bi-check2-circle' }
+    { number: 1, title: 'Basics', icon: Contact },
+    { number: 2, title: 'Location', icon: MapPin },
+    { number: 3, title: 'Skills', icon: Settings },
+    { number: 4, title: 'Finish', icon: CheckCircle }
 ];
 
 export default function EditProfileClient() {
@@ -169,37 +170,38 @@ export default function EditProfileClient() {
 
     if (fetching) {
         return (
-            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
-                <div className="spinner-border" style={{ color: 'var(--primary-500)' }} role="status"></div>
+            <div className="flex justify-center items-center" style={{ minHeight: '80vh' }}>
+                <div className="w-10 h-10 border-4 rounded-full animate-spin"
+                    style={{ borderColor: 'var(--primary-500)', borderTopColor: 'transparent' }}></div>
             </div>
         );
     }
 
     return (
         <div style={{ minHeight: '100vh', padding: '40px 20px' }}>
-            <div className="container" style={{ maxWidth: '680px' }}>
+            <div style={{ maxWidth: '680px', margin: '0 auto' }}>
 
                 {/* Back Button */}
                 <button
                     type="button"
                     onClick={() => navigate('/profile')}
-                    className="btn btn-link text-muted mb-4 d-inline-flex align-items-center p-0"
-                    style={{ fontSize: '0.9rem', textDecoration: 'none' }}
+                    className="inline-flex items-center mb-4"
+                    style={{ fontSize: '0.9rem', textDecoration: 'none', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }}
                 >
-                    <i className="bi bi-arrow-left me-2"></i>Back to Profile
+                    <ArrowLeft className="mr-2 inline-block" size={16} />Back to Profile
                 </button>
 
                 {/* Header */}
                 <div className="text-center mb-5">
-                    <div className="d-inline-flex align-items-center justify-content-center mb-4"
+                    <div className="inline-flex items-center justify-center mb-4"
                         style={{
                             width: '72px', height: '72px', borderRadius: '20px',
                             background: 'linear-gradient(135deg, var(--primary-500), #8b5cf6)',
                             boxShadow: '0 12px 40px rgba(99, 102, 241, 0.35)'
                         }}>
-                        <i className="bi bi-person-plus-fill text-white fs-3"></i>
+                        <UserPlus className="text-white" size={32} />
                     </div>
-                    <h1 className="fw-bold mb-2" style={{ fontSize: '2rem', color: 'var(--text-main)', letterSpacing: '-0.03em' }}>
+                    <h1 className="font-bold mb-2" style={{ fontSize: '2rem', color: 'var(--text-main)', letterSpacing: '-0.03em' }}>
                         {formData.name ? 'Edit your profile' : 'Create your profile'}
                     </h1>
                     <p style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>
@@ -208,12 +210,12 @@ export default function EditProfileClient() {
                 </div>
 
                 {totalSteps > 1 && (
-                    <div className="d-flex justify-content-center gap-2 mb-5">
+                    <div className="flex justify-center gap-2 mb-5">
                         {steps.map((step) => (
                             <div
                                 key={step.number}
                                 onClick={() => setCurrentStep(step.number)}
-                                className="d-flex flex-column align-items-center"
+                                className="flex flex-col items-center"
                                 style={{
                                     cursor: 'pointer',
                                     padding: '16px 20px',
@@ -233,10 +235,7 @@ export default function EditProfileClient() {
                                     marginBottom: '8px',
                                     transition: 'background-color 0.25s ease'
                                 }}>
-                                    <i className={`bi ${step.icon}`} style={{
-                                        color: currentStep >= step.number ? 'white' : 'var(--text-muted)',
-                                        fontSize: '1rem'
-                                    }}></i>
+                                    <step.icon size={16} color={currentStep >= step.number ? 'white' : 'var(--text-muted)'} />
                                 </div>
                                 <span style={{
                                     fontSize: '0.75rem', fontWeight: 600,
@@ -299,10 +298,10 @@ export default function EditProfileClient() {
                     )}
                 </div>
 
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="flex justify-between items-center">
                     {currentStep > 1 ? (
                         <Button variant="secondary" onClick={prevStep} style={{ width: 'auto', padding: '14px 28px' }}>
-                            <i className="bi bi-arrow-left me-2"></i>Back
+                            <ArrowLeft className="mr-2 inline-block" size={16} />Back
                         </Button>
                     ) : (
                         <button type="button" onClick={() => navigate('/profile')}
@@ -315,7 +314,7 @@ export default function EditProfileClient() {
                     )}
 
                     {currentStep < totalSteps ? (
-                        <div className="d-flex gap-3">
+                        <div className="flex gap-3">
                             <Button
                                 onClick={() => handleSubmit(false)}
                                 loading={updateMutation.isPending}
@@ -327,7 +326,7 @@ export default function EditProfileClient() {
                                     color: 'var(--text-main)'
                                 }}
                             >
-                                <i className="bi bi-cloud-check me-2"></i>Save Progress
+                                <Save className="mr-2 inline-block" size={16} />Save Progress
                             </Button>
                             <Button
                                 onClick={nextStep}
@@ -338,7 +337,7 @@ export default function EditProfileClient() {
                                     boxShadow: '0 8px 24px rgba(99, 102, 241, 0.35)'
                                 }}
                             >
-                                Continue<i className="bi bi-arrow-right ms-2"></i>
+                                Continue<ArrowRight className="ml-2 inline-block" size={16} />
                             </Button>
                         </div>
                     ) : (
@@ -352,7 +351,7 @@ export default function EditProfileClient() {
                                 boxShadow: '0 8px 24px rgba(16, 185, 129, 0.35)'
                             }}
                         >
-                            <i className="bi bi-check-lg me-2"></i>Save Profile
+                            <Check className="mr-2 inline-block" size={16} />Save Profile
                         </Button>
                     )}
                 </div>

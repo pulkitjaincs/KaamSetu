@@ -2,6 +2,7 @@
 
 import { useMemo, useEffect } from 'react';
 import { Virtuoso } from 'react-virtuoso';
+import { Plus, Briefcase, MapPin, IndianRupee, Calendar, CheckCircle, PauseCircle, Users, Eye, Pencil, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate, formatSalary } from '@/utils/index';
 import { useEmployerJobs, useDeleteJob } from '@/hooks/queries/useApplications';
@@ -38,128 +39,107 @@ export default function MyJobsPage() {
 
     if (loading) {
         return (
-            <div className="container py-5 text-center">
-                <div className="spinner-border" role="status"></div>
+            <div className="w-full max-w-7xl mx-auto px-4 py-12 flex justify-center">
+                <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" role="status"></div>
             </div>
         );
     }
+
     return (
-        <div className="container py-5">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link href="/" className="text-decoration-none d-inline-flex align-items-center mb-3"
-                    style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                    ← Back to Jobs
-                </Link>
-                <h2 className="fw-bold" style={{ color: 'var(--text-main)' }}>My Posted Jobs</h2>
-                <Link href="/post-job" className="btn rounded-full px-4 py-2 fw-semibold post-job-btn"
-                    style={{ background: 'var(--text-main)', color: 'var(--bg-body)' }}>
-                    <i className="bi bi-plus-lg me-1"></i> Post New Job
-                </Link>
-            </div>
-            {jobs.length === 0 ? (
-                <div className="text-center py-5" style={{ color: 'var(--text-muted)' }}>
-                    <i className="bi bi-briefcase fs-1 mb-3 d-block"></i>
-                    <p>You haven&apos;t posted any jobs yet.</p>
+        <div className="w-full min-h-screen bg-bg-body bg-[radial-gradient(at_0%_0%,rgba(99,102,241,0.03)_0px,transparent_50%),radial-gradient(at_100%_0%,rgba(0,86,182,0.03)_0px,transparent_50%)] dark:bg-[radial-gradient(at_0%_0%,rgba(99,102,241,0.07)_0px,transparent_50%),radial-gradient(at_100%_0%,rgba(0,86,182,0.07)_0px,transparent_50%)]">
+            <div className="w-full max-w-7xl mx-auto px-4 py-12">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
+                    <div className="flex flex-col gap-1">
+                        <Link href="/" className="no-underline inline-flex items-center text-text-muted text-sm font-semibold hover:text-primary-500 hover:-translate-x-1 transition-all">
+                            <span className="mr-2">←</span> Back to Jobs
+                        </Link>
+                        <h2 className="font-extrabold text-text-main text-3xl md:text-4xl tracking-tight mb-0">My Posted Jobs</h2>
+                    </div>
+                    <Link href="/post-job" className="rounded-xl px-6 py-3 font-bold bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 hover:opacity-90 hover:-translate-y-0.5 shadow-lg transition-all inline-flex items-center justify-center">
+                        <Plus className="mr-2" size={18} /> Post New Job
+                    </Link>
                 </div>
-            ) : (
-                <div className="d-flex flex-column">
-                    <Virtuoso
-                        useWindowScroll
-                        data={jobs}
-                        endReached={() => {
-                            if (hasNextPage) fetchNextPage();
-                        }}
-                        itemContent={(_index: number, job: Job) => (
-                            <div className="p-4 position-relative mb-3"
-                                style={{
-                                    background: 'var(--bg-card)',
-                                    borderRadius: '24px',
-                                    border: '1px solid var(--border-color)'
-                                }}>
 
-                                <div style={{
-                                    position: 'absolute',
-                                    left: 0,
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    width: '4px',
-                                    height: '60%',
-                                    borderRadius: '0 8px 8px 0',
-                                    background: job.status === 'active'
-                                        ? 'linear-gradient(180deg, #22c55e, #16a34a)'
-                                        : 'linear-gradient(180deg, var(--zinc-400), var(--zinc-500))'
-                                }}></div>
+                {jobs.length === 0 ? (
+                    <div className="text-center py-20 bg-bg-card rounded-[32px] border border-dashed border-border-color">
+                        <Briefcase className="mb-6 block mx-auto text-text-muted opacity-50" size={56} />
+                        <p className="text-lg font-semibold text-text-muted">You haven&apos;t posted any jobs yet.</p>
+                    </div>
+                ) : (
+                    <div className="flex flex-col">
+                        <Virtuoso
+                            useWindowScroll
+                            data={jobs}
+                            endReached={() => {
+                                if (hasNextPage) fetchNextPage();
+                            }}
+                            itemContent={(_index: number, job: Job) => (
+                                <div className="group p-5 lg:p-6 relative mb-5 bg-bg-card rounded-[28px] border border-border-color shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.005] hover:border-primary-200 dark:hover:bg-[#232222cc] dark:hover:border-indigo-500/20 transition-all duration-500 overflow-hidden">
+                                    {/* Status Stripe */}
+                                    <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1/2 rounded-r-sm transition-all duration-300 group-hover:h-[70%] ${
+                                        job.status === 'active' 
+                                        ? 'bg-gradient-to-b from-green-500 to-emerald-500' 
+                                        : 'bg-gradient-to-b from-zinc-400 to-zinc-500'
+                                    }`}></div>
 
-                                <div className="card-body p-3 p-md-4">
-                                    <div className="row align-items-center g-3">
-                                        <div className="col-lg-6">
-                                            <div className="d-flex align-items-start gap-3">
-                                                <div className="d-none d-md-flex align-items-center justify-content-center rounded-xl shadow-sm"
-                                                    style={{
-                                                        width: '48px',
-                                                        height: '48px',
-                                                        background: 'var(--bg-card)',
-                                                        border: '1px solid var(--border-color)',
-                                                        flexShrink: 0
-                                                    }}>
-                                                    <i className="bi bi-briefcase-fill" style={{ color: 'var(--primary-500)', fontSize: '1.25rem' }}></i>
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pl-3">
+                                        <div className="lg:col-span-6">
+                                            <div className="flex items-start gap-4">
+                                                <div className="hidden md:flex items-center justify-center rounded-[18px] shadow-sm border border-border-color bg-bg-surface shrink-0 w-14 h-14 text-primary-500 group-hover:bg-primary-50 dark:group-hover:bg-indigo-500/10 group-hover:border-primary-100 group-hover:-rotate-6 transition-all duration-300">
+                                                    <Briefcase size={24} />
                                                 </div>
 
-                                                <div className="flex-grow-1 min-w-0">
-                                                    <h5 className="fw-bold mb-1 text-truncate" style={{ color: 'var(--text-main)', fontSize: '1.1rem' }}>
+                                                <div className="flex-grow min-w-0">
+                                                    <h5 className="font-bold mb-1 truncate text-text-main text-xl">
                                                         {job.title}
                                                     </h5>
-                                                    <div className="d-flex flex-wrap gap-x-3 gap-y-1" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                                                        <span className="text-truncate"><i className="bi bi-geo-alt me-1"></i>{job.city}, {job.state}</span>
-                                                        <span><i className="bi bi-currency-rupee me-1"></i>{formatSalary(job.salaryMin, job.salaryMax)}</span>
-                                                        <span><i className="bi bi-calendar3 me-1"></i>{formatDate(job.createdAt)}</span>
+                                                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-text-muted text-sm font-medium">
+                                                        <span className="truncate inline-flex items-center"><MapPin className="mr-1.5 opacity-70" size={14} />{job.city}, {job.state}</span>
+                                                        <span className="inline-flex items-center"><IndianRupee className="mr-1.5 opacity-70" size={14} />{formatSalary(job.salaryMin, job.salaryMax)}</span>
+                                                        <span className="inline-flex items-center"><Calendar className="mr-1.5 opacity-70" size={14} />{formatDate(job.createdAt)}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-lg-3 text-lg-center">
-                                            <span className="badge rounded-full px-3 py-2" style={{
-                                                background: job.status === 'active' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(156, 163, 175, 0.1)',
-                                                color: job.status === 'active' ? '#22c55e' : 'var(--text-muted)',
-                                                border: `1px solid ${job.status === 'active' ? 'rgba(34, 197, 94, 0.2)' : 'var(--border-color)'}`,
-                                                fontSize: '0.75rem'
-                                            }}>
-                                                <i className={`bi ${job.status === 'active' ? 'bi-check-circle-fill' : 'bi-pause-circle-fill'} me-1`}></i>
+
+                                        <div className="lg:col-span-3 text-left lg:text-center">
+                                            <span className={`inline-flex items-center rounded-full px-4 py-1.5 text-xs font-bold border transition-all duration-300 ${
+                                                job.status === 'active' 
+                                                ? 'bg-green-500/10 text-green-500 border-green-500/20' 
+                                                : 'bg-zinc-400/10 text-text-muted border-border-color'
+                                            }`}>
+                                                {job.status === 'active' ? <CheckCircle className="mr-1.5" size={14} /> : <PauseCircle className="mr-1.5" size={14} />}
                                                 {(job.status ?? 'inactive').charAt(0).toUpperCase() + (job.status ?? 'inactive').slice(1)}
                                             </span>
                                         </div>
 
-                                        <div className="col-lg-3">
-                                            <div className="d-flex gap-2 justify-content-start justify-content-lg-end flex-wrap">
+                                        <div className="lg:col-span-3">
+                                            <div className="flex gap-3 justify-start lg:justify-end flex-wrap">
                                                 <Link href={`/jobs/${job._id}/applicants`}
-                                                    className="btn btn-sm rounded-full px-3 py-2 d-flex align-items-center gap-1 shadow-sm"
-                                                    style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
-                                                    <i className="bi bi-people-fill"></i>
-                                                    <span className="fw-bold">{job.applicationsCount || 0}</span>
+                                                    className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold shadow-sm border bg-green-500/10 text-green-500 border-green-500/20 hover:bg-green-500 hover:text-white transition-all no-underline">
+                                                    <Users size={16} />
+                                                    <span>{job.applicationsCount || 0} Applicants</span>
                                                 </Link>
-                                                <div className="d-flex gap-2">
+                                                <div className="flex gap-2">
                                                     <Link href={`/jobs/${job._id}`}
-                                                        className="btn btn-sm rounded-full p-0 d-flex align-items-center justify-content-center shadow-sm"
-                                                        style={{ width: '34px', height: '34px', background: 'var(--bg-surface)', color: 'var(--text-main)', border: '1px solid var(--border-color)' }}
+                                                        className="inline-flex items-center justify-center rounded-xl shadow-sm w-10 h-10 bg-bg-surface text-text-main border border-border-color hover:bg-zinc-100 dark:hover:bg-white/10 hover:scale-110 transition-all no-underline"
                                                         title="View job">
-                                                        <i className="bi bi-eye-fill"></i>
+                                                        <Eye size={18} />
                                                     </Link>
                                                     <Link href={`/edit-job/${job._id}`}
-                                                        className="btn btn-sm rounded-full p-0 d-flex align-items-center justify-content-center shadow-sm"
-                                                        style={{ width: '34px', height: '34px', background: 'var(--primary-500)', color: 'white', border: 'none' }}
+                                                        className="inline-flex items-center justify-center rounded-xl shadow-sm w-10 h-10 bg-primary-500 text-white hover:bg-primary-600 hover:shadow-[0_4px_12px_rgba(79,70,229,0.3)] hover:scale-110 transition-all no-underline"
                                                         title="Edit job">
-                                                        <i className="bi bi-pencil-fill"></i>
+                                                        <Pencil size={18} />
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDelete(job._id)}
                                                         disabled={deleteMutation.isPending && deleteMutation.variables === job._id}
-                                                        className="btn btn-sm rounded-full p-0 d-flex align-items-center justify-content-center shadow-sm"
-                                                        style={{ width: '34px', height: '34px', background: '#fee2e2', color: '#dc2626', border: '1px solid #fecaca' }}
+                                                        className="inline-flex items-center justify-center rounded-xl shadow-sm w-10 h-10 bg-red-100 text-red-600 border border-red-200 hover:bg-red-200 hover:shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:scale-110 transition-all disabled:opacity-50"
                                                         title="Delete job">
                                                         {deleteMutation.isPending && deleteMutation.variables === job._id ? (
-                                                            <span className="spinner-border spinner-border-sm"></span>
+                                                            <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                                                         ) : (
-                                                            <i className="bi bi-trash-fill"></i>
+                                                            <Trash2 size={18} />
                                                         )}
                                                     </button>
                                                 </div>
@@ -167,16 +147,16 @@ export default function MyJobsPage() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
-                        components={{
-                            Footer: () => isFetchingNextPage ? (
-                                <div className="text-center py-3 text-muted">Loading more...</div>
-                            ) : null
-                        }}
-                    />
-                </div>
-            )}
+                            )}
+                            components={{
+                                Footer: () => isFetchingNextPage ? (
+                                    <div className="text-center py-4 text-text-muted font-medium">Loading more...</div>
+                                ) : null
+                            }}
+                        />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

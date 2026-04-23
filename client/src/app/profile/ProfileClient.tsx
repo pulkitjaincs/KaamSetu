@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback, lazy, Suspense, useEffect } from 'react';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useProfile } from '@/hooks/queries/useProfile';
@@ -86,10 +87,9 @@ export default function ProfileClient() {
 
     if (loading) {
         return (
-            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
+            <div className="flex justify-center items-center" style={{ minHeight: '60vh' }}>
+                <div className="w-10 h-10 border-4 rounded-full animate-spin"
+                    style={{ borderColor: 'var(--primary-main)', borderTopColor: 'transparent' }}></div>
             </div>
         );
     }
@@ -102,20 +102,20 @@ export default function ProfileClient() {
     }
 
     return (
-        <div className="container py-5">
+        <div className="py-5 px-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
             {fromJobId && (
                 <div className="mb-5">
-                    <Link href={`/jobs/${fromJobId}/applicants`} className="text-decoration-none d-inline-flex align-items-center fw-bold"
+                    <Link href={`/jobs/${fromJobId}/applicants`} className="no-underline inline-flex items-center font-bold"
                         style={{ color: 'var(--text-muted)', fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                        <i className="bi bi-arrow-left me-2"></i> Applicants
+                        <ArrowLeft className="mr-2 inline-block" size={16} /> Applicants
                     </Link>
                 </div>
             )}
             {fromTeam && (
                 <div className="mb-5">
-                    <Link href="/my-team" className="text-decoration-none d-inline-flex align-items-center fw-bold"
+                    <Link href="/my-team" className="no-underline inline-flex items-center font-bold"
                         style={{ color: 'var(--text-muted)', fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                        <i className="bi bi-arrow-left me-2"></i> My Team
+                        <ArrowLeft className="mr-2 inline-block" size={16} /> My Team
                     </Link>
                 </div>
             )}
@@ -128,8 +128,8 @@ export default function ProfileClient() {
                 getAge={getAge}
             />
 
-            <div className="row g-5">
-                <div className="col-lg-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-8">
                     {!isEmployer && (
                         <SkillsSection
                             skills={profile.skills}
@@ -148,7 +148,7 @@ export default function ProfileClient() {
                     )}
                 </div>
 
-                <div className="col-lg-4">
+                <div className="lg:col-span-4">
                     <ProfileSidebar profile={profile} isEmployer={isEmployer} isOwnProfile={isOwnProfile} />
                 </div>
             </div>

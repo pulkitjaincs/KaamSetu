@@ -4,17 +4,17 @@ interface FinishFormData { expectedSalaryMin?: string; expectedSalaryMax?: strin
 export default function EditProfile_Finish({ formData, handleChange, setValues }: { formData: FinishFormData; handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void; setValues: (v: FinishFormData) => void }) {
     return (
         <div>
-            <h4 className="fw-bold mb-4" style={{ color: 'var(--text-main)' }}>Almost done!</h4>
+            <h4 className="font-bold mb-4" style={{ color: 'var(--text-main)' }}>Almost done!</h4>
 
-            <p className="fw-semibold mb-1" style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>Expected Salary</p>
-            <div className="row g-2 mb-4">
-                <div className="col-4">
+            <p className="font-semibold mb-1" style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>Expected Salary</p>
+            <div className="grid grid-cols-3 gap-2 mb-4">
+                <div>
                     <InputField name="expectedSalaryMin" value={formData.expectedSalaryMin} onChange={handleChange} type="number" placeholder="Min ₹" />
                 </div>
-                <div className="col-4">
+                <div>
                     <InputField name="expectedSalaryMax" value={formData.expectedSalaryMax} onChange={handleChange} type="number" placeholder="Max ₹ (optional)" />
                 </div>
-                <div className="col-4">
+                <div>
                     <SelectField
                         name="expectedSalaryType"
                         value={formData.expectedSalaryType}
@@ -27,11 +27,11 @@ export default function EditProfile_Finish({ formData, handleChange, setValues }
                 </div>
             </div>
 
-            <p className="fw-semibold mb-1" style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>
+            <p className="font-semibold mb-1" style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>
                 Identity Documents <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
             </p>
-            <div className="row g-2">
-                <div className="col-md-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
                     <InputField
                         name="aadhaarNumber"
                         value={formData.aadhaarNumber}
@@ -40,7 +40,7 @@ export default function EditProfile_Finish({ formData, handleChange, setValues }
                         placeholder="Aadhaar (12 digits)"
                     />
                 </div>
-                <div className="col-md-6">
+                <div>
                     <InputField
                         name="panNumber"
                         value={formData.panNumber}
@@ -50,7 +50,7 @@ export default function EditProfile_Finish({ formData, handleChange, setValues }
                         placeholder="PAN Number"
                     />
                 </div>
-                <div className="col-md-6">
+                <div>
                     <InputField
                         name="licenseNumber"
                         value={formData.licenseNumber}

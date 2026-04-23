@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import "./globals.css";
 import Providers from "@/providers/Providers";
 import Navbar from "@/components/layout/Navbar";
@@ -39,10 +37,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
       <body className={`${inter.className}`}>
-        <div className="d-flex flex-column" style={{ minHeight: "100vh", backgroundColor: "var(--bg-body)" }}>
+        <div className="flex flex-col" style={{ minHeight: "100vh", backgroundColor: "var(--bg-body)" }}>
           <Providers>
             <Navbar />
-            <main className="flex-grow-1 pb-[80px] lg:pb-0" style={{ paddingTop: '88px' }}>
+            <main className="grow pb-[80px] lg:pb-0" style={{ paddingTop: '88px' }}>
               {children}
             </main>
             <Footer />

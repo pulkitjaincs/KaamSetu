@@ -6,7 +6,7 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     error?: string;
     helpText?: string;
-    icon?: string;
+    icon?: React.ReactNode;
     sm?: boolean;
 }
 
@@ -17,17 +17,19 @@ export const InputField = ({
 }: InputFieldProps) => (
     <div className={`mb-3 ${className}`}>
         {label && (
-            <label htmlFor={name} className="form-label fw-medium" style={{ color: 'var(--text-main)', fontSize: sm ? '0.85rem' : undefined }}>
-                {label} {required && <span className="text-danger">*</span>}
-                {helpText && <span className="text-muted fw-normal ms-1" style={{ fontSize: '0.8rem' }}>({helpText})</span>}
+            <label htmlFor={name} className="block font-medium" style={{ color: 'var(--text-main)', fontSize: sm ? '0.85rem' : undefined }}>
+                {label} {required && <span className="text-red-500">*</span>}
+                {helpText && <span className="text-[var(--text-muted)] font-normal ml-1" style={{ fontSize: '0.8rem' }}>({helpText})</span>}
             </label>
         )}
         <div className={type === 'date' ? 'premium-date-input' : ''} style={{ position: 'relative' }}>
             {icon && (
-                <i className={`bi ${icon}`} style={{
+                <div style={{
                     position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)',
-                    color: 'var(--text-muted)', fontSize: '1rem'
-                }} />
+                    color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                    {React.isValidElement(icon) ? React.cloneElement(icon as React.ReactElement<unknown>, { size: 16 } as React.Attributes & { size?: number }) : icon}
+                </div>
             )}
             <input
                 type={type}
@@ -39,7 +41,7 @@ export const InputField = ({
                 required={required}
                 disabled={disabled}
                 maxLength={maxLength}
-                className={`form-control ${sm ? 'form-control-sm' : ''}`}
+                className="w-full"
                 style={{
                     background: 'var(--bg-surface)',
                     color: 'var(--text-main)',
@@ -52,7 +54,7 @@ export const InputField = ({
                 {...rest}
             />
         </div>
-        {error && <small className="text-danger">{error}</small>}
+        {error && <small className="text-red-500">{error}</small>}
     </div>
 );
 
@@ -75,8 +77,8 @@ export const SelectField = ({
 }: SelectFieldProps) => (
     <div className={`mb-3 ${className}`}>
         {label && (
-            <label htmlFor={name} className="form-label fw-medium" style={{ color: 'var(--text-main)' }}>
-                {label} {required && <span className="text-danger">*</span>}
+            <label htmlFor={name} className="block font-medium" style={{ color: 'var(--text-main)' }}>
+                {label} {required && <span className="text-red-500">*</span>}
             </label>
         )}
         <select
@@ -86,7 +88,7 @@ export const SelectField = ({
             onChange={onChange}
             required={required}
             disabled={disabled}
-            className="form-select"
+            className="w-full"
             style={{
                 background: 'var(--bg-surface)',
                 color: 'var(--text-main)',
@@ -107,7 +109,7 @@ export const SelectField = ({
                 );
             })}
         </select>
-        {error && <small className="text-danger">{error}</small>}
+        {error && <small className="text-red-500">{error}</small>}
     </div>
 );
 
@@ -123,8 +125,8 @@ export const TextAreaField = ({
 }: TextAreaFieldProps) => (
     <div className={`mb-3 ${className}`}>
         {label && (
-            <label htmlFor={name} className="form-label fw-medium" style={{ color: 'var(--text-main)', fontSize: sm ? '0.85rem' : undefined }}>
-                {label} {required && <span className="text-danger">*</span>}
+            <label htmlFor={name} className="block font-medium" style={{ color: 'var(--text-main)', fontSize: sm ? '0.85rem' : undefined }}>
+                {label} {required && <span className="text-red-500">*</span>}
             </label>
         )}
         <textarea
@@ -136,7 +138,7 @@ export const TextAreaField = ({
             rows={rows}
             required={required}
             disabled={disabled}
-            className={`form-control ${sm ? 'form-control-sm' : ''}`}
+            className="w-full"
             style={{
                 background: 'var(--bg-surface)',
                 color: 'var(--text-main)',
@@ -147,7 +149,7 @@ export const TextAreaField = ({
             }}
             {...rest}
         />
-        {error && <small className="text-danger">{error}</small>}
+        {error && <small className="text-red-500">{error}</small>}
     </div>
 );
 
@@ -174,7 +176,7 @@ export const Button = ({
             type={type}
             onClick={onClick}
             disabled={disabled || loading}
-            className={`btn ${fullWidth ? 'w-100' : ''} ${className}`}
+            className={`${fullWidth ? 'w-full' : ''} ${className}`}
             style={{
                 ...variants[variant],
                 borderRadius: '9999px',
@@ -187,7 +189,7 @@ export const Button = ({
             {...rest}
         >
             {loading ? (
-                <span className="spinner-border spinner-border-sm me-2" role="status" />
+                <span className="animate-spin inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full mr-2" role="status" />
             ) : null}
             {children}
         </button>

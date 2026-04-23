@@ -1,11 +1,13 @@
 "use client";
 
+import Image from 'next/image';
 import { useMemo } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useJobDetails, useJobApplicants, useUpdateApplicationStatus } from '@/hooks/queries/useApplications';
 import { Application, PaginatedApplicationsResponse } from '@/types';
+import { Users, Inbox, Phone, Mail, Calendar, Clock, Eye, Star, XCircle, Trophy, Slash, Loader2, type LucideIcon } from 'lucide-react';
 
 export default function JobApplicantsPage() {
     const params = useParams();
@@ -41,18 +43,20 @@ export default function JobApplicantsPage() {
     };
 
     const getStatusBadge = (status: string) => {
-        const styles: Record<string, { bg: string, color: string, icon: string }> = {
-            pending: { bg: 'rgba(251, 191, 36, 0.1)', color: '#f59e0b', icon: 'bi-clock-fill' },
-            reviewed: { bg: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', icon: 'bi-eye-fill' },
-            shortlisted: { bg: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', icon: 'bi-star-fill' },
-            rejected: { bg: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', icon: 'bi-x-circle-fill' },
-            hired: { bg: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', icon: 'bi-trophy-fill' },
-            "employment-ended": { bg: 'rgba(107, 114, 128, 0.1)', color: '#6b7280', icon: 'bi-slash-circle-fill' }
+        const styles: Record<string, { bg: string, text: string, icon: LucideIcon }> = {
+            pending: { bg: 'bg-amber-50 dark:bg-amber-500/10', text: 'text-amber-500', icon: Clock },
+            reviewed: { bg: 'bg-blue-50 dark:bg-blue-500/10', text: 'text-blue-500', icon: Eye },
+            shortlisted: { bg: 'bg-green-50 dark:bg-green-500/10', text: 'text-green-500', icon: Star },
+            rejected: { bg: 'bg-red-50 dark:bg-red-500/10', text: 'text-red-500', icon: XCircle },
+            hired: { bg: 'bg-purple-50 dark:bg-purple-500/10', text: 'text-purple-500', icon: Trophy },
+            "employment-ended": { bg: 'bg-slate-100 dark:bg-slate-500/10', text: 'text-slate-500', icon: Slash }
         };
         const s = styles[status] || styles.pending;
+        const Icon = s.icon;
+        
         return (
-            <span className="badge rounded-full px-3 py-2" style={{ background: s.bg, color: s.color }}>
-                <i className={`bi ${s.icon} me-1`}></i>
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${s.bg} ${s.text}`}>
+                <Icon size={14} />
                 {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
         );
@@ -60,36 +64,37 @@ export default function JobApplicantsPage() {
 
     if (loading) {
         return (
-            <div className="container py-5 text-center">
-                <div className="spinner-border" role="status"></div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex justify-center items-center">
+                <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
             </div>
         );
     }
 
     return (
-        <div className="container py-5">
-            <div className="mb-4">
-                <Link href="/my-jobs" className="text-decoration-none d-inline-flex align-items-center mb-3"
-                    style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <div className="mb-8">
+                <Link href="/my-jobs" className="text-slate-500 hover:text-indigo-600 no-underline inline-flex items-center gap-2 mb-6 transition-colors font-medium">
                     ← Back to My Jobs
                 </Link>
-                <h2 className="fw-bold mb-1" style={{ color: 'var(--text-main)' }}>
-                    <i className="bi bi-people-fill me-2" style={{ color: 'var(--primary-500)' }}></i>
+                <h2 className="flex items-center text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">
+                    <Users className="w-8 h-8 mr-3 text-indigo-500" />
                     Applicants
                 </h2>
                 {job && (
-                    <p style={{ color: 'var(--text-muted)' }}>
-                        For: <strong style={{ color: 'var(--text-main)' }}>{job.title}</strong> — {job.city}, {job.state}
+                    <p className="text-slate-500 dark:text-slate-400 text-lg">
+                        For: <strong className="text-slate-900 dark:text-white">{job.title}</strong> — {job.city}, {job.state}
                     </p>
                 )}
             </div>
             {applications.length === 0 ? (
-                <div className="text-center py-5" style={{ color: 'var(--text-muted)' }}>
-                    <i className="bi bi-inbox fs-1 mb-3 d-block"></i>
-                    <p>No applications yet for this job.</p>
+                <div className="text-center py-20 bg-slate-50 dark:bg-slate-900/50 rounded-[40px] border-none ring-1 ring-slate-900/10 dark:ring-white/10 border-dashed">
+                    <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-500/10 rounded-3xl flex items-center justify-center mx-auto mb-6 text-indigo-500">
+                        <Inbox size={40} />
+                    </div>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white">No applications yet for this job.</p>
                 </div>
             ) : (
-                <div className="d-flex flex-column">
+                <div className="flex flex-col">
                     <Virtuoso
                         useWindowScroll
                         data={applications}
@@ -97,73 +102,53 @@ export default function JobApplicantsPage() {
                             if (hasNextPage) fetchNextPage();
                         }}
                         itemContent={(index, app: Application) => (
-                            <div className="p-4 mb-3"
-                                style={{
-                                    background: 'var(--bg-card)',
-                                    borderRadius: '24px',
-                                    border: '1px solid var(--border-color)'
-                                }}>
-                                <div className="row align-items-center">
-                                    <div className="col-lg-5 mb-3 mb-lg-0">
-                                        <div className="d-flex align-items-center gap-3">
-                                            <div className="d-flex align-items-center justify-content-center rounded-full overflow-hidden"
-                                                style={{
-                                                    width: '48px',
-                                                    height: '48px',
-                                                    background: app.applicant?.avatarUrl ? 'transparent' : 'var(--primary-500)',
-                                                    color: 'white',
-                                                    fontWeight: 'bold',
-                                                    fontSize: '1.1rem',
-                                                    flexShrink: 0
-                                                }}>
+                            <div className="p-5 md:p-6 bg-white dark:bg-slate-900 rounded-[24px] ring-1 ring-slate-900/5 dark:ring-white/5 shadow-sm hover:shadow-md transition-shadow mb-4">
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                                    <div className="lg:col-span-5">
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex items-center justify-center rounded-full overflow-hidden w-12 h-12 bg-indigo-500 text-white font-bold text-lg shrink-0">
                                                 {app.applicant?.avatarUrl ? (
-                                                    // eslint-disable-next-line @next/next/no-img-element
-                                                    <img src={app.applicant.avatarUrl} alt={app.applicant?.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    <Image src={app.applicant.avatarUrl} alt={app.applicant?.name ?? 'Applicant'} width={48} height={48} className="w-full h-full object-cover" />
                                                 ) : (
                                                     app.applicant?.name?.charAt(0).toUpperCase() || '?'
                                                 )}
                                             </div>
                                             <div>
-                                                <Link href={`/profile/${app.applicant?._id}?fromJob=${jobId}`} className="text-decoration-none">
-                                                    <h5 className="fw-bold mb-1" style={{ color: 'var(--text-main)', fontSize: '1rem' }}>
+                                                <Link href={`/profile/${app.applicant?._id}?fromJob=${jobId}`} className="no-underline">
+                                                    <h5 className="font-bold text-lg text-slate-900 dark:text-white mb-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                                         {app.applicant?.name || 'Unknown'}
                                                     </h5>
                                                 </Link>
-                                                <div className="d-flex flex-wrap gap-3" style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                                                <div className="flex flex-wrap gap-4 text-slate-500 dark:text-slate-400 text-sm font-medium">
                                                     {app.applicant?.phone && (
-                                                        <span><i className="bi bi-telephone me-1"></i>{app.applicant.phone}</span>
+                                                        <span className="flex items-center gap-1.5"><Phone size={14} /> {app.applicant.phone}</span>
                                                     )}
                                                     {app.applicant?.email && (
-                                                        <span><i className="bi bi-envelope me-1"></i>{app.applicant.email}</span>
+                                                        <span className="flex items-center gap-1.5"><Mail size={14} /> {app.applicant.email}</span>
                                                     )}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-lg-4 mb-3 mb-lg-0">
-                                        <div className="d-flex align-items-center gap-3">
+                                    <div className="lg:col-span-4">
+                                        <div className="flex items-center gap-4">
                                             {getStatusBadge(app.status)}
-                                            <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                                                <i className="bi bi-calendar3 me-1"></i>
+                                            <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm font-medium">
+                                                <Calendar size={14} />
                                                 {app.appliedAt ? new Date(app.appliedAt).toLocaleDateString('en-GB') : '—'}
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="col-lg-3">
-                                        <div className="d-flex gap-2 justify-content-lg-end">
+                                    <div className="lg:col-span-3 lg:text-right">
+                                        <div className="flex justify-start lg:justify-end">
                                             <select
                                                 value={app.status}
                                                 onChange={(e) => handleStatusChange(app._id, e.target.value)}
                                                 disabled={(updateStatusMutation.isPending && (updateStatusMutation.variables as { appId: string })?.appId === app._id) ||
                                                     app.status === 'hired' ||
                                                     app.status === 'employment-ended'}
-                                                className="form-select form-select-sm rounded-xl"
-                                                style={{
-                                                    background: 'var(--bg-surface)',
-                                                    color: 'var(--text-main)',
-                                                    border: '1px solid var(--border-color)',
-                                                    maxWidth: '150px'
-                                                }}>
+                                                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
                                                 <option value="pending">Pending</option>
                                                 <option value="reviewed">Reviewed</option>
                                                 <option value="shortlisted">Shortlisted</option>
@@ -173,21 +158,21 @@ export default function JobApplicantsPage() {
                                         </div>
                                     </div>
                                 </div>
-                                {
-                                    app.coverNote && (
-                                        <div className="mt-3 p-3 rounded-xl" style={{ background: 'var(--bg-surface)' }}>
-                                            <small style={{ color: 'var(--text-muted)' }}>Cover Note:</small>
-                                            <p className="mb-0 mt-1" style={{ color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                                                {app.coverNote}
-                                            </p>
-                                        </div>
-                                    )
-                                }
+                                {app.coverNote && (
+                                    <div className="mt-5 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                                        <small className="font-bold text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">Cover Note</small>
+                                        <p className="mb-0 mt-2 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                                            {app.coverNote}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         )}
                         components={{
                             Footer: () => isFetchingNextPage ? (
-                                <div className="text-center py-3 text-muted">Loading more...</div>
+                                <div className="text-center py-6 flex justify-center">
+                                    <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
+                                </div>
                             ) : null
                         }}
                     />

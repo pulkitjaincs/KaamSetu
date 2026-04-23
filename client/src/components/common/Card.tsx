@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Bookmark, Zap } from 'lucide-react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { Job } from '@/types';
@@ -124,7 +125,7 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
                     onMouseEnter={(e) => (e.currentTarget.style.color = '#0056b6')}
                     onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
                 >
-                    <i className="bi bi-bookmark" style={{ fontSize: "1.2rem" }}></i>
+                    <Bookmark style={{ width: "1.2rem", height: "1.2rem" }} />
                 </button>
             </div>
 
@@ -227,7 +228,7 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
                 onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
             >
                 Quick Apply
-                <i className="bi bi-lightning-charge-fill" style={{ fontSize: "0.9rem" }}></i>
+                <Zap style={{ width: "1rem", height: "1rem", fill: "currentColor" }} />
             </button>
         </motion.div>
     );

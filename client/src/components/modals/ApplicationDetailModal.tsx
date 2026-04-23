@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Application } from '@/types';
 import { formatDate, formatSalary } from '@/utils/index';
+import { MapPin, IndianRupee, ExternalLink } from 'lucide-react';
 
 interface ApplicationDetailModalProps {
     selectedApp: Application;
@@ -14,25 +15,25 @@ export default function ApplicationDetailModal({ selectedApp, onClose, getStatus
     if (!selectedApp) return null;
 
     return (
-        <div className="modal d-block show" style={{ zIndex: 2000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose}>
-            <div className="modal-dialog modal-dialog-centered" onClick={e => e.stopPropagation()}>
-                <div className="modal-content position-relative" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose}>
+            <div className="w-full mx-4" style={{ maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
+                <div className="relative" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
                     <button onClick={onClose}
-                        className="btn position-absolute p-0"
-                        style={{ top: '12px', right: '12px', color: 'var(--text-muted)', background: 'transparent', border: 'none', fontSize: '1.5rem', fontWeight: 'bold', lineHeight: 1, transition: 'color 0.2s ease', zIndex: 10 }}
+                        className="absolute top-3 right-3 p-0 z-10"
+                        style={{ color: 'var(--text-muted)', background: 'transparent', border: 'none', fontSize: '1.5rem', fontWeight: 'bold', lineHeight: 1, transition: 'color 0.2s ease' }}
                         onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; }}
                         onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; }}>
                         ×
                     </button>
-                    <div className="modal-header border-0 pb-0">
-                        <h5 className="modal-title fw-bold" style={{ color: 'var(--text-main)' }}>
+                    <div className="p-6 pb-3">
+                        <h5 className="font-bold" style={{ color: 'var(--text-main)' }}>
                             {selectedApp.job?.title}
                         </h5>
                     </div>
-                    <div className="modal-body">
-                        <div className="d-flex flex-wrap gap-3 mb-3" style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                            <span><i className="bi bi-geo-alt me-1"></i>{selectedApp.job?.city}, {selectedApp.job?.state}</span>
-                            <span><i className="bi bi-currency-rupee me-1"></i>{formatSalary(selectedApp.job?.salaryMin, selectedApp.job?.salaryMax)}</span>
+                    <div className="px-6 pb-4">
+                        <div className="flex flex-wrap items-center gap-3 mb-3" style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                            <span className="flex items-center"><MapPin className="mr-1" style={{ width: '1rem', height: '1rem' }} />{selectedApp.job?.city}, {selectedApp.job?.state}</span>
+                            <span className="flex items-center"><IndianRupee className="mr-1" style={{ width: '1rem', height: '1rem' }} />{formatSalary(selectedApp.job?.salaryMin, selectedApp.job?.salaryMax)}</span>
                         </div>
 
                         <div className="mb-3">
@@ -54,12 +55,12 @@ export default function ApplicationDetailModal({ selectedApp, onClose, getStatus
                             </div>
                         </div>
                     </div>
-                    <div className="modal-footer border-0 pt-0">
-                        <Link href={`/jobs/${selectedApp.job?._id}`} className="btn rounded-full px-4 w-100"
+                    <div className="px-6 pb-6 pt-0">
+                        <Link href={`/jobs/${selectedApp.job?._id}`} className="rounded-full px-4 py-2 block text-center w-full"
                             style={{ background: 'var(--primary-500)', color: 'white', textDecoration: 'none', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
                             onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.4)'; }}
                             onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
-                            <i className="bi bi-box-arrow-up-right me-1"></i> View Full Job
+                            <ExternalLink className="inline-block mr-1" style={{ width: '1.2rem', height: '1.2rem', verticalAlign: 'middle' }} /> View Full Job
                         </Link>
                     </div>
                 </div>

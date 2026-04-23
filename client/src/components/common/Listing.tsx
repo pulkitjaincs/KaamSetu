@@ -9,6 +9,7 @@ import { formatDate, formatSalary } from "@/utils/index";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Variants } from "framer-motion";
+import { Briefcase, X, MapPin, Banknote, Award, Users, Check, CheckCheck, ExternalLink } from "lucide-react";
 import type { Job, Application } from '@/types';
 
 const ApplyModal = dynamic(() => import("@/components/common/ApplyModal"), { ssr: false });
@@ -87,14 +88,14 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
     // ── Empty state ──────────────────────────────────────────────────────────────
     if (!job) {
         return (
-            <div className="h-100 d-flex flex-column align-items-center justify-content-center px-4" style={{ gap: '1.5rem' }}>
-                <div className="rounded-3xl d-flex align-items-center justify-content-center"
+            <div className="h-full flex flex-col items-center justify-center px-4" style={{ gap: '1.5rem' }}>
+                <div className="rounded-3xl flex items-center justify-center"
                     style={{ width: 80, height: 80, background: 'var(--bg-card)', border: '1.5px solid var(--border-color)' }}>
-                    <i className="bi bi-briefcase fs-2" style={{ color: 'var(--text-muted)' }}></i>
+                    <Briefcase className="text-2xl" style={{ color: 'var(--text-muted)' }} />
                 </div>
                 <div className="text-center">
-                    <h5 className="fw-black mb-1" style={{ color: 'var(--text-main)', letterSpacing: '-0.02em' }}>Select a job</h5>
-                    <p className="small mb-0" style={{ color: 'var(--text-muted)' }}>Click any listing to preview it here</p>
+                    <h5 className="font-black mb-1" style={{ color: 'var(--text-main)', letterSpacing: '-0.02em' }}>Select a job</h5>
+                    <p className="text-sm mb-0" style={{ color: 'var(--text-muted)' }}>Click any listing to preview it here</p>
                 </div>
             </div>
         );
@@ -112,7 +113,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                     animate={isSwitch ? "switch" : "enter"}
                     exit="exit"
                     variants={variants}
-                    className="h-100 d-flex flex-column overflow-hidden"
+                    className="h-full flex flex-col overflow-hidden"
                     style={{
                         borderRadius: '20px',
                         background: 'var(--bg-card)',
@@ -122,13 +123,13 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                     }}
                 >
                     {/* ── HERO HEADER ──────────────────────────────────────────────── */}
-                    <div className="position-relative flex-shrink-0 overflow-hidden" style={{
+                    <div className="relative shrink-0 overflow-hidden" style={{
                         height: '160px',
                         background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #4f46e5 75%, #7c3aed 100%)',
                         borderRadius: '20px 20px 0 0',
                     }}>
                         {/* Radial glow overlay */}
-                        <div className="position-absolute w-100 h-100" style={{
+                        <div className="absolute w-full h-full" style={{
                             inset: 0,
                             backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(139,92,246,0.5) 0%, transparent 55%), radial-gradient(circle at 15% 85%, rgba(99,102,241,0.35) 0%, transparent 45%)',
                         }}></div>
@@ -136,7 +137,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                         {/* Close button — top right */}
                         <button
                             onClick={handleClose}
-                            className="position-absolute top-0 end-0 m-3 btn rounded-circle p-0 d-flex align-items-center justify-content-center hover-scale"
+                            className="absolute top-3 right-3 rounded-full p-0 flex items-center justify-center"
                             style={{
                                 width: 36, height: 36,
                                 background: 'rgba(255,255,255,0.15)',
@@ -148,12 +149,12 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                             }}
                             aria-label="Close"
                         >
-                            <i className="bi bi-x-lg" style={{ fontSize: '0.85rem' }}></i>
+                            <X style={{ width: '1.2rem', height: '1.2rem' }} />
                         </button>
 
                         {/* Job type badge */}
-                        <div className="position-absolute bottom-0 end-0 m-3 z-2">
-                            <span className="badge rounded-full fw-bold text-uppercase"
+                        <div className="absolute bottom-3 right-3 z-[2]">
+                            <span className="rounded-full font-bold uppercase"
                                 style={{
                                     background: 'rgba(255,255,255,0.15)',
                                     backdropFilter: 'blur(8px)',
@@ -168,8 +169,8 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                         </div>
 
                         {/* Floating logo — bottom left, bleeds out */}
-                        <div className="position-absolute" style={{ bottom: '-36px', left: '24px', zIndex: 5 }}>
-                            <div className="rounded-3xl overflow-hidden shadow-lg border border-3"
+                        <div className="absolute" style={{ bottom: '-36px', left: '24px', zIndex: 5 }}>
+                            <div className="rounded-3xl overflow-hidden shadow-lg border-[3px]"
                                 style={{
                                     width: 72, height: 72,
                                     borderColor: 'var(--bg-body)',
@@ -179,7 +180,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                                 {job.company?.logo ? (
                                     <Image src={job.company.logo} alt={job.company.name} fill sizes="72px" style={{ objectFit: 'cover' }} />
                                 ) : (
-                                    <div className="w-100 h-100 d-flex align-items-center justify-content-center fw-black text-white"
+                                    <div className="w-full h-full flex items-center justify-center font-black text-white"
                                         style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', fontSize: '1.6rem' }}>
                                         {job.title?.charAt(0).toUpperCase()}
                                     </div>
@@ -189,10 +190,10 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                     </div>
 
                     {/* ── SCROLLABLE BODY ───────────────────────────────────────────── */}
-                    <div className="flex-grow-1 overflow-auto custom-scroll" style={{ minHeight: 0 }}>
+                    <div className="grow overflow-auto custom-scroll" style={{ minHeight: 0 }}>
                         {/* Identity block */}
                         <div className="px-4 pt-5 pb-0 mt-3">
-                            <h4 className="fw-black mb-1" style={{
+                            <h4 className="font-black mb-1" style={{
                                 color: 'var(--text-main)',
                                 letterSpacing: '-0.035em',
                                 lineHeight: 1.15,
@@ -200,42 +201,42 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                             }}>
                                 {job.title}
                             </h4>
-                            <div className="d-flex flex-wrap align-items-center gap-2 mt-2 mb-4">
-                                <span className="fw-bold small" style={{ color: 'var(--primary-500)' }}>{job.company?.name}</span>
+                            <div className="flex flex-wrap items-center gap-2 mt-2 mb-4">
+                                <span className="font-bold text-sm" style={{ color: 'var(--primary-500)' }}>{job.company?.name}</span>
                                 <span style={{ color: 'var(--border-color)' }}>·</span>
-                                <span className="small" style={{ color: 'var(--text-muted)' }}>
-                                    <i className="bi bi-geo-alt me-1"></i>{job.city}, {job.state}
+                                <span className="text-sm flex items-center" style={{ color: 'var(--text-muted)' }}>
+                                    <MapPin className="mr-1" style={{ width: '1rem', height: '1rem' }} />{job.city}, {job.state}
                                 </span>
                                 <span style={{ color: 'var(--border-color)' }}>·</span>
-                                <span className="small" style={{ color: 'var(--text-muted)' }}>
+                                <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
                                     {formatDate(job.createdAt)}
                                 </span>
                             </div>
 
                             {/* Quick stats bar */}
-                            <div className="d-flex rounded-xl overflow-hidden mb-5" style={{ border: '1px solid var(--border-color)' }}>
+                            <div className="flex rounded-xl overflow-hidden mb-10" style={{ border: '1px solid var(--border-color)' }}>
                                 {[
-                                    { icon: 'bi-cash-coin', label: 'Salary', value: formatSalary(job.salaryMin, job.salaryMax, job.salaryType) },
-                                    { icon: 'bi-award', label: 'Exp', value: (job.experienceMin ?? 0) > 0 ? `${job.experienceMin}+ yr` : 'Fresher' },
-                                    { icon: 'bi-people', label: 'Open', value: `${job.vacancies ?? 1}` },
+                                    { Icon: Banknote, label: 'Salary', value: formatSalary(job.salaryMin, job.salaryMax, job.salaryType) },
+                                    { Icon: Award, label: 'Exp', value: (job.experienceMin ?? 0) > 0 ? `${job.experienceMin}+ yr` : 'Fresher' },
+                                    { Icon: Users, label: 'Open', value: `${job.vacancies ?? 1}` },
                                 ].map((s, i, arr) => (
-                                    <div key={i} className="flex-fill text-center py-3 px-2"
+                                    <div key={i} className="flex-1 flex flex-col items-center justify-center py-3 px-2"
                                         style={{
                                             background: 'var(--bg-surface)',
                                             borderRight: i < arr.length - 1 ? '1px solid var(--border-color)' : 'none',
                                         }}>
-                                        <i className={`bi ${s.icon} d-block mb-1`} style={{ color: 'var(--primary-500)', fontSize: '0.85rem' }}></i>
-                                        <div className="text-uppercase fw-black opacity-40 mb-1" style={{ fontSize: '0.52rem', letterSpacing: '1px' }}>{s.label}</div>
-                                        <div className="fw-bold text-truncate" style={{ color: 'var(--text-main)', fontSize: '0.78rem' }}>{s.value}</div>
+                                        <s.Icon className="mb-1" style={{ color: 'var(--primary-500)', width: '1.2rem', height: '1.2rem' }} />
+                                        <div className="uppercase font-black opacity-40 mb-1" style={{ fontSize: '0.52rem', letterSpacing: '1px' }}>{s.label}</div>
+                                        <div className="font-bold truncate text-center" style={{ color: 'var(--text-main)', fontSize: '0.78rem' }}>{s.value}</div>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Description */}
-                            <div className="mb-5">
-                                <div className="d-flex align-items-center gap-2 mb-3">
-                                    <span className="fw-black text-uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>About the Role</span>
-                                    <div className="flex-grow-1" style={{ height: 1, background: 'var(--border-color)' }}></div>
+                            <div className="mb-10">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-black uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>About the Role</span>
+                                    <div className="grow" style={{ height: 1, background: 'var(--border-color)' }}></div>
                                 </div>
                                 <p style={{ color: 'var(--text-main)', opacity: 0.82, lineHeight: '1.75', fontSize: '0.92rem', whiteSpace: 'pre-line' }}>
                                     {job.description}
@@ -244,15 +245,15 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
 
                             {/* Skills */}
                             {job.skills && job.skills.length > 0 && (
-                                <div className="mb-5">
-                                    <div className="d-flex align-items-center gap-2 mb-3">
-                                        <span className="fw-black text-uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>Skills</span>
-                                        <div className="flex-grow-1" style={{ height: 1, background: 'var(--border-color)' }}></div>
+                                <div className="mb-10">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <span className="font-black uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>Skills</span>
+                                        <div className="grow" style={{ height: 1, background: 'var(--border-color)' }}></div>
                                     </div>
-                                    <div className="d-flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-2">
                                         {job.skills.map((skill, index) => (
                                             <span key={index}
-                                                className="fw-semibold rounded-full px-3 py-1"
+                                                className="font-semibold rounded-full px-3 py-1"
                                                 style={{
                                                     background: 'var(--bg-surface)',
                                                     color: 'var(--text-main)',
@@ -268,17 +269,17 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
 
                             {/* Benefits */}
                             {job.benefits && job.benefits.length > 0 && (
-                                <div className="mb-5">
-                                    <div className="d-flex align-items-center gap-2 mb-3">
-                                        <span className="fw-black text-uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>Perks</span>
-                                        <div className="flex-grow-1" style={{ height: 1, background: 'var(--border-color)' }}></div>
+                                <div className="mb-10">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <span className="font-black uppercase opacity-40" style={{ fontSize: '0.65rem', letterSpacing: '1.5px' }}>Perks</span>
+                                        <div className="grow" style={{ height: 1, background: 'var(--border-color)' }}></div>
                                     </div>
-                                    <div className="d-flex flex-column gap-2">
+                                    <div className="flex flex-col gap-2">
                                         {job.benefits.map((b: string, idx: number) => (
-                                            <div key={idx} className="d-flex align-items-center gap-2">
-                                                <div className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                            <div key={idx} className="flex items-center gap-2">
+                                                <div className="rounded-full flex items-center justify-center shrink-0"
                                                     style={{ width: 20, height: 20, background: 'rgba(16,185,129,0.12)' }}>
-                                                    <i className="bi bi-check-lg" style={{ color: '#10b981', fontSize: '0.6rem' }}></i>
+                                                    <Check style={{ color: '#10b981', width: '0.8rem', height: '0.8rem' }} />
                                                 </div>
                                                 <span style={{ color: 'var(--text-main)', fontSize: '0.85rem' }}>{b}</span>
                                             </div>
@@ -290,11 +291,11 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                     </div>
 
                     {/* ── STICKY ACTION FOOTER ──────────────────────────────────────── */}
-                    <div className="flex-shrink-0 px-4 py-4" style={{
+                    <div className="shrink-0 px-4 py-4" style={{
                         borderTop: '1px solid var(--border-color)',
                         background: 'var(--bg-card)',
                     }}>
-                        <div className="d-grid gap-2">
+                        <div className="grid gap-2">
                             {canApply && (
                                 <button
                                     onClick={() => user
@@ -302,7 +303,7 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                                         : router.push(`/login?redirect=/?openJob=${job._id}`)
                                     }
                                     disabled={applied}
-                                    className="btn py-3 fw-black rounded-full"
+                                    className="py-3 font-black rounded-full"
                                     style={{
                                         fontSize: '0.95rem',
                                         letterSpacing: '-0.01em',
@@ -313,21 +314,21 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                                         transition: 'opacity 0.2s ease, transform 0.2s ease',
                                     }}>
                                     {applied
-                                        ? <><i className="bi bi-check2-all me-2"></i>Already Applied</>
-                                        : <>Apply Now &nbsp;→</>
+                                        ? <span className="flex items-center justify-center"><CheckCheck className="mr-2" style={{ width: '1.2rem', height: '1.2rem' }} />Already Applied</span>
+                                        : <span>Apply Now &nbsp;→</span>
                                     }
                                 </button>
                             )}
                             <button
                                 onClick={() => router.push(`/jobs/${job._id}`)}
-                                className="btn py-2 fw-semibold rounded-full d-flex align-items-center justify-content-center gap-2"
+                                className="py-2 font-semibold rounded-full flex items-center justify-center gap-2"
                                 style={{
                                     background: 'var(--bg-surface)',
                                     color: 'var(--text-muted)',
                                     border: '1px solid var(--border-color)',
                                     fontSize: '0.87rem',
                                 }}>
-                                <i className="bi bi-box-arrow-up-right" style={{ fontSize: '0.8rem' }}></i>
+                                <ExternalLink style={{ width: '1rem', height: '1rem' }} />
                                 View full details
                             </button>
                         </div>

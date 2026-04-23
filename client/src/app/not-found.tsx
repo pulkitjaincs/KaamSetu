@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { Home } from 'lucide-react';
 
 export const metadata: Metadata = {
     title: 'Page Not Found | SkillAnchor',
@@ -8,26 +9,30 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
     return (
-        <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="text-center p-5 mx-3" style={{ maxWidth: '600px' }}>
-                <div className="mb-4">
-                    <span className="fw-bold" style={{ fontSize: '6rem', color: 'var(--primary-100)', textShadow: '0 10px 30px rgba(99, 102, 241, 0.2)' }}>
+        <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
+            <div className="text-center max-w-2xl mx-auto px-4">
+                <div className="mb-6 relative">
+                    <span className="font-black text-9xl tracking-tighter text-indigo-100 dark:text-indigo-900/30 drop-shadow-xl">
                         404
                     </span>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="font-extrabold text-4xl text-slate-900 dark:text-white mt-12">
+                            Oops!
+                        </span>
+                    </div>
                 </div>
-                <h1 className="fw-bold mb-3" style={{ color: 'var(--text-main)', fontSize: '2.5rem', letterSpacing: '-0.03em' }}>
+                <h1 className="font-extrabold text-3xl md:text-4xl text-slate-900 dark:text-white mb-4 tracking-tight">
                     Page Not Found
                 </h1>
-                <p className="mx-auto mb-4" style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '400px' }}>
-                    Oops! The page you&apos;re looking for doesn&apos;t exist or has been moved.
+                <p className="mx-auto mb-10 text-slate-500 dark:text-slate-400 text-lg max-w-md">
+                    The page you&apos;re looking for doesn&apos;t exist, has been moved, or is temporarily unavailable.
                 </p>
 
                 <Link
                     href="/"
-                    className="btn px-5 py-3 d-inline-flex align-items-center gap-2"
-                    style={{ background: 'var(--text-main)', color: 'var(--bg-body)', borderRadius: '16px', fontWeight: 600, fontSize: '1.05rem', transition: 'transform 0.2s', boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-lg transition-all shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-1"
                 >
-                    <i className="bi bi-house-door-fill"></i>
+                    <Home className="w-5 h-5" />
                     Back to Home
                 </Link>
             </div>

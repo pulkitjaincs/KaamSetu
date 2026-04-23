@@ -1,10 +1,10 @@
 export default function Loading() {
     return (
-        <div className="d-flex flex-column align-items-center justify-content-center w-100" style={{ minHeight: '60vh' }}>
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: '3rem', height: '3rem' }}>
-                <span className="visually-hidden">Loading...</span>
+        <div className="flex flex-col items-center justify-center w-full min-h-[60vh] bg-slate-50 dark:bg-[#0f1117]">
+            <div className="animate-spin rounded-full border-4 border-slate-200 dark:border-slate-800 border-t-indigo-600 dark:border-t-indigo-500 mb-4 w-12 h-12" role="status">
+                <span className="sr-only">Loading...</span>
             </div>
-            <p className="fw-medium text-muted">Loading SkillAnchor...</p>
+            <p className="font-medium text-slate-500 dark:text-slate-400">Loading SkillAnchor...</p>
         </div>
     );
 }

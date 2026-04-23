@@ -4,7 +4,7 @@ interface SkillsFormData { bio?: string; skills?: string; languages?: string; }
 export default function EditProfile_Skills({ formData, handleChange }: { formData: SkillsFormData; handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void }) {
     return (
         <div>
-            <h4 className="fw-bold mb-4" style={{ color: 'var(--text-main)' }}>Tell us about your skills</h4>
+            <h4 className="font-bold mb-4" style={{ color: 'var(--text-main)' }}>Tell us about your skills</h4>
 
             <TextAreaField label="Bio" name="bio" value={formData.bio} onChange={handleChange} rows={3} placeholder="Tell employers about yourself..." />
 
@@ -17,7 +17,7 @@ export default function EditProfile_Skills({ formData, handleChange }: { formDat
                 helpText="Comma separated"
             />
             {formData.skills && (
-                <div className="d-flex flex-wrap gap-2 mt-2 mb-4">
+                <div className="flex flex-wrap gap-2 mt-2 mb-4">
                     {formData.skills.split(',').filter((s: string) => s.trim()).map((s: string, i: number) => (
                         <span key={i} style={{
                             background: 'linear-gradient(135deg, var(--primary-500), #8b5cf6)',

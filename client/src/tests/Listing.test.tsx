@@ -116,7 +116,7 @@ describe('Listing Component', () => {
 
     render(<Listing job={mockJob} onClose={mockOnClose} />);
 
-    const btn = await screen.findByText('Already Applied');
+    const btn = await screen.findByRole('button', { name: /Already Applied/i });
     expect(btn).toBeInTheDocument();
     expect(btn).toBeDisabled();
   });
@@ -149,7 +149,7 @@ describe('Listing Component', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Already Applied')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Already Applied/i })).toBeInTheDocument();
     });
   });
 

@@ -9,6 +9,7 @@ import PageTransitions from "@/components/common/PageTransitions";
 import JobCard from "@/components/common/Card";
 import JobSkeleton from "@/components/common/JobSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
+import { AlertCircle, ArrowRight, Search } from "lucide-react";
 import { Job, PaginatedJobsResponse } from "@/types";
 
 const Listing = dynamic(() => import("@/components/common/Listing"), {
@@ -95,12 +96,12 @@ function HomePageContent() {
   }, [selectedJob]);
 
   const listColumnClass = selectedJob
-    ? "d-none d-lg-flex col-lg-5"
-    : "col-12";
+    ? "hidden lg:flex lg:w-5/12"
+    : "w-full";
 
   const detailColumnClass = selectedJob
-    ? "col-12 col-lg-7"
-    : "d-none";
+    ? "w-full lg:w-7/12"
+    : "hidden";
 
   const handleHeroSearch = ({ search, location, category }: { search?: string, location?: string, category?: string }) => {
     const params = new URLSearchParams();
@@ -111,10 +112,10 @@ function HomePageContent() {
   };
 
   if (isError) return (
-    <div className="text-center py-5 mt-5">
-      <i className="bi bi-exclamation-circle text-danger fs-1"></i>
+    <div className="text-center py-20 mt-20">
+      <AlertCircle className="text-red-500 mx-auto" size={36} />
       <h5 className="mt-3">Failed to load jobs</h5>
-      <button className="btn btn-primary mt-2" onClick={() => window.location.reload()}>Retry</button>
+      <button className="mt-2 px-4 py-2" style={{ background: 'var(--primary-500)', color: 'white', borderRadius: '12px', fontWeight: 600 }} onClick={() => window.location.reload()}>Retry</button>
     </div>
   );
 
@@ -125,7 +126,7 @@ function HomePageContent() {
 
   return (
     <PageTransitions>
-      <div className="container-fluid flex-grow-1 px-4 px-lg-5" style={{ maxWidth: "1400px" }}>
+      <div className="w-full grow px-4 lg:px-10" style={{ maxWidth: "1400px" }}>
 
         <SearchHero
           onSearch={handleHeroSearch}
@@ -134,9 +135,9 @@ function HomePageContent() {
           initialCategory={categoryQuery}
         />
 
-        <div className="row g-4" style={{ paddingTop: '0px' }}>
+        <div className="grid gap-4" style={{ paddingTop: '0px' }}>
 
-          <div className={`${listColumnClass} d-flex flex-column layout-transition`}
+          <div className={`${listColumnClass} flex flex-col layout-transition`}
             style={{ paddingTop: "0px", paddingBottom: "20px" }}>
 
             {/* Section header — Stitch "Premium Opportunities / See All" style */}
@@ -172,7 +173,7 @@ function HomePageContent() {
                     padding: 0,
                   }}
                 >
-                  See All <i className="bi bi-arrow-right" style={{ fontSize: '0.85rem' }}></i>
+                  See All <ArrowRight size={14} />
                 </button>
               )}
             </div>
@@ -196,13 +197,13 @@ function HomePageContent() {
                 ) : allJobs.length === 0 ? (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="py-5 text-center d-flex flex-column align-items-center"
+                    className="py-20 text-center flex flex-col items-center"
                   >
-                    <div className="p-4 rounded-circle mb-3 mb-4" style={{ background: "var(--bg-surface)" }}>
-                      <i className="bi bi-search fs-1" style={{ color: "var(--text-muted)" }}></i>
+                    <div className="p-4 rounded-full mb-4" style={{ background: "var(--bg-surface)" }}>
+                      <Search className="text-[var(--text-muted)] mx-auto" size={36} />
                     </div>
-                    <h5 className="fw-bold mb-2">No jobs found</h5>
-                    <p className="text-muted" style={{ maxWidth: "300px" }}>Try adjusting your search filters or exploring a different category.</p>
+                    <h5 className="font-bold mb-2">No jobs found</h5>
+                    <p className="text-[var(--text-muted)]" style={{ maxWidth: "300px" }}>Try adjusting your search filters or exploring a different category.</p>
                   </motion.div>
                 ) : (
                   <>
@@ -246,8 +247,8 @@ function HomePageContent() {
                       </div>
                     )}
                     {!hasNextPage && allJobs.length > 0 && (
-                      <div className="py-4 text-center border-top mt-3" style={{ borderColor: "var(--border-color)", opacity: 0.7 }}>
-                        <span className="small fw-medium" style={{ color: "var(--text-muted)" }}>You&apos;ve reached the end of the list</span>
+                      <div className="py-4 text-center border-t mt-3" style={{ borderColor: "var(--border-color)", opacity: 0.7 }}>
+                        <span className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>You&apos;ve reached the end of the list</span>
                       </div>
                     )}
                   </>
@@ -259,7 +260,7 @@ function HomePageContent() {
           <div className={`${detailColumnClass} layout-transition`}
             style={{ position: 'sticky', height: "calc(100vh - 120px)", overflowY: "hidden", top: "110px", borderRadius: "24px", zIndex: 1100 }}>
             {selectedJob && (
-              <Suspense fallback={<div className="h-100 d-flex align-items-center justify-content-center text-muted">Loading Details...</div>}>
+              <Suspense fallback={<div className="h-full flex items-center justify-center text-[var(--text-muted)]">Loading Details...</div>}>
                 <Listing
                   job={selectedJob}
                   onClose={() => { setSelectedJob(null); setIsSwitch(false); }}
@@ -276,7 +277,7 @@ function HomePageContent() {
 
 export default function HomePage() {
   return (
-    <Suspense fallback={<div className="py-5 text-center"><div className="spinner-border text-primary" role="status"></div></div>}>
+    <Suspense fallback={<div className="py-20 text-center"><div className="animate-spin rounded-full border-4 border-[var(--border-color)] border-t-[var(--primary-500)] w-8 h-8 mx-auto" role="status"></div></div>}>
       <HomePageContent />
     </Suspense>
   );

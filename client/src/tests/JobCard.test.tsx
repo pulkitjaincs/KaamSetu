@@ -69,7 +69,7 @@ describe('JobCard Component', () => {
     it('should handle bookmarks hover effects safely', () => {
         const { container } = render(<JobCard job={mockJob} isSelected={false} onClick={() => {}} />);
         // Use a generic selector for the bookmark since it has no text
-        const bookmarkBtn = container.querySelector('.bi-bookmark')?.parentElement;
+        const bookmarkBtn = container.querySelector('.lucide-bookmark')?.parentElement;
         
         if (bookmarkBtn) {
             fireEvent.click(bookmarkBtn);

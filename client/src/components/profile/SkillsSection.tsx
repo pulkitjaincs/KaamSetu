@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import Link from 'next/link';
+import { Wrench, Plus, Languages } from 'lucide-react';
 
 interface SkillsSectionProps {
     skills?: string[];
@@ -30,29 +31,29 @@ const labelStyle = {
 };
 
 const SkillsSection = memo(({ skills, languages, isOwnProfile }: SkillsSectionProps) => (
-    <div className="row g-4 mb-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         {/* Expertise Tile */}
-        <div className="col-12 col-md-6">
-            <div className="p-4 h-100" style={tileStyle}>
-                <div className="d-flex align-items-center gap-2 mb-4">
-                    <i className="bi bi-tools text-primary fs-5"></i>
+        <div>
+            <div className="p-4 h-full" style={tileStyle}>
+                <div className="flex items-center gap-2 mb-4">
+                    <Wrench className="text-xl" style={{ color: 'var(--primary-main)', width: '1.25rem', height: '1.25rem' }} />
                     <span style={labelStyle}>Expertise</span>
                 </div>
-                <div className="d-flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                     {skills && skills.length > 0 ? (
                         skills.map((skill, i) => (
-                            <span key={i} className="badge rounded-full px-4 py-2" style={chipStyle}>
+                            <span key={i} className="rounded-full px-4 py-2" style={chipStyle}>
                                 {skill}
                             </span>
                         ))
                     ) : (
-                        <p className="text-muted small mb-0 fst-italic">No skills added yet.</p>
+                        <p className="text-[var(--text-muted)] text-sm mb-0 italic">No skills added yet.</p>
                     )}
                     {isOwnProfile && (
                         <Link href="/profile/edit"
-                            className="badge rounded-full px-4 py-2 text-decoration-none"
+                            className="rounded-full px-4 py-2 no-underline"
                             style={{ ...chipStyle, color: 'var(--primary-main)', border: '1.5px dashed var(--primary-main)', background: 'transparent' }}>
-                            <i className="bi bi-plus"></i> Add
+                            <Plus className="inline-block" style={{ width: '1rem', height: '1rem', verticalAlign: 'text-bottom' }} /> Add
                         </Link>
                     )}
                 </div>
@@ -60,27 +61,27 @@ const SkillsSection = memo(({ skills, languages, isOwnProfile }: SkillsSectionPr
         </div>
 
         {/* Languages Tile */}
-        <div className="col-12 col-md-6">
-            <div className="p-4 h-100" style={tileStyle}>
-                <div className="d-flex align-items-center gap-2 mb-4">
-                    <i className="bi bi-translate text-primary fs-5"></i>
+        <div>
+            <div className="p-4 h-full" style={tileStyle}>
+                <div className="flex items-center gap-2 mb-4">
+                    <Languages className="text-xl" style={{ color: 'var(--primary-main)', width: '1.25rem', height: '1.25rem' }} />
                     <span style={labelStyle}>Languages</span>
                 </div>
-                <div className="d-flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                     {languages && languages.length > 0 ? (
                         languages.map((lang, i) => (
-                            <span key={i} className="badge rounded-full px-4 py-2" style={chipStyle}>
+                            <span key={i} className="rounded-full px-4 py-2" style={chipStyle}>
                                 {lang}
                             </span>
                         ))
                     ) : (
-                        <p className="text-muted small mb-0 fst-italic">No languages added yet.</p>
+                        <p className="text-[var(--text-muted)] text-sm mb-0 italic">No languages added yet.</p>
                     )}
                     {isOwnProfile && (
                         <Link href="/profile/edit"
-                            className="badge rounded-full px-4 py-2 text-decoration-none"
+                            className="rounded-full px-4 py-2 no-underline"
                             style={{ ...chipStyle, color: 'var(--primary-main)', border: '1.5px dashed var(--primary-main)', background: 'transparent' }}>
-                            <i className="bi bi-plus"></i> Add
+                            <Plus className="inline-block" style={{ width: '1rem', height: '1rem', verticalAlign: 'text-bottom' }} /> Add
                         </Link>
                     )}
                 </div>

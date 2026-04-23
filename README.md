@@ -65,10 +65,10 @@ A full-stack job portal purpose-built for India's blue-collar and hourly workfor
 | Framework | **Next.js 16** (App Router) with **React 19** |
 | Language | TypeScript 5 |
 | State Management | TanStack React Query v5, React Context API |
-| Styling | Tailwind CSS v4, Bootstrap 5, CSS Modules |
+| Styling | Tailwind CSS v4, CSS Modules |
 | Animations | Framer Motion 12 |
 | Performance | React Compiler (auto-memoization), React Virtuoso, `next/image`, `next/font` |
-| Icons | Bootstrap Icons, Lucide React |
+| Icons | Lucide React |
 | HTTP Client | Axios (with interceptors for 401 auto-logout) |
 | Testing | Vitest 4, React Testing Library, jsdom |
 

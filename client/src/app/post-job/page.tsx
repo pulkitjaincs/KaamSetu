@@ -7,6 +7,7 @@ import { useForm } from '@/hooks';
 import { InputField, SelectField, TextAreaField, Button } from '@/components/common/FormComponents';
 import { CATEGORY_OPTIONS } from '@/constants/jobConstants';
 import { useCreateJob } from '@/hooks/queries/useApplications';
+import { Briefcase, AlertTriangle } from 'lucide-react';
 
 export default function PostJobPage() {
     const router = useRouter();
@@ -56,57 +57,49 @@ export default function PostJobPage() {
     };
 
     return (
-        <div className="container py-5">
-            <Link href="/my-jobs" className="text-decoration-none d-inline-flex align-items-center mb-3"
-                style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                ← Back to My Jobs
+        <div className="w-full max-w-7xl mx-auto px-4 py-12">
+            <Link href="/my-jobs" className="no-underline inline-flex items-center mb-6 text-text-muted text-sm hover:text-text-main transition-colors">
+                &larr; Back to My Jobs
             </Link>
-            <div className="row justify-content-center">
-                <div className="col-lg-8">
-                    <div className="card border-0 overflow-hidden"
-                        style={{
-                            background: 'var(--bg-card)',
-                            borderRadius: '24px',
-                            border: '1px solid var(--border-color)'
-                        }}>
+            <div className="flex justify-center">
+                <div className="w-full lg:w-8/12">
+                    <div className="bg-bg-card rounded-3xl border border-border-color overflow-hidden shadow-sm">
                         {/* Premium Header */}
-                        <div style={{
-                            background: 'var(--text-main)',
-                            padding: '2rem',
-                            color: 'var(--bg-body)'
-                        }}>
-                            <h2 className="fw-bold mb-1" style={{ color: 'var(--bg-body)' }}>
-                                <i className="bi bi-briefcase-fill me-2"></i>
+                        <div className="bg-text-main p-8 text-bg-body">
+                            <h2 className="font-bold mb-2 text-bg-body text-2xl flex items-center">
+                                <Briefcase className="w-6 h-6 mr-3" />
                                 Post a New Job
                             </h2>
-                            <p className="mb-0" style={{ opacity: 0.7 }}>Fill in the details to reach qualified workers</p>
+                            <p className="mb-0 opacity-70">Fill in the details to reach qualified workers</p>
                         </div>
 
-                        <div className="card-body p-4 p-lg-5">
+                        <div className="p-6 lg:p-12">
                             {error && (
-                                <div className="alert alert-danger rounded-xl d-flex align-items-center">
-                                    <i className="bi bi-exclamation-triangle-fill me-2"></i>{error}
+                                <div className="bg-red-100 text-red-800 border border-red-200 rounded-xl p-4 flex items-center mb-6">
+                                    <AlertTriangle className="w-5 h-5 mr-3 flex-shrink-0" />{error}
                                 </div>
                             )}
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} className="space-y-8">
                                 {/* Section: Basic Info */}
-                                <div className="mb-4 mt-2">
-                                    <h6 className="text-uppercase fw-bold mb-3 d-flex align-items-center" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.1em' }}>
-                                        <span className="d-inline-block me-2" style={{ width: '20px', height: '2px', background: 'var(--primary-500)' }}></span>
+                                <div>
+                                    <h6 className="uppercase font-bold mb-4 flex items-center text-text-muted text-xs tracking-wider">
+                                        <span className="inline-block mr-3 w-5 h-0.5 bg-primary-500 rounded-full"></span>
                                         Basic Information
                                     </h6>
-                                    <InputField label="Job Title" name="title" value={formData.title} onChange={handleChange} placeholder="e.g. Kitchen Helper" required />
-                                    <TextAreaField label="Description" name="description" value={formData.description} onChange={handleChange} placeholder="Describe the job responsibilities..." required />
+                                    <div className="space-y-4">
+                                        <InputField label="Job Title" name="title" value={formData.title} onChange={handleChange} placeholder="e.g. Kitchen Helper" required />
+                                        <TextAreaField label="Description" name="description" value={formData.description} onChange={handleChange} placeholder="Describe the job responsibilities..." required />
+                                    </div>
                                 </div>
 
                                 {/* Section: Location */}
-                                <div className="mb-4 mt-5">
-                                    <h6 className="text-uppercase fw-bold mb-3 d-flex align-items-center" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.1em' }}>
-                                        <span className="d-inline-block me-2" style={{ width: '20px', height: '2px', background: 'var(--primary-500)' }}></span>
+                                <div>
+                                    <h6 className="uppercase font-bold mb-4 flex items-center text-text-muted text-xs tracking-wider">
+                                        <span className="inline-block mr-3 w-5 h-0.5 bg-primary-500 rounded-full"></span>
                                         Location & Category
                                     </h6>
-                                    <div className="row g-3">
-                                        <div className="col-md-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                        <div>
                                             <SelectField
                                                 label="Category"
                                                 name="category"
@@ -116,29 +109,29 @@ export default function PostJobPage() {
                                                 required
                                             />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div>
                                             <InputField label="City" name="city" value={formData.city} onChange={handleChange} placeholder="e.g. Mumbai" required />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div>
                                             <InputField label="State" name="state" value={formData.state} onChange={handleChange} placeholder="e.g. Maharashtra" required />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Section: Compensation */}
-                                <div className="mb-4 mt-5">
-                                    <h6 className="text-uppercase fw-bold mb-3 d-flex align-items-center" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.1em' }}>
-                                        <span className="d-inline-block me-2" style={{ width: '20px', height: '2px', background: 'var(--primary-500)' }}></span>
+                                <div>
+                                    <h6 className="uppercase font-bold mb-4 flex items-center text-text-muted text-xs tracking-wider">
+                                        <span className="inline-block mr-3 w-5 h-0.5 bg-primary-500 rounded-full"></span>
                                         Compensation
                                     </h6>
-                                    <div className="row g-3">
-                                        <div className="col-md-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                        <div>
                                             <InputField label="Min Salary" name="salaryMin" type="number" value={formData.salaryMin} onChange={handleChange} placeholder="15000" required />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div>
                                             <InputField label="Max Salary" name="salaryMax" type="number" value={formData.salaryMax} onChange={handleChange} placeholder="25000" />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div>
                                             <SelectField
                                                 label="Salary Type" name="salaryType" value={formData.salaryType} onChange={handleChange}
                                                 options={[{ label: 'Monthly', value: 'monthly' }, { label: 'Daily', value: 'daily' }, { label: 'Hourly', value: 'hourly' }]}
@@ -149,48 +142,48 @@ export default function PostJobPage() {
                                 </div>
 
                                 {/* Section: Job Details */}
-                                <div className="mb-4 mt-5">
-                                    <h6 className="text-uppercase fw-bold mb-3 d-flex align-items-center" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.1em' }}>
-                                        <span className="d-inline-block me-2" style={{ width: '20px', height: '2px', background: 'var(--primary-500)' }}></span>
+                                <div>
+                                    <h6 className="uppercase font-bold mb-4 flex items-center text-text-muted text-xs tracking-wider">
+                                        <span className="inline-block mr-3 w-5 h-0.5 bg-primary-500 rounded-full"></span>
                                         Job Details
                                     </h6>
-                                    <div className="row g-3">
-                                        <div className="col-md-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                        <div>
                                             <SelectField
                                                 label="Job Type" name="jobType" value={formData.jobType} onChange={handleChange}
                                                 options={[{ label: 'Full Time', value: 'full-time' }, { label: 'Part Time', value: 'part-time' }, { label: 'Contract', value: 'contract' }]}
                                                 required
                                             />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div>
                                             <SelectField
                                                 label="Shift" name="shift" value={formData.shift} onChange={handleChange}
                                                 options={[{ label: 'Day', value: 'day' }, { label: 'Night', value: 'night' }, { label: 'Flexible', value: 'flexible' }]}
                                             />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div>
                                             <InputField label="Vacancies" name="vacancies" type="number" value={formData.vacancies} onChange={handleChange} placeholder="1" />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Section: Requirements */}
-                                <div className="mb-4 mt-5">
-                                    <h6 className="text-uppercase fw-bold mb-3 d-flex align-items-center" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.1em' }}>
-                                        <span className="d-inline-block me-2" style={{ width: '20px', height: '2px', background: 'var(--primary-500)' }}></span>
+                                <div>
+                                    <h6 className="uppercase font-bold mb-4 flex items-center text-text-muted text-xs tracking-wider">
+                                        <span className="inline-block mr-3 w-5 h-0.5 bg-primary-500 rounded-full"></span>
                                         Skills & Benefits
                                     </h6>
-                                    <div className="row g-3">
-                                        <div className="col-md-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        <div>
                                             <InputField label="Skills" name="skills" value={formData.skills} onChange={handleChange} placeholder="Cooking, Hindi (comma separated)" />
                                         </div>
-                                        <div className="col-md-6">
+                                        <div>
                                             <InputField label="Benefits" name="benefits" value={formData.benefits} onChange={handleChange} placeholder="Food, Accommodation (comma separated)" />
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-5">
+                                <div className="pt-4">
                                     <Button type="submit" variant="primary" loading={createMutation.isPending} fullWidth>
                                         Post Job
                                     </Button>

@@ -1,4 +1,5 @@
 import { useState, useCallback, memo } from 'react';
+import { Contact, Mail, CheckCircle, Phone } from 'lucide-react';
 
 const inputStyle = {
     background: 'var(--bg-body)',
@@ -99,28 +100,28 @@ const ContactDetailsCard = memo(({ user, onSendOTP, onVerifyOTP }: { user: Conta
             {!otpSent ? (
                 <>
                     {type === 'phone' ? (
-                        <div className="d-flex align-items-center gap-2 mb-3">
+                        <div className="flex items-center gap-2 mb-3">
                             <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>+91</span>
                             <input type="tel" name="phone" value={contactData.phone} onChange={handleContactChange} maxLength={10}
-                                style={{ ...inputStyle, flex: 1 }} className="form-control" placeholder={placeholder} autoFocus required />
+                                style={{ ...inputStyle, flex: 1 }} className="w-full" placeholder={placeholder} autoFocus required />
                         </div>
                     ) : (
                         <input type={inputType} name={type} value={contactData[type]} onChange={handleContactChange}
-                            style={{ ...inputStyle, marginBottom: '12px' }} className="form-control" placeholder={placeholder} autoFocus required />
+                            style={{ ...inputStyle, marginBottom: '12px' }} className="w-full" placeholder={placeholder} autoFocus required />
                     )}
-                    <div className="d-flex gap-2">
+                    <div className="flex gap-2">
                         <button type="submit" disabled={contactLoading} style={primaryBtnStyle}>Send OTP</button>
                         <button type="button" onClick={cancelEditing} style={cancelBtnStyle}>Cancel</button>
                     </div>
                 </>
             ) : (
                 <>
-                    <p className="small mb-2" style={{ color: 'var(--primary-600)' }}>
+                    <p className="text-sm mb-2" style={{ color: 'var(--primary-600)' }}>
                         OTP sent to {type === 'email' ? contactData.email : `+91 ${contactData.phone}`}
                     </p>
                     <input type="text" name="otp" value={contactData.otp} onChange={handleContactChange} maxLength={6}
-                        style={otpInputStyle} className="form-control" placeholder="000000" autoFocus required />
-                    <div className="d-flex gap-2">
+                        style={otpInputStyle} className="w-full" placeholder="000000" autoFocus required />
+                    <div className="flex gap-2">
                         <button type="submit" disabled={contactLoading} style={verifyBtnStyle}>Verify</button>
                         <button type="button" onClick={() => setOtpSent(false)} style={cancelBtnStyle}>Back</button>
                     </div>
@@ -131,26 +132,26 @@ const ContactDetailsCard = memo(({ user, onSendOTP, onVerifyOTP }: { user: Conta
 
     return (
         <div style={{ padding: '28px' }}>
-            <div className="d-flex align-items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-4">
                 <div style={{
                     width: '52px', height: '52px', borderRadius: '16px',
                     background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1))',
                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
-                    <i className="bi bi-person-badge-fill" style={{ color: '#10b981', fontSize: '1.3rem' }}></i>
+                    <Contact style={{ color: '#10b981', width: '1.5rem', height: '1.5rem' }} />
                 </div>
                 <div>
-                    <h5 className="fw-bold mb-0" style={{ color: 'var(--text-main)' }}>Contact Details</h5>
-                    <p className="mb-0 small" style={{ color: 'var(--text-muted)' }}>Email & Phone</p>
+                    <h5 className="font-bold mb-0" style={{ color: 'var(--text-main)' }}>Contact Details</h5>
+                    <p className="mb-0 text-sm" style={{ color: 'var(--text-muted)' }}>Email &amp; Phone</p>
                 </div>
             </div>
 
             {/* Email Section */}
             <div style={{ ...sectionStyle, marginBottom: '16px' }}>
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                    <div className="d-flex align-items-center gap-2">
-                        <i className="bi bi-envelope-fill" style={{ color: 'var(--text-muted)' }}></i>
-                        <span className="fw-semibold small" style={{ color: 'var(--text-muted)' }}>EMAIL</span>
+                <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-2">
+                        <Mail style={{ color: 'var(--text-muted)', width: '1.2rem', height: '1.2rem' }} />
+                        <span className="font-semibold text-sm" style={{ color: 'var(--text-muted)' }}>EMAIL</span>
                     </div>
                     {editingSection !== 'email' && (
                         <button onClick={() => startEditing('email')}
@@ -160,12 +161,12 @@ const ContactDetailsCard = memo(({ user, onSendOTP, onVerifyOTP }: { user: Conta
                     )}
                 </div>
                 {editingSection === 'email' ? renderEditForm('email', 'new@email.com', 'email') : (
-                    <div className="d-flex align-items-center justify-content-between">
-                        <span className="fw-semibold" style={{ color: 'var(--text-main)', fontSize: '1rem' }}>
+                    <div className="flex items-center justify-between">
+                        <span className="font-semibold" style={{ color: 'var(--text-main)', fontSize: '1rem' }}>
                             {user?.email || <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Not linked</span>}
                         </span>
                         {user?.emailVerified && (
-                            <span style={verifiedBadgeStyle}><i className="bi bi-check-circle-fill me-1"></i>Verified</span>
+                            <span style={verifiedBadgeStyle} className="flex items-center"><CheckCircle className="mr-1" style={{ width: '1rem', height: '1rem' }} />Verified</span>
                         )}
                     </div>
                 )}
@@ -173,10 +174,10 @@ const ContactDetailsCard = memo(({ user, onSendOTP, onVerifyOTP }: { user: Conta
 
             {/* Phone Section */}
             <div style={sectionStyle}>
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                    <div className="d-flex align-items-center gap-2">
-                        <i className="bi bi-phone-fill" style={{ color: 'var(--text-muted)' }}></i>
-                        <span className="fw-semibold small" style={{ color: 'var(--text-muted)' }}>PHONE</span>
+                <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-2">
+                        <Phone style={{ color: 'var(--text-muted)', width: '1.2rem', height: '1.2rem' }} />
+                        <span className="font-semibold text-sm" style={{ color: 'var(--text-muted)' }}>PHONE</span>
                     </div>
                     {editingSection !== 'phone' && (
                         <button onClick={() => startEditing('phone')}
@@ -186,12 +187,12 @@ const ContactDetailsCard = memo(({ user, onSendOTP, onVerifyOTP }: { user: Conta
                     )}
                 </div>
                 {editingSection === 'phone' ? renderEditForm('phone', '9876543210', 'tel') : (
-                    <div className="d-flex align-items-center justify-content-between">
-                        <span className="fw-semibold" style={{ color: 'var(--text-main)', fontSize: '1rem' }}>
+                    <div className="flex items-center justify-between">
+                        <span className="font-semibold" style={{ color: 'var(--text-main)', fontSize: '1rem' }}>
                             {user?.phone ? `+91 ${user.phone}` : <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Not linked</span>}
                         </span>
                         {user?.phoneVerified && (
-                            <span style={verifiedBadgeStyle}><i className="bi bi-check-circle-fill me-1"></i>Verified</span>
+                            <span style={verifiedBadgeStyle} className="flex items-center"><CheckCircle className="mr-1" style={{ width: '1rem', height: '1rem' }} />Verified</span>
                         )}
                     </div>
                 )}

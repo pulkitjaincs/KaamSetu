@@ -18,22 +18,22 @@ const JobSkeleton = memo(() => {
             }}
         >
             {/* Header skeleton: logo + text */}
-            <div className="d-flex gap-3 mb-4" style={{ alignItems: "flex-start" }}>
+            <div className="flex gap-3 mb-4 items-start">
                 {/* Logo */}
-                <div className="placeholder-glow" style={{ flexShrink: 0 }}>
+                <div className="shrink-0">
                     <div
-                        className="placeholder"
+                        className="animate-pulse"
                         style={{ width: "56px", height: "56px", borderRadius: "12px", backgroundColor: shimmerBg }}
                     />
                 </div>
                 {/* Company name + title */}
-                <div className="flex-grow-1 placeholder-glow" style={{ minWidth: 0 }}>
+                <div className="grow min-w-0">
                     <div
-                        className="placeholder mb-2"
+                        className="animate-pulse mb-2"
                         style={{ width: "35%", height: "12px", borderRadius: "6px", backgroundColor: shimmerBg, display: "block" }}
                     />
                     <div
-                        className="placeholder"
+                        className="animate-pulse"
                         style={{ width: "70%", height: "18px", borderRadius: "6px", backgroundColor: shimmerBg, display: "block" }}
                     />
                 </div>
@@ -41,25 +41,16 @@ const JobSkeleton = memo(() => {
 
             {/* Metadata grid skeleton */}
             <div
-                className="placeholder-glow"
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr",
-                    gap: "16px",
-                    borderTop: "1px solid var(--border-color)",
-                    borderBottom: "1px solid var(--border-color)",
-                    padding: "16px 0",
-                    marginBottom: "16px",
-                }}
+                className="grid grid-cols-3 gap-4 border-t border-b border-[var(--border-color)] py-4 mb-4"
             >
                 {[1, 2, 3].map((i) => (
-                    <div key={i} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    <div key={i} className="flex flex-col gap-1.5">
                         <div
-                            className="placeholder"
+                            className="animate-pulse"
                             style={{ width: "50%", height: "8px", borderRadius: "4px", backgroundColor: shimmerBg }}
                         />
                         <div
-                            className="placeholder"
+                            className="animate-pulse"
                             style={{ width: "70%", height: "14px", borderRadius: "4px", backgroundColor: shimmerBg }}
                         />
                     </div>
@@ -67,9 +58,9 @@ const JobSkeleton = memo(() => {
             </div>
 
             {/* CTA skeleton */}
-            <div className="placeholder-glow">
+            <div>
                 <div
-                    className="placeholder"
+                    className="animate-pulse"
                     style={{
                         width: "100%",
                         height: "48px",

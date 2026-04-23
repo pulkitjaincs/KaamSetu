@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getInitials } from '@/utils/index';
 import { Profile } from '@/types';
+import { Check, BadgeCheck, MapPin, Share2 } from 'lucide-react';
 
 interface ProfileHeaderProps {
     profile: Profile;
@@ -24,12 +25,12 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
         <>
             {/* Profile Identity Block */}
             <section className="mb-6" style={{ marginBottom: '2rem' }}>
-                <div className="d-flex align-items-start justify-content-between gap-4 flex-wrap mb-5">
-                    <div className="d-flex align-items-center gap-4">
+                <div className="flex items-start justify-between gap-4 flex-wrap mb-5">
+                    <div className="flex items-center gap-4">
                         {/* Avatar */}
-                        <div className="position-relative flex-shrink-0"
+                        <div className="relative shrink-0"
                             style={{ width: '80px', height: '80px' }}>
-                            <div className="w-100 h-100 rounded-3xl overflow-hidden d-flex align-items-center justify-content-center position-relative"
+                            <div className="w-full h-full rounded-3xl overflow-hidden flex items-center justify-center relative"
                                 style={{ background: 'var(--surface-container-low)' }}>
                                 {avatarSrc?.startsWith('http') ? (
                                     <Image
@@ -41,28 +42,28 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                                         unoptimized={true}
                                     />
                                 ) : (
-                                    <span className="fw-bold fs-3" style={{ color: 'var(--primary-main)' }}>
+                                    <span className="font-bold text-3xl" style={{ color: 'var(--primary-main)' }}>
                                         {getInitials(profile.name)}
                                     </span>
                                 )}
                             </div>
                             {isVerified && (
-                                <div className="position-absolute bottom-0 end-0 rounded-full border border-3 border-white d-flex align-items-center justify-content-center"
+                                <div className="absolute bottom-0 right-0 rounded-full border-[3px] border-white flex items-center justify-center"
                                     style={{ width: '22px', height: '22px', background: 'var(--tertiary-container)' }}>
-                                    <i className="bi bi-check-lg text-white" style={{ fontSize: '10px' }}></i>
+                                    <Check className="text-white" style={{ width: '12px', height: '12px' }} strokeWidth={4} />
                                 </div>
                             )}
                         </div>
 
                         {/* Name + Badge + Subtitle */}
                         <div>
-                            <div className="d-flex align-items-center gap-3 mb-1">
-                                <h1 className="fw-extrabold mb-0"
+                            <div className="flex items-center gap-3 mb-1">
+                                <h1 className="font-extrabold mb-0"
                                     style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', letterSpacing: '-0.03em', color: 'var(--text-main)' }}>
                                     {profile.name}
                                 </h1>
                                 {isVerified && (
-                                    <span className="d-flex align-items-center gap-1 px-3 py-1 rounded-full"
+                                    <span className="flex items-center gap-1 px-3 py-1 rounded-full"
                                         style={{
                                             background: 'var(--tertiary-container)',
                                             color: '#ffffff',
@@ -72,17 +73,17 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                                             textTransform: 'uppercase',
                                             lineHeight: 1
                                         }}>
-                                        <i className="bi bi-patch-check-fill" style={{ fontSize: '0.75rem' }}></i>
+                                        <BadgeCheck style={{ width: '0.75rem', height: '0.75rem' }} />
                                         Verified
                                     </span>
                                 )}
                             </div>
-                            <p className="mb-0 fw-medium" style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+                            <p className="mb-0 font-medium" style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
                                 {roleSubtitle}
                             </p>
                             {(profile.city || profile.state) && (
-                                <p className="mb-0 small mt-1" style={{ color: 'var(--text-muted)' }}>
-                                    <i className="bi bi-geo-alt me-1"></i>
+                                <p className="mb-0 text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+                                    <MapPin className="mr-1 inline-block" style={{ width: '1rem', height: '1rem', verticalAlign: 'text-bottom' }} />
                                     {[profile.city, profile.state].filter(Boolean).join(', ')}
                                     {profile.dob ? ` • ${getAge(profile.dob)} yrs` : ''}
                                 </p>
@@ -91,10 +92,10 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="d-flex gap-3 align-items-center">
+                    <div className="flex gap-3 items-center">
                         {isOwnProfile && (
                             <Link href="/profile/edit"
-                                className="btn px-5 py-2 fw-bold rounded-xl"
+                                className="px-5 py-2 font-bold rounded-xl"
                                 style={{
                                     background: 'linear-gradient(135deg, #0056b6 0%, #006ee5 100%)',
                                     color: '#ffffff',
@@ -108,7 +109,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                             </Link>
                         )}
                         <button
-                            className="btn px-4 py-2 rounded-xl"
+                            className="px-4 py-2 rounded-xl"
                             style={{
                                 background: 'var(--surface-container-low)',
                                 color: 'var(--text-main)',
@@ -116,7 +117,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                                 fontSize: '0.85rem',
                                 fontWeight: 600
                             }}>
-                            <i className="bi bi-share me-2"></i>Share
+                            <Share2 className="mr-2 inline-block" style={{ width: '1rem', height: '1rem', verticalAlign: 'text-bottom' }} />Share
                         </button>
                     </div>
                 </div>
@@ -133,16 +134,16 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
             {isOwnProfile && !isEmployer && completionPercent < 100 && (
                 <div className="p-4 rounded-3xl mb-5"
                     style={{ background: 'var(--surface-container-lowest)', border: 'none' }}>
-                    <div className="d-flex justify-content-between align-items-end mb-3">
-                        <span className="fw-bold small" style={{ color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    <div className="flex justify-between items-end mb-3">
+                        <span className="font-bold text-sm" style={{ color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                             Profile Completion
                         </span>
-                        <span className="fw-extrabold" style={{ fontSize: '1.75rem', color: 'var(--primary-main)', letterSpacing: '-0.03em', lineHeight: 1 }}>
+                        <span className="font-extrabold" style={{ fontSize: '1.75rem', color: 'var(--primary-main)', letterSpacing: '-0.03em', lineHeight: 1 }}>
                             {completionPercent}%
                         </span>
                     </div>
-                    <div className="w-100 rounded-full overflow-hidden mb-3" style={{ height: '10px', background: 'var(--surface-container)' }}>
-                        <div className="h-100 rounded-full"
+                    <div className="w-full rounded-full overflow-hidden mb-3" style={{ height: '10px', background: 'var(--surface-container)' }}>
+                        <div className="h-full rounded-full"
                             style={{
                                 width: `${completionPercent}%`,
                                 background: 'linear-gradient(135deg, #0056b6 0%, #006ee5 100%)',
@@ -150,8 +151,8 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                             }}
                         />
                     </div>
-                    <p className="small mb-0 p-3 rounded-xl" style={{ background: 'rgba(0,86,182,0.06)', color: 'var(--text-muted)' }}>
-                        <span className="fw-bold" style={{ color: 'var(--primary-main)' }}>Pro Tip:</span>
+                    <p className="text-sm mb-0 p-3 rounded-xl" style={{ background: 'rgba(0,86,182,0.06)', color: 'var(--text-muted)' }}>
+                        <span className="font-bold" style={{ color: 'var(--primary-main)' }}>Pro Tip:</span>
                         {' '}Add your PAN Card to reach up to 100% and get priority job listings.
                     </p>
                 </div>

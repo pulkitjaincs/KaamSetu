@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { authAPI } from '@/lib/api';
 import BrandLogo from '@/components/common/BrandLogo';
 import { useEffect } from 'react';
-import '../AuthPages.css';
+import { Smartphone, Mail, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
     const [method, setMethod] = useState<'email' | 'phone'>('email');
@@ -95,50 +95,50 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div className="container-fluid flex-grow-1 d-flex align-items-center justify-content-center px-4 py-5 auth-page-container">
-            <div className="row w-100 justify-content-center">
-                <div className="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+        <div className="min-h-screen flex-1 flex items-center justify-center px-4 py-5 bg-[var(--bg-body)]">
+            <div className="flex flex-wrap w-full justify-center">
+                <div className="w-full sm:w-10/12 md:w-8/12 lg:w-5/12 xl:w-4/12">
 
-                    <div className="card border-0 shadow-lg" style={{ borderRadius: '24px', background: 'var(--bg-card)', overflow: 'hidden' }}>
+                    <div className="bg-[var(--bg-card)] rounded-[24px] overflow-hidden border-0 shadow-lg">
 
-                        <div className="text-center pt-5 pb-4 px-4" style={{ background: 'linear-gradient(135deg, var(--primary-100), var(--zinc-100))' }}>
-                            <div className="d-inline-flex align-items-center justify-content-center mb-4">
+                        <div className="text-center pt-12 pb-6 px-6 bg-gradient-to-br from-[var(--primary-100)] to-[var(--zinc-100)]">
+                            <div className="inline-flex items-center justify-center mb-4 rounded-2xl bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] w-16 h-16 shadow-sm">
                                 <BrandLogo className="w-20 h-20" iconSize={64} />
                             </div>
-                            <h2 className="fw-bold mb-1" style={{ letterSpacing: '-0.03em', color: 'var(--text-main)' }}>
+                            <h2 className="font-bold mb-1 text-[var(--text-main)] tracking-tight text-2xl">
                                 {step === 1 ? 'Forgot Password?' : 'Reset Password'}
                             </h2>
-                            <p className="mb-0" style={{ color: 'var(--text-muted)' }}>
+                            <p className="mb-0 text-[var(--text-muted)]">
                                 {step === 1 ? "We'll send you an OTP to reset it" : 'Enter OTP and your new password'}
                             </p>
                         </div>
 
-                        <div className="card-body p-4 p-md-5">
+                        <div className="p-6 md:p-12">
 
                             {step === 1 && (
-                                <div className="d-flex gap-2 mb-4 p-1 rounded-full auth-toggle-group">
+                                <div className="flex gap-2 mb-4 p-1 rounded-full bg-[var(--bg-surface)]">
                                     <button type="button" onClick={() => setMethod('phone')}
-                                        className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${method === 'phone' ? 'active shadow-sm' : ''}`}>
-                                        <i className="bi bi-phone me-2"></i>Phone
+                                        className={`flex-1 rounded-full py-2 font-medium text-sm flex justify-center items-center transition-all ${method === 'phone' ? 'bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] shadow-sm' : 'text-[var(--text-muted)]'}`}>
+                                        <Smartphone className="w-4 h-4 mr-2" />Phone
                                     </button>
                                     <button type="button" onClick={() => setMethod('email')}
-                                        className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${method === 'email' ? 'active shadow-sm' : ''}`}>
-                                        <i className="bi bi-envelope me-2"></i>Email
+                                        className={`flex-1 rounded-full py-2 font-medium text-sm flex justify-center items-center transition-all ${method === 'email' ? 'bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] shadow-sm' : 'text-[var(--text-muted)]'}`}>
+                                        <Mail className="w-4 h-4 mr-2" />Email
                                     </button>
                                 </div>
                             )}
 
                             {error && (
-                                <div className="mb-4 p-3 rounded-xl d-flex align-items-center gap-2" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
-                                    <i className="bi bi-exclamation-circle" style={{ color: '#ef4444' }}></i>
-                                    <span className="small fw-medium" style={{ color: '#ef4444' }}>{error}</span>
+                                <div className="mb-4 p-3 rounded-xl flex items-center gap-2 bg-red-500/10 border border-red-500/30">
+                                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                                    <span className="text-sm font-medium text-red-500">{error}</span>
                                 </div>
                             )}
 
                             {success && (
-                                <div className="mb-4 p-3 rounded-xl d-flex align-items-center gap-2" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
-                                    <i className="bi bi-check-circle" style={{ color: '#22c55e' }}></i>
-                                    <span className="small fw-medium" style={{ color: '#22c55e' }}>{success}</span>
+                                <div className="mb-4 p-3 rounded-xl flex items-center gap-2 bg-green-500/10 border border-green-500/30">
+                                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                                    <span className="text-sm font-medium text-green-500">{success}</span>
                                 </div>
                             )}
 
@@ -146,95 +146,93 @@ export default function ForgotPasswordPage() {
                                 <form onSubmit={handleSendOtp}>
                                     {method === 'email' ? (
                                         <div className="mb-4">
-                                            <label className="form-label fw-medium small text-uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.5px' }}>Email Address</label>
+                                            <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Email Address</label>
                                             <input
                                                 type="email"
-                                                className="form-control border-0 py-3"
+                                                className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                                 placeholder="you@example.com"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
-                                                style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', borderRadius: '12px', fontSize: '1rem' }} />
+                                            />
                                         </div>
                                     ) : (
                                         <div className="mb-4">
-                                            <label className="form-label fw-medium small text-uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.5px' }}>Phone Number</label>
-                                            <div className="input-group">
-                                                <span className="input-group-text border-0 fw-medium" style={{ background: 'var(--bg-surface)', color: 'var(--text-muted)', borderRadius: '12px 0 0 12px' }}>+91</span>
+                                            <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Phone Number</label>
+                                            <div className="flex relative items-stretch w-full rounded-xl overflow-hidden border border-[var(--border-color)]">
+                                                <span className="flex items-center px-4 font-medium bg-[var(--bg-surface)] text-[var(--text-muted)] border-r border-[var(--border-color)]">+91</span>
                                                 <input
                                                     type="tel"
-                                                    className="form-control border-0 py-3"
+                                                    className="block w-full py-3 px-4 bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                                     placeholder="Enter your phone number"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                                                    style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', borderRadius: '0 12px 12px 0', fontSize: '1rem' }} />
+                                                />
                                             </div>
                                         </div>
                                     )}
 
-                                    <button type="submit" className="btn w-100 py-3 fw-bold rounded-full shadow-lg" disabled={loading}
-                                        style={{ background: 'var(--text-main)', color: 'var(--bg-card)', fontSize: '1rem', transition: 'opacity 0.25s ease, transform 0.25s ease' }}>
+                                    <button type="submit" className="w-full py-3 font-bold rounded-full shadow-lg bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] transition-opacity hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed" disabled={loading}>
                                         {loading ? 'Sending...' : 'Send OTP'}
                                     </button>
                                 </form>
                             ) : (
                                 <form onSubmit={handleResetPassword}>
-                                    <div className="mb-3 p-3 rounded-xl d-flex align-items-center justify-content-between" style={{ background: 'var(--bg-surface)' }}>
-                                        <strong style={{ color: 'var(--text-main)' }}>{method === 'email' ? email : `+91 ${phone}`}</strong>
-                                        <button type="button" className="btn btn-link p-0 text-decoration-none" onClick={() => { setStep(1); setSuccess(''); setError(''); }} style={{ color: 'var(--primary-600)', fontSize: '0.875rem' }}>
+                                    <div className="mb-4 p-3 rounded-xl flex items-center justify-between bg-[var(--bg-surface)] border border-[var(--border-color)]">
+                                        <strong className="text-[var(--text-main)]">{method === 'email' ? email : `+91 ${phone}`}</strong>
+                                        <button type="button" className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer bg-transparent border-none p-0" onClick={() => { setStep(1); setSuccess(''); setError(''); }}>
                                             Change
                                         </button>
                                     </div>
 
                                     <div className="mb-4">
-                                        <label className="form-label fw-medium small text-uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.5px' }}>Enter OTP</label>
+                                        <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Enter OTP</label>
                                         <input
                                             type="text"
-                                            className="form-control border-0 py-3"
+                                            className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] text-lg tracking-[0.5em] text-center outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                             placeholder="6-digit OTP"
                                             maxLength={6}
                                             value={otp}
                                             onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                            style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', borderRadius: '12px', fontSize: '1.2rem', letterSpacing: '0.5em', textAlign: 'center' }} />
+                                        />
                                     </div>
 
                                     <div className="mb-4">
-                                        <label className="form-label fw-medium small text-uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.5px' }}>New Password</label>
+                                        <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">New Password</label>
                                         <input
                                             type="password"
-                                            className="form-control border-0 py-3"
+                                            className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                             placeholder="At least 8 characters"
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
-                                            style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', borderRadius: '12px', fontSize: '1rem' }} />
+                                        />
                                     </div>
 
                                     <div className="mb-4">
-                                        <label className="form-label fw-medium small text-uppercase" style={{ color: 'var(--text-muted)', letterSpacing: '0.5px' }}>Confirm Password</label>
+                                        <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Confirm Password</label>
                                         <input
                                             type="password"
-                                            className="form-control border-0 py-3"
+                                            className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                             placeholder="Re-enter password"
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
-                                            style={{ background: 'var(--bg-surface)', color: 'var(--text-main)', borderRadius: '12px', fontSize: '1rem' }} />
+                                        />
                                     </div>
 
-                                    <button type="submit" className="btn w-100 py-3 fw-bold rounded-full shadow-lg" disabled={loading}
-                                        style={{ background: 'var(--text-main)', color: 'var(--bg-card)', fontSize: '1rem', transition: 'opacity 0.25s ease, transform 0.25s ease' }}>
+                                    <button type="submit" className="w-full py-3 font-bold rounded-full shadow-lg bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] transition-opacity hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed mt-6" disabled={loading}>
                                         {loading ? 'Resetting...' : 'Reset Password'}
                                     </button>
                                 </form>
                             )}
 
-                            <div className="d-flex align-items-center my-4">
-                                <hr className="flex-grow-1" style={{ borderColor: 'var(--border-color)' }} />
-                                <span className="px-3 small" style={{ color: 'var(--text-muted)' }}>or</span>
-                                <hr className="flex-grow-1" style={{ borderColor: 'var(--border-color)' }} />
+                            <div className="flex items-center my-6">
+                                <hr className="flex-1 border-t border-[var(--border-color)]" />
+                                <span className="px-3 text-sm text-[var(--text-muted)]">or</span>
+                                <hr className="flex-1 border-t border-[var(--border-color)]" />
                             </div>
 
-                            <p className="text-center mb-0" style={{ color: 'var(--text-muted)' }}>
+                            <p className="text-center mb-0 text-[var(--text-muted)]">
                                 Remember your password?{' '}
-                                <Link href="/login" className="fw-semibold text-decoration-none" style={{ color: 'var(--text-main)' }}>Sign in</Link>
+                                <Link href="/login" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Sign in</Link>
                             </p>
                         </div>
                     </div>

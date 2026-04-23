@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useRegister } from '@/hooks/ui/useRegister';
 import BrandLogo from '@/components/common/BrandLogo';
-import '../AuthPages.css';
+import { Phone, Mail, AlertCircle, Contact, Building } from 'lucide-react';
 
 export default function RegisterPage() {
     const { user } = useAuth();
@@ -37,77 +37,77 @@ export default function RegisterPage() {
     }, [user, router]);
 
     return (
-        <div className="container-fluid auth-page-container flex-grow-1 d-flex align-items-center justify-content-center px-4 py-5">
-            <div className="row w-100 justify-content-center">
-                <div className="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+        <div className="min-h-screen flex-1 flex items-center justify-center px-4 py-5 bg-[var(--bg-body)]">
+            <div className="flex flex-wrap w-full justify-center">
+                <div className="w-full sm:w-10/12 md:w-8/12 lg:w-5/12 xl:w-4/12">
 
-                    <div className="card border-0 shadow-lg auth-card">
+                    <div className="bg-[var(--bg-card)] rounded-[24px] overflow-hidden border-0 shadow-lg">
 
-                        <div className="text-center pt-5 pb-4 px-4 auth-header">
-                            <div className="d-inline-flex align-items-center justify-content-center mb-4">
+                        <div className="text-center pt-12 pb-6 px-6 bg-gradient-to-br from-[var(--primary-100)] to-[var(--zinc-100)]">
+                            <div className="inline-flex items-center justify-center mb-4 rounded-2xl w-16 h-16 bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] shadow-sm">
                                 <BrandLogo className="w-20 h-20" iconSize={64} />
                             </div>
-                            <h2 className="fw-bold mb-1 auth-header-title">Join SkillAnchor</h2>
-                            <p className="mb-0 auth-header-subtitle">Create your account to get started</p>
+                            <h2 className="font-bold mb-1 text-[var(--text-main)] tracking-tight text-2xl">Join SkillAnchor</h2>
+                            <p className="mb-0 text-[var(--text-muted)]">Create your account to get started</p>
                         </div>
 
-                        <div className="card-body p-4 p-md-5">
+                        <div className="p-6 md:p-12">
 
                             <div className="mb-4">
-                                <label className="form-label fw-medium small text-uppercase auth-form-label">I am a</label>
-                                <div className="d-flex gap-3">
+                                <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">I am a</label>
+                                <div className="flex gap-3">
                                     <div onClick={() => setRole('worker')}
-                                        className={`flex-grow-1 p-3 rounded-3xl text-center role-selector-card ${role === 'worker' ? 'active' : ''}`}>
-                                        <i className={`bi bi-person-badge fs-3 d-block mb-2 role-icon ${role === 'worker' ? 'active' : ''}`}></i>
-                                        <span className={`fw-semibold role-text ${role === 'worker' ? 'active' : ''}`}>Job Seeker</span>
+                                        className={`flex-1 p-3 rounded-3xl text-center cursor-pointer transition-all border-2 ${role === 'worker' ? 'bg-[var(--primary-100)] border-[var(--primary-600)] dark:bg-black dark:border-[var(--primary-500)]' : 'bg-[var(--bg-surface)] border-transparent'}`}>
+                                        <Contact className={`block mb-2 mx-auto transition-colors ${role === 'worker' ? 'text-[var(--primary-600)]' : 'text-[var(--text-muted)]'}`} size={32} />
+                                        <span className={`font-semibold transition-colors ${role === 'worker' ? 'text-[var(--primary-700)] dark:text-[var(--primary-300)]' : 'text-[var(--text-muted)]'}`}>Job Seeker</span>
                                     </div>
                                     <div onClick={() => setRole('employer')}
-                                        className={`flex-grow-1 p-3 rounded-3xl text-center role-selector-card ${role === 'employer' ? 'active' : ''}`}>
-                                        <i className={`bi bi-building fs-3 d-block mb-2 role-icon ${role === 'employer' ? 'active' : ''}`}></i>
-                                        <span className={`fw-semibold role-text ${role === 'employer' ? 'active' : ''}`}>Employer</span>
+                                        className={`flex-1 p-3 rounded-3xl text-center cursor-pointer transition-all border-2 ${role === 'employer' ? 'bg-[var(--primary-100)] border-[var(--primary-600)] dark:bg-black dark:border-[var(--primary-500)]' : 'bg-[var(--bg-surface)] border-transparent'}`}>
+                                        <Building className={`block mb-2 mx-auto transition-colors ${role === 'employer' ? 'text-[var(--primary-600)]' : 'text-[var(--text-muted)]'}`} size={32} />
+                                        <span className={`font-semibold transition-colors ${role === 'employer' ? 'text-[var(--primary-700)] dark:text-[var(--primary-300)]' : 'text-[var(--text-muted)]'}`}>Employer</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="d-flex gap-2 mb-4 p-1 rounded-full auth-toggle-group">
+                            <div className="flex gap-2 mb-4 p-1 rounded-full bg-[var(--bg-surface)]">
                                 <button type="button" onClick={() => setRegisterMethod('phone')}
-                                    className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${registerMethod === 'phone' ? 'active shadow-sm' : ''}`}>
-                                    <i className="bi bi-phone me-2"></i>Phone
+                                    className={`flex-1 rounded-full py-2 font-medium text-sm transition-all ${registerMethod === 'phone' ? 'bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] shadow-sm' : 'text-[var(--text-muted)]'}`}>
+                                    <Phone className="me-2 inline-block" size={16} />Phone
                                 </button>
                                 <button type="button" onClick={() => setRegisterMethod('email')}
-                                    className={`btn flex-grow-1 rounded-full py-2 fw-medium auth-toggle-btn ${registerMethod === 'email' ? 'active shadow-sm' : ''}`}>
-                                    <i className="bi bi-envelope me-2"></i>Email
+                                    className={`flex-1 rounded-full py-2 font-medium text-sm transition-all ${registerMethod === 'email' ? 'bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] shadow-sm' : 'text-[var(--text-muted)]'}`}>
+                                    <Mail className="me-2 inline-block" size={16} />Email
                                 </button>
                             </div>
 
                             {error && (
-                                <div className="mb-4 p-3 rounded-xl d-flex align-items-center gap-2 auth-error-box">
-                                    <i className="bi bi-exclamation-circle auth-error-icon"></i>
-                                    <span className="small fw-medium auth-error-text">{error}</span>
+                                <div className="mb-4 p-3 rounded-xl flex items-center gap-2 bg-red-500/10 border border-red-500/30">
+                                    <AlertCircle className="text-red-500" size={16} />
+                                    <span className="text-sm font-medium text-red-500">{error}</span>
                                 </div>
                             )}
 
                             <form onSubmit={handleRegister}>
                                 <div className="mb-4">
-                                    <label className="form-label fw-medium small text-uppercase auth-form-label">Full Name</label>
-                                    <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} className="form-control border-0 py-3 auth-form-control" placeholder="Enter your full name" />
+                                    <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Full Name</label>
+                                    <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="Enter your full name" />
                                 </div>
 
                                 {registerMethod === 'phone' && (
                                     <>
                                         <div className="mb-4">
-                                            <label className="form-label fw-medium small text-uppercase auth-form-label">Phone Number</label>
-                                            <div className="input-group">
-                                                <span className="input-group-text border-0 fw-medium auth-input-group-text">+91</span>
-                                                <input type="tel" id="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} disabled={otpSent} className="form-control border-0 py-3 auth-form-control auth-form-control-phone" placeholder="Enter your phone number" />
+                                            <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Phone Number</label>
+                                            <div className="flex relative items-stretch w-full rounded-xl overflow-hidden border border-[var(--border-color)]">
+                                                <span className="flex items-center px-4 font-medium bg-[var(--bg-surface)] text-[var(--text-main)] border-r border-[var(--border-color)]">+91</span>
+                                                <input type="tel" id="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} disabled={otpSent} className="block w-full py-3 px-4 bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="Enter your phone number" />
                                             </div>
                                         </div>
 
                                         {otpSent && (
                                             <div className="mb-4">
-                                                <label className="form-label fw-medium small text-uppercase auth-form-label">Enter OTP</label>
-                                                <input type="text" id="otp" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} className="form-control border-0 py-3 auth-form-control auth-otp-input" placeholder="6-digit OTP" maxLength={6} />
-                                                <button type="button" className="btn btn-link p-0 mt-2 text-decoration-none auth-link fs-sm" onClick={() => setOtpSent(false)}>Change number</button>
+                                                <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Enter OTP</label>
+                                                <input type="text" id="otp" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] text-lg tracking-[0.5em] text-center outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="6-digit OTP" maxLength={6} />
+                                                <button type="button" className="p-0 mt-2 text-indigo-600 dark:text-indigo-400 text-sm bg-transparent border-none cursor-pointer" onClick={() => setOtpSent(false)}>Change number</button>
                                             </div>
                                         )}
                                     </>
@@ -116,40 +116,40 @@ export default function RegisterPage() {
                                 {registerMethod === 'email' && (
                                     <>
                                         <div className="mb-4">
-                                            <label className="form-label fw-medium small text-uppercase auth-form-label">Email Address</label>
-                                            <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control border-0 py-3 auth-form-control" placeholder="you@example.com" />
+                                            <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Email Address</label>
+                                            <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="you@example.com" />
                                         </div>
 
                                         <div className="mb-4">
-                                            <label className="form-label fw-medium small text-uppercase auth-form-label">Password</label>
-                                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control border-0 py-3 auth-form-control" placeholder="Create a password" />
+                                            <label className="block font-medium text-xs uppercase mb-2 text-[var(--text-muted)] tracking-wider">Password</label>
+                                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full py-3 px-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="Create a password" />
                                         </div>
                                     </>
                                 )}
 
-                                <button type="submit" className="btn w-100 py-3 fw-bold rounded-full shadow-lg auth-submit-btn" disabled={loading}>
+                                <button type="submit" className="w-full py-3 font-bold rounded-full bg-[var(--zinc-900)] dark:bg-[var(--zinc-50)] text-[var(--bg-card)] shadow-lg hover:opacity-85 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading}>
                                     {loading ? 'Please wait...' : (registerMethod === 'phone' ? (otpSent ? 'Verify & Register' : 'Send OTP') : 'Create Account')}
                                 </button>
                             </form>
 
-                            <div className="d-flex align-items-center my-4">
-                                <hr className="flex-grow-1 auth-hr" />
-                                <span className="px-3 small auth-text-muted">or</span>
-                                <hr className="flex-grow-1 auth-hr" />
+                            <div className="flex items-center my-6">
+                                <hr className="flex-1 border-t border-[var(--border-color)]" />
+                                <span className="px-3 text-sm text-[var(--text-muted)]">or</span>
+                                <hr className="flex-1 border-t border-[var(--border-color)]" />
                             </div>
 
-                            <p className="text-center mb-0 auth-text-muted">
+                            <p className="text-center mb-0 text-[var(--text-muted)]">
                                 Already have an account?{' '}
-                                <Link href="/login" className="fw-semibold text-decoration-none auth-text-main">Sign in</Link>
+                                <Link href="/login" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Sign in</Link>
                             </p>
                         </div>
                     </div>
 
-                    <p className="text-center mt-4 small auth-text-muted">
+                    <p className="text-center mt-4 text-sm text-gray-500">
                         By continuing, you agree to our{' '}
-                        <Link href="/terms" className="text-decoration-none auth-text-main fw-semibold">Terms</Link>
+                        <Link href="/terms" className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Terms</Link>
                         {' '}and{' '}
-                        <Link href="/privacy" className="text-decoration-none auth-text-main fw-semibold">Privacy Policy</Link>
+                        <Link href="/privacy" className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Privacy Policy</Link>
                     </p>
                 </div>
             </div>
