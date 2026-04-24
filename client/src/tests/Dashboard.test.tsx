@@ -30,7 +30,7 @@ describe('Dashboard Stats (ProfileHeader)', () => {
 
         expect(screen.getByText('65%')).toBeInTheDocument();
         expect(screen.getByText(/Profile Completion/i)).toBeInTheDocument();
-        expect(screen.getByText(/Pro Tip/i)).toBeInTheDocument();
+        expect(screen.getByText(/Next Step/i)).toBeInTheDocument();
     });
 
     it('should hide completion alert when profile is 100% complete', () => {
