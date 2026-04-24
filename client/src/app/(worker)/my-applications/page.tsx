@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, lazy, Suspense, useEffect } from 'react';
+
 import { Virtuoso } from 'react-virtuoso';
 import { Eye, XCircle, FileCheck, MapPin, Calendar, Loader2 } from 'lucide-react';
 import Link from 'next/link';
@@ -42,6 +43,25 @@ export default function MyApplicationsPage() {
         } catch {
             alert("Failed to withdraw application");
         }
+    };
+
+    const getStatusBadge = (status: string) => {
+        const styles = {
+            pending: 'bg-yellow-50 text-yellow-600 border-yellow-100',
+            reviewed: 'bg-blue-50 text-blue-600 border-blue-100',
+            shortlisted: 'bg-green-50 text-green-600 border-green-100',
+            interview: 'bg-purple-50 text-purple-600 border-purple-100',
+            offered: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+            rejected: 'bg-red-50 text-red-600 border-red-100',
+            withdrawn: 'bg-slate-50 text-slate-500 border-slate-100',
+        };
+        const currentStyle = styles[status as keyof typeof styles] || styles.pending;
+        
+        return (
+            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${currentStyle} capitalize`}>
+                {status}
+            </span>
+        );
     };
 
     if (loading) {
@@ -176,15 +196,14 @@ export default function MyApplicationsPage() {
                         />
                     </div>
                 )}
-                {selectedApp && (
-                    <Suspense fallback={null}>
-                        <ApplicationDetailModal
-                            selectedApp={selectedApp}
-                            onClose={() => setSelectedApp(null)}
-                            getStatusBadge={() => null} // No longer used in modernized UI
-                        />
-                    </Suspense>
-                )}
+                <Suspense fallback={null}>
+                    <ApplicationDetailModal
+                        show={!!selectedApp}
+                        selectedApp={selectedApp}
+                        onClose={() => setSelectedApp(null)}
+                        getStatusBadge={getStatusBadge}
+                    />
+                </Suspense>
             </div>
         </div>
     );

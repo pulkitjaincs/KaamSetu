@@ -76,7 +76,7 @@ export default function JobDetailClient({ id }: { id: string }) {
     if (isError || !job) {
         return (
             <div className="flex items-center justify-center min-h-[80vh] bg-slate-50 dark:bg-slate-950">
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-center px-6 py-12 backdrop-blur-3xl bg-white/40 dark:bg-black/40 border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl max-w-md"
@@ -110,8 +110,8 @@ export default function JobDetailClient({ id }: { id: string }) {
                 <div className="absolute top-[20%] right-[-10%] w-[30%] h-[150%] bg-purple-500/10 dark:bg-purple-500/5 blur-[100px] rounded-full pointer-events-none"></div>
                 {/* Noise dither layer to eliminate banding */}
                 <svg className="absolute inset-0 w-full h-full opacity-[0.12] dark:opacity-[0.06] pointer-events-none mix-blend-overlay" xmlns="http://www.w3.org/2000/svg">
-                    <filter id="heroNoise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter>
-                    <rect width="100%" height="100%" filter="url(#heroNoise)"/>
+                    <filter id="heroNoise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /></filter>
+                    <rect width="100%" height="100%" filter="url(#heroNoise)" />
                 </svg>
 
                 {/* Back nav container */}
@@ -129,7 +129,7 @@ export default function JobDetailClient({ id }: { id: string }) {
 
             {/* ═══ IDENTITY ROW ═════════════════════════════════════════════════════ */}
             <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <motion.div 
+                <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -137,12 +137,12 @@ export default function JobDetailClient({ id }: { id: string }) {
                 >
                     <div className="shrink-0 relative rounded-2xl overflow-hidden shadow-xl border-4 border-white dark:border-[#1a1c23] w-24 h-24 sm:w-28 sm:h-28 bg-white dark:bg-slate-800">
                         {job.company?.logo && !imageError ? (
-                            <Image 
-                                src={job.company.logo} 
-                                alt={job.company.name} 
-                                fill 
-                                sizes="112px" 
-                                className="object-cover" 
+                            <Image
+                                src={job.company.logo}
+                                alt={job.company.name}
+                                fill
+                                sizes="112px"
+                                className="object-cover"
                                 onError={() => setImageError(true)}
                             />
                         ) : (
@@ -167,11 +167,11 @@ export default function JobDetailClient({ id }: { id: string }) {
                             <span className="flex items-center text-slate-600 dark:text-slate-400 font-medium">
                                 <Clock className="w-4 h-4 mr-1.5" /> {timeAgo(job.createdAt)}
                             </span>
-                            
+
                             <span className="inline-flex items-center rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border border-indigo-500/20 ml-auto sm:ml-2">
                                 {job.jobType?.replace(/-/g, ' ') || 'Full-time'}
                             </span>
-                            
+
                             {!isActive && (
                                 <span className="inline-flex items-center rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest border border-amber-500/20">
                                     {job.status}
@@ -190,7 +190,7 @@ export default function JobDetailClient({ id }: { id: string }) {
                     <div className="lg:col-span-8 space-y-8">
 
                         {/* Quick Stats Glass Panel */}
-                        <motion.div 
+                        <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
@@ -214,7 +214,7 @@ export default function JobDetailClient({ id }: { id: string }) {
                         </motion.div>
 
                         {/* Description Section */}
-                        <motion.section 
+                        <motion.section
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
@@ -232,7 +232,7 @@ export default function JobDetailClient({ id }: { id: string }) {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Skills Cell */}
                                 {(job.skills?.length ?? 0) > 0 && (
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.3 }}
@@ -254,7 +254,7 @@ export default function JobDetailClient({ id }: { id: string }) {
 
                                 {/* Perks Cell */}
                                 {(job.benefits?.length ?? 0) > 0 && (
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.4 }}
@@ -285,24 +285,23 @@ export default function JobDetailClient({ id }: { id: string }) {
                         <div className="sticky top-28 space-y-6">
 
                             {/* Main Action Card */}
-                            <motion.div 
+                            <motion.div
                                 initial={{ y: 20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
                                 className="rounded-2xl overflow-hidden backdrop-blur-2xl bg-white/70 dark:bg-[#1a1c23]/70 border border-slate-200/50 dark:border-transparent shadow-xl"
                             >
                                 {/* Status Header Plate */}
-                                <div className={`px-8 py-6 relative overflow-hidden ${
-                                    applied ? 'bg-gradient-to-br from-emerald-800 to-emerald-950' : 
-                                    isActive ? 'bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800' : 
-                                    'bg-gradient-to-br from-slate-700 to-slate-900'
-                                }`}>
+                                <div className={`px-8 py-6 relative overflow-hidden ${applied ? 'bg-gradient-to-br from-emerald-800 to-emerald-950' :
+                                        isActive ? 'bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800' :
+                                            'bg-gradient-to-br from-slate-700 to-slate-900'
+                                    }`}>
                                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
                                     <div className="relative z-10 flex items-center gap-4">
                                         <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md shadow-lg">
-                                            {applied ? <CheckCircle2 className="w-6 h-6 text-white" /> : 
-                                             isActive ? <Rocket className="w-6 h-6 text-white" /> : 
-                                             <Lock className="w-6 h-6 text-white" />}
+                                            {applied ? <CheckCircle2 className="w-6 h-6 text-white" /> :
+                                                isActive ? <Rocket className="w-6 h-6 text-white" /> :
+                                                    <Lock className="w-6 h-6 text-white" />}
                                         </div>
                                         <div>
                                             <div className="font-black text-white text-lg tracking-tight">
@@ -323,11 +322,10 @@ export default function JobDetailClient({ id }: { id: string }) {
                                             whileTap={!applied && isActive ? { scale: 0.98 } : {}}
                                             onClick={() => user ? setShowApplyModal(true) : router.push(`/login?redirect=/jobs/${id}`)}
                                             disabled={applied || !isActive}
-                                            className={`w-full py-4 !rounded-2xl font-extrabold text-lg flex items-center justify-center gap-2 shadow-xl ${
-                                                applied ? 'bg-slate-200 dark:bg-slate-800 text-slate-500 cursor-not-allowed shadow-none' : 
-                                                !isActive ? 'bg-slate-200 dark:bg-slate-800 text-slate-500 cursor-not-allowed shadow-none' : 
-                                                'bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-700 dark:hover:bg-indigo-400 hover:shadow-indigo-500/20'
-                                            } transition-all duration-300`}
+                                            className={`w-full py-4 !rounded-2xl font-extrabold text-lg flex items-center justify-center gap-2 shadow-xl ${applied ? 'bg-slate-200 dark:bg-slate-800 text-slate-500 cursor-not-allowed shadow-none' :
+                                                    !isActive ? 'bg-slate-200 dark:bg-slate-800 text-slate-500 cursor-not-allowed shadow-none' :
+                                                        'bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-700 dark:hover:bg-indigo-400 hover:shadow-indigo-500/20'
+                                                } transition-all duration-300`}
                                         >
                                             {applied ? (
                                                 <><CheckCircle2 className="w-5 h-5" /> Already Applied</>
@@ -370,14 +368,14 @@ export default function JobDetailClient({ id }: { id: string }) {
                                                 <div className="font-extrabold text-2xl text-slate-900 dark:text-white mb-1">{job.vacancies || 1}</div>
                                                 <div className="text-[0.65rem] font-bold uppercase tracking-widest text-slate-500">Vacancies</div>
                                             </div>
-                                       
+
                                         </div>
                                     </div>
                                 </div>
                             </motion.div>
 
                             {/* Trust Badge */}
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}

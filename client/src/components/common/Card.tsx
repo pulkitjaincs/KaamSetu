@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Bookmark, Zap } from 'lucide-react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -11,6 +11,7 @@ interface CardProps {
 }
 
 const Card = memo(({ job, isSelected, onClick }: CardProps) => {
+    const [imageError, setImageError] = useState(false);
 
     const salaryDisplay = (() => {
         const min = job.salaryMin;
@@ -42,22 +43,25 @@ const Card = memo(({ job, isSelected, onClick }: CardProps) => {
             <div className="flex justify-between items-start mb-5">
                 <div className="flex gap-4 min-w-0">
                     {/* Company Logo */}
-                    <div className="card-logo">
-                        {job.company?.logo ? (
-                            <Image
-                                src={job.company.logo}
-                                alt={job.company?.name || job.title}
-                                width={56}
-                                height={56}
-                                className="object-cover w-full h-full"
-                                unoptimized
-                            />
-                        ) : (
-                            <div className="card-fallback-logo">
-                                {job.company?.name?.charAt(0)?.toUpperCase() || "?"}
-                            </div>
-                        )}
-                    </div>
+                    {!imageError && (
+                        <div className="card-logo">
+                            {job.company?.logo ? (
+                                <Image
+                                    src={job.company.logo}
+                                    alt={job.company?.name || job.title}
+                                    width={56}
+                                    height={56}
+                                    className="object-cover w-full h-full"
+                                    unoptimized
+                                    onError={() => setImageError(true)}
+                                />
+                            ) : (
+                                <div className="card-fallback-logo">
+                                    {job.company?.name?.charAt(0)?.toUpperCase() || "?"}
+                                </div>
+                            )}
+                        </div>
+                    )}
                     {/* Company name + title */}
                     <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-1">

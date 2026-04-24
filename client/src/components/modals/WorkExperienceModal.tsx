@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { workExperienceAPI } from '@/lib/api';
-import { InputField, TextAreaField, Button } from '@/components/common/FormComponents';
-import { Eye, EyeOff, BadgeCheck, Trash2 } from 'lucide-react';
+import { InputField, TextAreaField } from '@/components/common/FormComponents';
+import { Eye, EyeOff, BadgeCheck, Trash2, X } from 'lucide-react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
 interface WorkExperience {
     _id: string;
@@ -29,6 +30,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
     const isAddMode = !experience;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
 
     const [formData, setFormData] = useState({
         role: '',
@@ -38,6 +40,29 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
         isCurrent: false,
         description: ''
     });
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    useEffect(() => {
+        if (!show) return;
+
+        // Lock background scroll
+        const originalHtmlOverflow = document.documentElement.style.overflow;
+        const originalBodyOverflow = document.body.style.overflow;
+        
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        
+        return () => {
+            document.documentElement.style.overflow = originalHtmlOverflow;
+            document.body.style.overflow = originalBodyOverflow;
+        };
+    }, [show]);
 
     useEffect(() => {
         if (experience) {
@@ -135,190 +160,277 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
         }
     };
 
-    if (!show) return null;
-
     const isVerified = experience?.isVerified;
     const canEdit = !isVerified;
     const canEndEmployment = isVerified && experience?.isCurrent;
 
+    const variants: Variants = {
+        hidden: isMobile 
+            ? { y: "100%", opacity: 1 } 
+            : { opacity: 0, scale: 0.95, y: 20 },
+        enter: {
+            opacity: 1, y: 0, scale: 1,
+            transition: isMobile ? { 
+                duration: 0.35,
+                ease: "linear"
+            } : { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+        },
+        exit: {
+            opacity: isMobile ? 1 : 0,
+            y: isMobile ? "100%" : 20,
+            scale: isMobile ? 1 : 0.95,
+            transition: isMobile ? { 
+                duration: 0.3,
+                ease: "linear"
+            } : { duration: 0.15, ease: "easeIn" }
+        }
+    };
+
     return (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={onClose}>
-            <div className="w-full mx-4" style={{ maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
-                <div style={{
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: '24px'
-                }}>
-                    <div className="p-6 pb-3 flex justify-between items-center">
-                        <h5 className="font-bold mb-0" style={{ color: 'var(--text-main)' }}>
-                            {isAddMode ? 'Add Work Experience' : (canEdit ? 'Edit Experience' : 'Experience Details')}
-                        </h5>
-                        <button type="button" onClick={onClose}
-                            style={{ background: 'none', border: 'none', fontSize: '1.5rem', lineHeight: 1, cursor: 'pointer', color: 'var(--text-muted)', filter: 'var(--icon-filter)' }}
-                            aria-label="Close">
-                            &times;
-                        </button>
-                    </div>
-                    <div className="px-6 pb-4">
-                        {error && (
-                            <div className="py-2 mb-3 px-3 rounded-[10px]" style={{ background: 'rgba(186,26,26,0.1)', color: '#ba1a1a', fontSize: '0.9rem' }}>
-                                {error}
-                            </div>
-                        )}
+        <AnimatePresence>
+            {show && (
+                <div className="fixed inset-0 z-[2000] flex items-end md:items-center justify-center overflow-hidden">
+                    {/* Backdrop */}
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+                        onClick={onClose}
+                    />
 
-                        {/* Visibility Toggle - always shown for existing experiences */}
-                        {!isAddMode && (
-                            <div className="flex items-center justify-between p-3 mb-3 rounded-xl"
-                                style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
-                                <div>
-                                    <p className="mb-0 font-semibold flex items-center" style={{ color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                                        {experience.isVisible !== false 
-                                            ? <Eye className="mr-2" style={{ width: '1rem', height: '1rem' }} /> 
-                                            : <EyeOff className="mr-2" style={{ width: '1rem', height: '1rem' }} />
-                                        }
-                                        {experience.isVisible !== false ? 'Visible on Profile' : 'Hidden from Profile'}
-                                    </p>
-                                    <p className="mb-0 text-sm" style={{ color: 'var(--text-muted)' }}>
-                                        Others {experience.isVisible !== false ? 'can' : 'cannot'} see this on your profile
-                                    </p>
-                                </div>
-                                <button
-                                    className="text-sm px-3 py-1"
-                                    style={{
-                                        background: experience.isVisible !== false ? 'var(--bg-surface)' : 'var(--primary-500)',
-                                        color: experience.isVisible !== false ? 'var(--text-muted)' : '#fff',
-                                        border: '1px solid var(--border-color)',
-                                        borderRadius: '8px',
-                                        cursor: 'pointer'
-                                    }}
-                                    onClick={handleToggleVisibility}
-                                    disabled={loading}
+                    {/* Modal Content */}
+                    <motion.div 
+                        key="work-exp-modal"
+                        initial="hidden"
+                        animate="enter"
+                        exit="exit"
+                        variants={variants}
+                        className={`relative flex flex-col z-10 bg-[var(--bg-card)] pointer-events-auto ${
+                            isMobile 
+                            ? 'w-full h-auto max-h-[85vh] rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]' 
+                            : 'w-[90%] max-w-[500px] rounded-[24px] shadow-2xl border border-[var(--border-color)]'
+                        }`}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Mobile Drag Handle */}
+                        {isMobile && <div className="w-12 h-1.5 rounded-full bg-[var(--border-color)] opacity-30 mx-auto mt-4 mb-2 shrink-0" />}
+
+                        {/* Sticky Header */}
+                        <div className="px-6 py-4 flex justify-between items-center border-b border-[var(--border-color)] shrink-0">
+                            <h5 className="font-black text-[var(--text-main)] text-xl tracking-tight leading-none mb-0">
+                                {isAddMode ? 'Add Work Experience' : (canEdit ? 'Edit Experience' : 'Experience Details')}
+                            </h5>
+                            {!isMobile && (
+                                <button 
+                                    type="button" 
+                                    onClick={onClose}
+                                    className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-main)] transition-all hover:bg-[var(--border-color)]/20 hover:scale-110 active:scale-95"
+                                    aria-label="Close"
                                 >
-                                    {experience.isVisible !== false ? 'Hide' : 'Show'}
+                                    <X size={20} />
                                 </button>
-                            </div>
-                        )}
+                            )}
+                        </div>
 
-                        {/* Verified Badge & End Employment */}
-                        {isVerified && (
-                            <div className="flex items-center justify-between p-3 mb-3 rounded-xl"
-                                style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981' }}>
-                                <div className="flex items-center gap-2">
-                                    <BadgeCheck style={{ color: '#10b981', width: '1.2rem', height: '1.2rem' }} />
-                                    <span className="font-semibold" style={{ color: '#10b981' }}>Verified Experience</span>
-                                </div>
-                                {canEndEmployment && (
-                                    <button
-                                        className="text-sm px-3 py-1"
-                                        style={{ borderRadius: '8px', border: '1px solid #ba1a1a', color: '#ba1a1a', background: 'transparent', cursor: 'pointer' }}
-                                        onClick={handleEndEmployment}
-                                        disabled={loading}
+                        {/* Scrollable Body */}
+                        <div className="grow overflow-y-auto custom-scroll" style={{ overscrollBehavior: 'contain' }}>
+                            <div className="px-6 py-8">
+                                {error && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="p-4 mb-8 rounded-2xl border border-red-100 bg-red-50/50 text-red-600 text-sm font-semibold flex items-center gap-3"
                                     >
-                                        End Employment
-                                    </button>
+                                        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                                        {error}
+                                    </motion.div>
                                 )}
-                            </div>
-                        )}
 
-                        {/* Form Fields */}
-                        <div className="flex flex-col gap-3">
-                            <div>
-                                <InputField
-                                    label="Job Title / Role"
-                                    name="role"
-                                    value={formData.role}
-                                    onChange={handleChange}
-                                    placeholder="e.g. Electrician"
-                                    disabled={!canEdit && !isAddMode}
-                                    sm={true}
-                                />
-                            </div>
-                            <div>
-                                <InputField
-                                    label="Company Name"
-                                    name="companyName"
-                                    value={formData.companyName}
-                                    onChange={handleChange}
-                                    placeholder="e.g. ABC Pvt Ltd"
-                                    disabled={!canEdit && !isAddMode}
-                                    sm={true}
-                                />
-                            </div>
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <InputField
-                                        label="Start Date"
-                                        name="startDate"
-                                        type="date"
-                                        value={formData.startDate}
+                                {/* Visibility Toggle - Status Card */}
+                                {!isAddMode && (
+                                    <div className="group relative p-5 mb-8 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-color)] transition-all hover:border-[var(--primary-main)]/30 overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-4 opacity-5">
+                                            {experience.isVisible !== false ? <Eye size={64} /> : <EyeOff size={64} />}
+                                        </div>
+                                        <div className="flex items-center justify-between relative z-10">
+                                            <div className="flex flex-col gap-1">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`w-2 h-2 rounded-full ${experience.isVisible !== false ? 'bg-green-500' : 'bg-[var(--text-muted)]'}`} />
+                                                    <span className="font-black text-[0.7rem] uppercase tracking-[0.15em] text-[var(--text-main)] opacity-50">Profile Status</span>
+                                                </div>
+                                                <h6 className="font-bold text-[var(--text-main)] mb-0">
+                                                    {experience.isVisible !== false ? 'Visible to Employers' : 'Hidden from Profile'}
+                                                </h6>
+                                            </div>
+                                            <button
+                                                className={`px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all border ${
+                                                    experience.isVisible !== false 
+                                                    ? 'bg-transparent text-[var(--text-main)] border-[var(--border-color)] hover:bg-[var(--border-color)]/50' 
+                                                    : 'bg-[var(--primary-main)] text-white border-transparent shadow-lg shadow-[var(--primary-main)]/20 hover:scale-105 active:scale-95'
+                                                }`}
+                                                onClick={handleToggleVisibility}
+                                                disabled={loading}
+                                            >
+                                                {experience.isVisible !== false ? 'Set Private' : 'Make Public'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Verified Experience - Status Card */}
+                                {isVerified && (
+                                    <div className="p-5 mb-8 rounded-[24px] bg-gradient-to-br from-[#10b981]/10 to-transparent border border-[#10b981]/20 relative overflow-hidden group">
+                                        <div className="absolute -right-2 -top-2 opacity-10 group-hover:scale-110 transition-transform">
+                                            <BadgeCheck size={80} className="text-[#10b981]" />
+                                        </div>
+                                        <div className="flex items-center justify-between relative z-10">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-[#10b981]/20 flex items-center justify-center shadow-sm border border-[#10b981]/20">
+                                                    <BadgeCheck className="text-[#10b981]" size={24} />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-black text-[0.6rem] uppercase tracking-[0.2em] text-[#10b981] opacity-70">Authenticated Record</span>
+                                                    <h6 className="font-bold text-[var(--text-main)] mb-0">Verified Experience</h6>
+                                                </div>
+                                            </div>
+                                            {canEndEmployment && (
+                                                <button
+                                                    className="px-4 py-2 rounded-xl text-[0.65rem] font-black uppercase tracking-widest border border-red-500/30 text-red-600 hover:bg-red-50 transition-all active:scale-95"
+                                                    onClick={handleEndEmployment}
+                                                    disabled={loading}
+                                                >
+                                                    End Job
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Form Section Divider */}
+                                <div className="flex items-center gap-3 mb-8">
+                                    <span className="font-black text-[0.65rem] uppercase tracking-[0.2em] text-[var(--text-muted)] whitespace-nowrap">Experience Details</span>
+                                    <div className="grow h-px bg-[var(--border-color)] opacity-50" />
+                                </div>
+
+                                {/* Form Fields */}
+                                <div className="flex flex-col gap-8">
+                                    <div className="grid gap-6">
+                                        <InputField
+                                            label="Job Title / Role"
+                                            name="role"
+                                            value={formData.role}
+                                            onChange={handleChange}
+                                            placeholder="e.g. Master Electrician"
+                                            disabled={!canEdit && !isAddMode}
+                                            sm={true}
+                                        />
+                                        <InputField
+                                            label="Company Name"
+                                            name="companyName"
+                                            value={formData.companyName}
+                                            onChange={handleChange}
+                                            placeholder="e.g. SkillAnchor Infrastructures"
+                                            disabled={!canEdit && !isAddMode}
+                                            sm={true}
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <InputField
+                                            label="Start Date"
+                                            name="startDate"
+                                            type="date"
+                                            value={formData.startDate}
+                                            onChange={handleChange}
+                                            disabled={!canEdit && !isAddMode}
+                                            sm={true}
+                                        />
+                                        <InputField
+                                            label="End Date"
+                                            name="endDate"
+                                            type="date"
+                                            value={formData.endDate}
+                                            onChange={handleChange}
+                                            disabled={formData.isCurrent || (!canEdit && !isAddMode)}
+                                            sm={true}
+                                        />
+                                    </div>
+
+                                    {(canEdit || isAddMode) && (
+                                        <div 
+                                            className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-4 group ${
+                                                formData.isCurrent 
+                                                ? 'bg-[var(--primary-50)] dark:bg-[var(--primary-900)]/10 border-[var(--primary-200)] dark:border-[var(--primary-800)]' 
+                                                : 'bg-[var(--bg-surface)] border-[var(--border-color)] hover:border-[var(--primary-main)]/50'
+                                            }`}
+                                            onClick={() => setFormData(prev => ({ ...prev, isCurrent: !prev.isCurrent }))}
+                                        >
+                                            <div className={`w-6 h-6 rounded-lg flex items-center justify-center border transition-all ${
+                                                formData.isCurrent 
+                                                ? 'bg-[var(--primary-main)] border-transparent' 
+                                                : 'bg-transparent border-[var(--border-color)] group-hover:border-[var(--primary-main)]'
+                                            }`}>
+                                                {formData.isCurrent && <BadgeCheck size={14} className="text-white" />}
+                                            </div>
+                                            <span className={`text-sm font-bold transition-colors ${formData.isCurrent ? 'text-[var(--primary-main)]' : 'text-[var(--text-main)]'}`}>
+                                                Currently working in this role
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    <TextAreaField
+                                        label="Description & Responsibilities"
+                                        name="description"
+                                        value={formData.description}
                                         onChange={handleChange}
+                                        rows={5}
+                                        placeholder="Briefly describe your core responsibilities and any significant achievements in this role..."
                                         disabled={!canEdit && !isAddMode}
                                         sm={true}
                                     />
                                 </div>
-                                <div>
-                                    <InputField
-                                        label="End Date"
-                                        name="endDate"
-                                        type="date"
-                                        value={formData.endDate}
-                                        onChange={handleChange}
-                                        disabled={formData.isCurrent || (!canEdit && !isAddMode)}
-                                        sm={true}
-                                    />
-                                </div>
-                            </div>
-                            {(canEdit || isAddMode) && (
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <input
-                                            type="checkbox"
-                                            name="isCurrent"
-                                            id="modalExpCurrent"
-                                            checked={formData.isCurrent}
-                                            onChange={handleChange}
-                                        />
-                                        <label className="text-sm" style={{ color: 'var(--text-muted)' }} htmlFor="modalExpCurrent">
-                                            Currently working here
-                                        </label>
-                                    </div>
-                                </div>
-                            )}
-                            <div>
-                                <TextAreaField
-                                    label="Description (Optional)"
-                                    name="description"
-                                    value={formData.description}
-                                    onChange={handleChange}
-                                    rows={2}
-                                    placeholder="Describe your role..."
-                                    disabled={!canEdit && !isAddMode}
-                                    sm={true}
-                                />
                             </div>
                         </div>
-                    </div>
-                    <div className="px-6 pb-6 pt-0 flex gap-3 items-center">
-                        {/* Delete button - only for unverified */}
-                        {!isAddMode && canEdit && (
+                        
+                        {/* Sticky Footer */}
+                        <div className={`px-6 py-5 border-t border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 flex items-center gap-4 ${isMobile ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]' : ''}`}>
+                            {!isAddMode && canEdit && (
                                 <button
-                                    className="rounded-full mr-auto"
-                                    style={{ padding: '8px 20px', fontSize: '0.9rem', border: '1px solid #ba1a1a', color: '#ba1a1a', background: 'transparent', cursor: 'pointer' }}
-                                onClick={handleDelete}
-                                disabled={loading}
+                                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-red-500 border border-red-100 bg-red-50/30 hover:bg-red-50 hover:border-red-200 transition-all active:scale-90 group"
+                                    onClick={handleDelete}
+                                    disabled={loading}
+                                    title="Delete Experience"
+                                >
+                                    <Trash2 size={20} className="group-hover:rotate-12 transition-transform" />
+                                </button>
+                            )}
+                            
+                            <div className="flex-1" />
+                            
+                            <button 
+                                className="px-6 py-3 text-[0.8rem] font-black uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors" 
+                                onClick={onClose}
                             >
-                                <Trash2 className="mr-1 inline-block" style={{ width: '1rem', height: '1rem', verticalAlign: 'text-bottom' }} />Delete
+                                Cancel
                             </button>
-                        )}
-                        <button className="" style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }} onClick={onClose}>Cancel</button>
-                        {(canEdit || isAddMode) && (
-                            <Button onClick={handleSave} loading={loading} className="rounded-full px-4">
-                                {isAddMode ? 'Add Experience' : 'Save Changes'}
-                            </Button>
-                        )}
-                    </div>
+                            
+                            {(canEdit || isAddMode) && (
+                                <button 
+                                    onClick={handleSave} 
+                                    disabled={loading}
+                                    className="relative overflow-hidden group auth-submit-btn !py-3.5 !px-10 rounded-2xl text-sm font-bold hover:opacity-90 active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-[var(--primary-main)]/10"
+                                >
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        {loading ? 'Processing...' : (isAddMode ? 'Create Record' : 'Save Changes')}
+                                        {!loading && <span className="opacity-50 group-hover:translate-x-1 transition-transform">→</span>}
+                                    </span>
+                                </button>
+                            )}
+                        </div>
+                    </motion.div>
                 </div>
-            </div>
-        </div>
+            )}
+        </AnimatePresence>
     );
 }

@@ -23,7 +23,7 @@ function HomePageContent() {
   const [isSwitch, setIsSwitch] = useState(false);
   const searchParams = useSearchParams();
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -66,12 +66,15 @@ function HomePageContent() {
     return data?.pages.flatMap((page: PaginatedJobsResponse) => page.jobs) || [];
   }, [data]);
 
-  // IntersectionObserver-based infinite scroll
-  useEffect(() => {
-    const sentinel = loadMoreRef.current;
-    if (!sentinel) return;
+  // Callback ref for infinite scroll — fires exactly when sentinel mounts/unmounts,
+  // avoiding the AnimatePresence mode="wait" timing race with useEffect.
+  const loadMoreRef = useCallback((node: HTMLDivElement | null) => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+    if (!node || !hasNextPage || isFetchingNextPage) return;
 
-    const observer = new IntersectionObserver(
+    observerRef.current = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
@@ -79,9 +82,7 @@ function HomePageContent() {
       },
       { rootMargin: '400px' }
     );
-
-    observer.observe(sentinel);
-    return () => observer.disconnect();
+    observerRef.current.observe(node);
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {

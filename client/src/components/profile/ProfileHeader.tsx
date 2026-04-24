@@ -1,9 +1,10 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getInitials } from '@/utils/index';
 import { Profile } from '@/types';
-import { Check, BadgeCheck, MapPin, Share2 } from 'lucide-react';
+import { Check, BadgeCheck, MapPin, Share2, Trophy } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface ProfileHeaderProps {
     profile: Profile;
@@ -14,6 +15,7 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPercent, getAge }: ProfileHeaderProps) => {
+    const [imageError, setImageError] = useState(false);
     const avatarSrc = profile.avatarUrl || profile.avatar;
     const isVerified = !!profile.documents?.aadhaar?.verified;
     const roleSubtitle = isEmployer
@@ -32,7 +34,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                             style={{ width: '80px', height: '80px' }}>
                             <div className="w-full h-full rounded-3xl overflow-hidden flex items-center justify-center relative"
                                 style={{ background: 'var(--surface-container-low)' }}>
-                                {avatarSrc?.startsWith('http') ? (
+                                {avatarSrc?.startsWith('http') && !imageError ? (
                                     <Image
                                         src={avatarSrc}
                                         alt={profile.name}
@@ -40,6 +42,7 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
                                         sizes="80px"
                                         style={{ objectFit: 'cover' }}
                                         unoptimized={true}
+                                        onError={() => setImageError(true)}
                                     />
                                 ) : (
                                     <span className="font-bold text-3xl" style={{ color: 'var(--primary-main)' }}>
@@ -132,29 +135,45 @@ const ProfileHeader = memo(({ profile, isOwnProfile, isEmployer, completionPerce
 
             {/* Profile Completion Card — only own profile, incomplete */}
             {isOwnProfile && !isEmployer && completionPercent < 100 && (
-                <div className="p-4 rounded-3xl mb-5"
-                    style={{ background: 'var(--surface-container-lowest)', border: 'none' }}>
-                    <div className="flex justify-between items-end mb-3">
-                        <span className="font-bold text-sm" style={{ color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                            Profile Completion
-                        </span>
-                        <span className="font-extrabold" style={{ fontSize: '1.75rem', color: 'var(--primary-main)', letterSpacing: '-0.03em', lineHeight: 1 }}>
+                <div className="mb-8 rounded-[24px] border border-[var(--border-color)] bg-[var(--bg-card)] overflow-hidden">
+                    <div className="flex items-center justify-between p-5 px-6">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center text-[var(--primary-main)]">
+                                <Trophy size={20} />
+                            </div>
+                            <span className="text-base font-bold tracking-tight text-[var(--text-main)]">
+                                Profile Completion
+                            </span>
+                        </div>
+                        <span className="font-black text-xl sm:text-2xl text-[var(--primary-main)]">
                             {completionPercent}%
                         </span>
                     </div>
-                    <div className="w-full rounded-full overflow-hidden mb-3" style={{ height: '10px', background: 'var(--surface-container)' }}>
-                        <div className="h-full rounded-full"
-                            style={{
-                                width: `${completionPercent}%`,
-                                background: 'linear-gradient(135deg, #0056b6 0%, #006ee5 100%)',
-                                transition: 'width 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
-                            }}
-                        />
+                    
+                    <div className="px-6 pb-6">
+                        <div className="w-full rounded-full overflow-hidden" style={{ height: '8px', background: 'var(--surface-container-high)' }}>
+                            <motion.div 
+                                initial={{ width: 0 }}
+                                animate={{ width: `${completionPercent}%` }}
+                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                                className="h-full rounded-full"
+                                style={{
+                                    background: 'linear-gradient(90deg, var(--primary-main) 0%, #0088ff 100%)',
+                                    boxShadow: '0 0 15px rgba(0,86,182,0.2)'
+                                }}
+                            />
+                        </div>
+
+                        {/* Suggestions - Desktop only */}
+                        <div className="hidden lg:flex gap-4 p-4 mt-6 rounded-2xl items-start bg-[var(--primary-main)]/5 border border-[var(--primary-main)]/10">
+                            <div className="p-2 rounded-xl bg-[var(--primary-main)]/10 text-[var(--primary-main)] shrink-0">
+                                <BadgeCheck size={18} />
+                            </div>
+                            <p className="text-sm mb-0 font-medium leading-relaxed text-[var(--text-main)]">
+                                <span className="font-bold text-[var(--primary-main)]">Next Step:</span> Add your Aadhaar or PAN Card to reach 100% and unlock <span className="underline decoration-2">Priority Matching</span>.
+                            </p>
+                        </div>
                     </div>
-                    <p className="text-sm mb-0 p-3 rounded-xl" style={{ background: 'rgba(0,86,182,0.06)', color: 'var(--text-muted)' }}>
-                        <span className="font-bold" style={{ color: 'var(--primary-main)' }}>Pro Tip:</span>
-                        {' '}Add your PAN Card to reach up to 100% and get priority job listings.
-                    </p>
                 </div>
             )}
         </>

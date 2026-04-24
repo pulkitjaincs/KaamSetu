@@ -14,6 +14,8 @@ import SkillsSection from '@/components/profile/SkillsSection';
 import WorkHistorySection from '@/components/profile/WorkHistorySection';
 import EmployerQuickActions from '@/components/profile/EmployerQuickActions';
 import ProfileSidebar from '@/components/profile/ProfileSidebar';
+import CollapsibleSection from '@/components/common/CollapsibleSection';
+import { Wrench } from 'lucide-react';
 
 const WorkExperienceModal = lazy(() => import('@/components/modals/WorkExperienceModal'));
 
@@ -131,11 +133,17 @@ export default function ProfileClient() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-8">
                     {!isEmployer && (
-                        <SkillsSection
-                            skills={profile.skills}
-                            languages={profile.languages}
-                            isOwnProfile={isOwnProfile}
-                        />
+                        <CollapsibleSection 
+                            title="Skills & Expertise" 
+                            icon={<Wrench size={20} />}
+                            defaultOpen={true}
+                        >
+                            <SkillsSection
+                                skills={profile.skills}
+                                languages={profile.languages}
+                                isOwnProfile={isOwnProfile}
+                            />
+                        </CollapsibleSection>
                     )}
                     {isEmployer && <EmployerQuickActions />}
                     {!isEmployer && (

@@ -72,6 +72,13 @@ const SearchHero = ({
         onSearch({ search, location, category: cat === 'All' ? '' : cat });
     };
 
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollRef.current) {
+            const amount = scrollRef.current.clientWidth * 0.6;
+            scrollRef.current.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' });
+        }
+    };
+
     return (
         <div className="max-w-[1200px] mx-auto animate-[fadeInUp_0.8s_cubic-bezier(0.16,1,0.3,1)] mb-2 mt-4" ref={heroRef}>
             {/* Bold editorial headline — left-aligned */}
@@ -121,18 +128,19 @@ const SearchHero = ({
                 <div className="font-plus-jakarta text-[0.7rem] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)] mb-3">Top Industries</div>
                 
                 <div className="relative mx-[-1rem]">
-                    {/* Left Arrow Fade */}
-                    <div 
-                        className={`absolute left-0 top-0 bottom-0 z-10 w-12 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0'}`}
-                        style={{ background: 'linear-gradient(to right, var(--bg-main) 40%, transparent)' }}
+                    {/* Left Scroll Button */}
+                    <button 
+                        onClick={() => scroll('left')}
+                        className={`absolute left-4 top-[42%] -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] shadow-xl text-[var(--primary-main)] transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-[var(--bg-surface)] hover:border-[var(--primary-main)] ${canScrollLeft ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 pointer-events-none -translate-x-2'}`}
+                        aria-label="Scroll left"
                     >
-                        <ChevronLeft size={16} className="text-[var(--primary-main)] animate-pulse" />
-                    </div>
+                        <ChevronLeft size={22} strokeWidth={2.5} />
+                    </button>
 
                     <div 
                         ref={scrollRef}
                         onScroll={checkScroll}
-                        className="flex gap-3 overflow-x-auto pb-4 pt-1 px-12 scrollbar-hide scroll-smooth"
+                        className="flex gap-3 overflow-x-auto pb-4 pt-1 px-16 scrollbar-hide scroll-smooth"
                     >
                         {categories.map((cat) => {
                             const isActive = activeCategory === cat.name;
@@ -140,10 +148,10 @@ const SearchHero = ({
                                 <button
                                     key={cat.name}
                                     onClick={() => handleCategoryClick(cat.name)}
-                                    className={`flex shrink-0 items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap cursor-pointer transition-all duration-300 border-none outline-none shadow-sm ${
+                                    className={`flex shrink-0 items-center gap-2.5 px-6 py-2.5 rounded-full font-bold text-sm whitespace-nowrap cursor-pointer transition-all duration-300 border-none outline-none shadow-sm ${
                                         isActive 
                                             ? 'bg-[var(--primary-main)] text-[var(--on-primary)] shadow-lg shadow-[var(--ring-overlay)] ring-1 ring-[var(--primary-main)] -translate-y-0.5' 
-                                            : 'bg-[var(--bg-card)] text-[var(--text-muted)] ring-1 ring-[var(--border-color)] hover:bg-[var(--bg-surface)] hover:text-[var(--primary-main)] hover:-translate-y-0.5'
+                                            : 'bg-[var(--bg-card)] text-[var(--text-muted)] ring-1 ring-[var(--border-color)] hover:bg-[var(--bg-surface)] hover:text-[var(--primary-main)] hover:ring-[var(--primary-main)] hover:-translate-y-0.5'
                                     }`}
                                 >
                                     <cat.icon size={16} />
@@ -153,29 +161,16 @@ const SearchHero = ({
                         })}
                     </div>
 
-                    {/* Right Arrow Fade */}
-                    <div 
-                        className={`absolute right-0 top-0 bottom-0 z-10 w-12 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
-                        style={{ background: 'linear-gradient(to left, var(--bg-main) 40%, transparent)' }}
+                    {/* Right Scroll Button */}
+                    <button 
+                        onClick={() => scroll('right')}
+                        className={`absolute right-4 top-[42%] -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] shadow-xl text-[var(--primary-main)] transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-[var(--bg-surface)] hover:border-[var(--primary-main)] ${canScrollRight ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 pointer-events-none translate-x-2'}`}
+                        aria-label="Scroll right"
                     >
-                        <ChevronRight size={16} className="text-[var(--primary-main)] animate-pulse" />
-                    </div>
+                        <ChevronRight size={22} strokeWidth={2.5} />
+                    </button>
                 </div>
             </div>
-            
-            <style jsx global>{`
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-            `}</style>
         </div>
     );
 };
