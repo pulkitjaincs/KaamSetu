@@ -4,6 +4,7 @@ import Application from "../models/Application.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { Request, Response } from "express";
 import { AppError } from "../types/error.js";
+import { invalidateCache } from "../utils/cache.js";
 
 import mongoose, { QueryFilter } from "mongoose";
 
@@ -42,6 +43,9 @@ export const createWorkExperience = asyncHandler(async (req: Request, res: Respo
         { $push: { workHistory: exp._id } }
     );
 
+    await invalidateCache(`profile:${req.user._id}`);
+    await invalidateCache(`profile:own:${req.user._id}`);
+
     res.status(201).json({ success: true, data: { workExperience: exp } });
 });
 
@@ -52,6 +56,10 @@ export const updateWorkExperience = asyncHandler(async (req: Request, res: Respo
 
     Object.assign(exp, req.body);
     await exp.save();
+
+    await invalidateCache(`profile:${req.user._id}`);
+    await invalidateCache(`profile:own:${req.user._id}`);
+
     res.json({ success: true, data: { workExperience: exp } });
 });
 
@@ -62,6 +70,10 @@ export const deleteWorkExperience = asyncHandler(async (req: Request, res: Respo
         throw new AppError("Verified experience cannot be deleted", 403);
     }
     await exp.deleteOne();
+
+    await invalidateCache(`profile:${req.user._id}`);
+    await invalidateCache(`profile:own:${req.user._id}`);
+
     res.json({ success: true, data: { message: "Work experience deleted successfully" } });
 });
 
@@ -88,6 +100,9 @@ export const endEmployment = asyncHandler(async (req: Request, res: Response) =>
         { user: exp.worker },
         { $set: { currentlyEmployed: false } }
     );
+
+    await invalidateCache(`profile:${exp.worker}`);
+    await invalidateCache(`profile:own:${exp.worker}`);
 
     res.json({ success: true, data: { workExperience: exp } });
 });

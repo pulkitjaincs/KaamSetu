@@ -5,6 +5,7 @@ import WorkExperience from '../models/WorkExperience.model.js';
 import WorkerProfile from '../models/WorkerProfile.model.js';
 import mongoose from 'mongoose';
 import { logger } from '../utils/logger.js';
+import { invalidateCache } from '../utils/cache.js';
 import type { HiredJobData, PopulatedJobRef } from '../types/index.js';
 
 export type { HiredJobData };
@@ -51,6 +52,11 @@ export const createHiredWorker = () => {
             { session }
         );
         await session.commitTransaction();
+
+        // Invalidate worker's cached profile (new work experience was added)
+        await invalidateCache(`profile:${application.applicant}`);
+        await invalidateCache(`profile:own:${application.applicant}`);
+
         logger.info(`Successfully processed "hired" job for application ${applicationId}`);
     } catch (error) {
         await session.abortTransaction();

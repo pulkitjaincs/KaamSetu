@@ -355,16 +355,14 @@ const Listing = memo(({ job, onClose, isSwitch = false }: ListingProps) => {
                         </div>
 
                         {/* Apply modal */}
-                        {showApplyModal && (
-                            <Suspense fallback={null}>
-                                <ApplyModal
-                                    show={showApplyModal}
-                                    onClose={() => setShowApplyModal(false)}
-                                    onApply={handleApply}
-                                    applying={applying}
-                                />
-                            </Suspense>
-                        )}
+                        <Suspense fallback={null}>
+                            <ApplyModal
+                                show={showApplyModal}
+                                onClose={() => setShowApplyModal(false)}
+                                onApply={handleApply}
+                                applying={applying}
+                            />
+                        </Suspense>
                     </motion.div>
                 </>
             )}

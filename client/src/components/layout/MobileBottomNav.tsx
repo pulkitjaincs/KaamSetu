@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Briefcase, FileText, User } from 'lucide-react';
+import { Briefcase, FileText, User, LayoutDashboard, Users } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 const MobileBottomNav = () => {
@@ -13,11 +13,18 @@ const MobileBottomNav = () => {
 
   if (!user) return null;
 
-  const navItems = [
-    { label: 'Jobs', icon: Briefcase, href: '/' },
-    { label: 'Applied', icon: FileText, href: '/my-applications' },
-    { label: 'Profile', icon: User, href: '/profile' },
-  ];
+  const navItems = user?.role === 'employer' 
+    ? [
+        { label: 'Jobs', icon: Briefcase, href: '/' },
+        { label: 'My Jobs', icon: LayoutDashboard, href: '/my-jobs' },
+        { label: 'My Team', icon: Users, href: '/my-team' },
+        { label: 'Profile', icon: User, href: '/profile' },
+      ]
+    : [
+        { label: 'Jobs', icon: Briefcase, href: '/' },
+        { label: 'Applied', icon: FileText, href: '/my-applications' },
+        { label: 'Profile', icon: User, href: '/profile' },
+      ];
 
   return (
     <div className="lg:hidden fixed bottom-0 left-0 w-full z-[1100]">
@@ -29,27 +36,19 @@ const MobileBottomNav = () => {
       >
         {navItems.map((item) => {
           const isActive = pathname === item.href;
-          const Icon = item.icon;
 
           return (
             <Link key={item.label} href={item.href} className="no-underline relative group py-2 px-4">
-              <div className="flex flex-col items-center gap-1">
-                <Icon 
-                  size={20} 
-                  className={`transition-colors duration-200 ${
-                    isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'
-                  }`} 
-                />
-                <span className={`text-[10px] font-bold tracking-tight uppercase ${
-                  isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'
-                }`}>
-                  {item.label}
-                </span>
+              <div className={`flex flex-col items-center gap-1 relative ${
+                isActive ? 'text-[var(--primary-main)]' : 'text-[var(--text-muted)]'
+              }`}>
+                <item.icon className="w-5 h-5" strokeWidth={isActive ? 2.5 : 2} />
+                <span className="text-[10px] font-medium tracking-tight">{item.label}</span>
                 
                 {isActive && (
-                  <motion.div 
+                  <motion.div
                     layoutId="activeTab"
-                    className="absolute -bottom-1 w-1 h-1 bg-indigo-600 dark:bg-indigo-400 rounded-full"
+                    className="absolute -bottom-1 w-1 h-1 rounded-full bg-[var(--primary-main)]"
                     transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
                   />
                 )}

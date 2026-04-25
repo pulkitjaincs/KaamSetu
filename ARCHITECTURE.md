@@ -173,7 +173,11 @@ Next.js 16 App Router with a **hybrid rendering paradigm**:
 
 - **Server Components** (default): Used for layout shells, page-level data fetching, and SEO content. Reduces client JavaScript payload.
 - **Client Components** (`"use client"`): Only opted-in for interactive leaves — forms, modals, search inputs, and authenticated state consumers.
-- **Design System: Modern Craftsman**: Implements a high-contrast, editorial aesthetic with tonal surface layering, strict vertical rhythm (4px/8px grid), and premium micro-interactions. Standard tokens include `rounded-3xl` (24px corners) for containers, `rounded-xl` (12px) for sub-elements, and `rounded-full` (pill-shape) for interactive buttons. Uses `inter` + `plus-jakarta-sans` typography.
+- **Design System: Stitch Aesthetic**: Implements a premium, high-contrast aesthetic. Features include:
+    - **Surface Geometry**: 20px border-radius (`rounded-3xl` equivalent) for cards and inputs to create a modern, "airy" feel.
+    - **Spacious Interaction**: Standardized padding (18px vertical / 28px horizontal) for inputs and textareas to ensure text doesn't feel cramped.
+    - **Visual Effects**: Subtle glassmorphism on navbars/modals, vibrant harmonious color palettes (avoiding generic defaults), and custom premium date inputs with integrated Lucide icons.
+    - **Micro-interactions**: Hardware-accelerated Framer Motion transitions for every state change.
 - **React Compiler**: Enabled via `babel-plugin-react-compiler`, auto-memoizes component trees to eliminate manual `useMemo`/`useCallback`.
 
 ### 3.2 Directory Structure & Responsibilities
@@ -295,7 +299,7 @@ A complete request cycle from user interaction to UI update:
 
 | Strategy | Implementation |
 |---|---|
-| **Redis Caching** | `utils/cache.ts` implements cache-aside with **tag-based invalidation**. Each cached key is registered in a Redis SET (`tag:{name}`). Invalidation resolves the set in O(1) — no full-keyspace SCAN required. |
+| **Redis Caching** | `utils/cache.ts` implements a hybrid cache-aside pattern. Invalidation is dual-mode: **tag-based** (resolving registered keys in O(1)) and **direct-key** (ensuring non-tagged session/profile keys are cleared). High-traffic paths (`getJobById`, `getMyProfile`, `getAvatarForUser`, `getJobApplicants`) use TTLs ranging from 5m to 30m, significantly reducing MongoDB load. |
 | **ETag** | Express `etag: 'strong'` for conditional GET responses. |
 | **Response Compression** | gzip via `compression` middleware. |
 | **Database Indexing** | Strategic compound and text indexes on all high-query-volume collections. See model files for index definitions. |

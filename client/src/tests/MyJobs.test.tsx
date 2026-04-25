@@ -76,6 +76,9 @@ describe('MyJobs Page', () => {
         render(<MyJobsPage />);
         
         expect(screen.getByText('Software Dev')).toBeInTheDocument();
-        expect(screen.getByText(/5 Applicants/)).toBeInTheDocument();
+        // The text is split: <span>5 <span>Applicants</span>...</span>
+        // We look for the '5' and 'Applicants' nodes separately.
+        expect(screen.getByText('5')).toBeInTheDocument();
+        expect(screen.getByText('Applicants')).toBeInTheDocument();
     });
 });

@@ -51,6 +51,7 @@ A full-stack job portal purpose-built for India's blue-collar and hourly workfor
 | **Full-Text Search** | MongoDB text indexes across title, description, skills, category, and location |
 | **Dark Mode** | System-aware light/dark theming with smooth CSS transitions |
 | **Modern Craftsman UI** | High-contrast editorial design with tonal layering, hardware-accelerated Framer Motion animations, and strict typographic hierarchy |
+| **Edge Caching** | Advanced Redis-backed cache-aside architecture for high-traffic paths (Jobs, Profiles, Applicants) with instant tag-based invalidation for zero stale data. |
 | **Virtualized Lists** | React Virtuoso for fluid 60 FPS scrolling on large result sets |
 | **Structured Logging** | Pino JSON logging with request IDs and per-request HTTP tracing |
 
@@ -79,10 +80,10 @@ A full-stack job portal purpose-built for India's blue-collar and hourly workfor
 | Runtime | **Node.js 20+**, **Express 5** |
 | Language | TypeScript 5 (ESM) |
 | Database | MongoDB 8.0, Mongoose 9 |
-| Caching & Queues | Redis 7 (ioredis), BullMQ 5 (running in a dedicated standalone worker process) |
+| Caching & Queues | **Redis 7** (ioredis) — Robust cache-aside architecture with tag-based invalidation for 0ms read paths; **BullMQ 5** for background hire transactions. |
 | Validation | Zod 4 (request payloads + environment variables) |
 | Authentication | JWT (HttpOnly cookies), bcrypt, OTP via Nodemailer |
-| File Storage | AWS S3 (pre-signed URLs for direct client uploads) |
+| File Storage | AWS S3 (pre-signed URLs for direct client uploads with avatar key caching) |
 | Security | Helmet, CORS, NoSQL injection sanitization, Redis-backed rate limiting |
 | Observability | Pino + pino-http (structured JSON with request IDs), /health and /metrics endpoints |
 | Testing | Vitest 4, Supertest, mongodb-memory-server (in-memory replica set) |

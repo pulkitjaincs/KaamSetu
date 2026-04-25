@@ -65,6 +65,75 @@ a, a:hover, a:focus {
 .auth-form-control:focus {
     outline: none !important;
 }
+
+/* Global Reset for Premium Inputs */
+input, textarea, select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+}
+
+/* Date Input Reset & Premium Styling */
+input[type="date"] {
+    position: relative;
+    cursor: pointer;
+}
+
+/* Hide default calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    z-index: 20;
+}
+
+/* Premium Date Field Styling (Chrome/Safari) */
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+    display: flex;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+    color: var(--text-muted);
+    opacity: 0.4;
+    padding: 0 2px;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+    color: var(--text-main);
+    font-variant-numeric: tabular-nums;
+    transition: all 0.2s ease;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus {
+    background: var(--primary-500);
+    color: white;
+    border-radius: 4px;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* Smooth ring focus for all premium inputs */
+.focus-ring-premium {
+    box-shadow: 0 0 0 4px var(--ring-overlay);
+    border-color: var(--primary-main) !important;
+}
 .dark .border-indigo-500,
 .dark .border-indigo-400,
 .dark .border-red-500 {

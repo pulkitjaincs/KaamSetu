@@ -24,12 +24,16 @@ export const cacheAside = async <T>(
 
 export const invalidateCache = async (pattern: string): Promise<void> => {
     if (!pattern.includes("*")) {
+        // Tag-based invalidation: delete all keys associated with this tag
         const tagKey = `tag:${pattern}`;
         const keys = await redis.smembers(tagKey);
         if (keys.length > 0) {
             await redis.del(...keys);
         }
         await redis.del(tagKey);
+        // Direct key invalidation: also delete the key itself
+        // (covers cacheAside entries that were stored without a tag)
+        await redis.del(pattern);
         return;
     }
 

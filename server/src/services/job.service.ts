@@ -32,7 +32,7 @@ export const getJobs = async (filters: JobFilters) => {
 
     if (isDefaultRequest) {
         const cacheKey = `jobs:list:limit:${limit}`;
-        return cacheAside(cacheKey, 60, async () => {
+        return cacheAside(cacheKey, 300, async () => {
             const jobs = await Job.find({ status: "active" }, JOB_LISTING_PROJECTION)
                 .populate("company", "name logo")
                 .sort({ _id: -1 })
@@ -85,10 +85,13 @@ export const getJobs = async (filters: JobFilters) => {
 
 
 export const getJobById = async (id: string) => {
-    return await Job.findById(id)
-        .populate("company", "name logo industry")
-        .populate("employer", "name")
-        .lean();
+    const cacheKey = `job:detail:${id}`;
+    return cacheAside(cacheKey, 1800, async () => {
+        return await Job.findById(id)
+            .populate("company", "name logo industry")
+            .populate("employer", "name")
+            .lean();
+    }, "jobs:detail");
 };
 
 export const createJob = async (employerId: string, data: Partial<IJob>) => {
@@ -101,6 +104,8 @@ export const createJob = async (employerId: string, data: Partial<IJob>) => {
 
     const job = await Job.create(filteredData);
     await invalidateCache("jobs:list");
+    await invalidateCache("jobs:detail");
+    await invalidateCache(`jobs:employer:${employerId}`);
     return job;
 };
 
@@ -122,6 +127,9 @@ export const updateJob = async (jobId: string, employerId: string, data: Partial
         { new: true, runValidators: true }
     );
     await invalidateCache("jobs:list");
+    await invalidateCache("jobs:detail");
+    await invalidateCache(`job:detail:${jobId}`);
+    await invalidateCache(`jobs:employer:${employerId}`);
     return { success: true, data: updatedJob };
 };
 
@@ -132,22 +140,29 @@ export const deleteJob = async (jobId: string, employerId: string) => {
 
     await Job.findByIdAndDelete(jobId);
     await invalidateCache("jobs:list");
+    await invalidateCache("jobs:detail");
+    await invalidateCache(`job:detail:${jobId}`);
+    await invalidateCache(`jobs:employer:${employerId}`);
     return { success: true };
 };
 
 export const getMyJobs = async (employerId: string, filters: { limit?: number, cursor?: string }) => {
     const { limit = 10, cursor } = filters;
-    const query: QueryFilter<IJob> = { employer: new mongoose.Types.ObjectId(employerId) };
-    if (cursor && mongoose.isValidObjectId(cursor)) query._id = { $lt: new mongoose.Types.ObjectId(cursor) };
+    const cacheKey = `jobs:employer:${employerId}:${cursor || 'first'}:${limit}`;
 
-    const jobs = await Job.find(query, JOB_LISTING_PROJECTION)
-        .populate("company", "name logo")
-        .sort({ _id: -1 })
-        .limit(limit + 1)
-        .lean();
+    return cacheAside(cacheKey, 900, async () => {
+        const query: QueryFilter<IJob> = { employer: new mongoose.Types.ObjectId(employerId) };
+        if (cursor && mongoose.isValidObjectId(cursor)) query._id = { $lt: new mongoose.Types.ObjectId(cursor) };
 
-    const hasMore = jobs.length > limit;
-    if (hasMore) jobs.pop();
-    const nextCursor = hasMore && jobs.length > 0 ? jobs[jobs.length - 1]?._id : null;
-    return { jobs, hasMore, nextCursor };
+        const jobs = await Job.find(query, JOB_LISTING_PROJECTION)
+            .populate("company", "name logo")
+            .sort({ _id: -1 })
+            .limit(limit + 1)
+            .lean();
+
+        const hasMore = jobs.length > limit;
+        if (hasMore) jobs.pop();
+        const nextCursor = hasMore && jobs.length > 0 ? jobs[jobs.length - 1]?._id : null;
+        return { jobs, hasMore, nextCursor };
+    }, `jobs:employer:${employerId}`);
 };

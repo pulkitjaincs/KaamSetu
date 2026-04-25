@@ -209,7 +209,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                         className={`relative flex flex-col z-10 bg-[var(--bg-card)] pointer-events-auto ${
                             isMobile 
                             ? 'w-full h-auto max-h-[85vh] rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]' 
-                            : 'w-[90%] max-w-[500px] rounded-[24px] shadow-2xl border border-[var(--border-color)]'
+                            : 'w-[90%] max-w-[550px] max-h-[90vh] rounded-[24px] shadow-2xl border border-[var(--border-color)]'
                         }`}
                         onClick={e => e.stopPropagation()}
                     >
@@ -217,7 +217,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                         {isMobile && <div className="w-12 h-1.5 rounded-full bg-[var(--border-color)] opacity-30 mx-auto mt-4 mb-2 shrink-0" />}
 
                         {/* Sticky Header */}
-                        <div className="px-6 py-4 flex justify-between items-center border-b border-[var(--border-color)] shrink-0">
+                        <div className={`px-6 py-4 flex justify-between items-center border-b border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 ${!isMobile ? 'rounded-t-[24px]' : 'rounded-t-[32px]'}`}>
                             <h5 className="font-black text-[var(--text-main)] text-xl tracking-tight leading-none mb-0">
                                 {isAddMode ? 'Add Work Experience' : (canEdit ? 'Edit Experience' : 'Experience Details')}
                             </h5>
@@ -249,7 +249,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
 
                                 {/* Visibility Toggle - Status Card */}
                                 {!isAddMode && (
-                                    <div className="group relative p-5 mb-8 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-color)] transition-all hover:border-[var(--primary-main)]/30 overflow-hidden">
+                                    <div className="group relative p-5 mb-6 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-color)] transition-all hover:border-[var(--primary-main)]/30 overflow-hidden">
                                         <div className="absolute top-0 right-0 p-4 opacity-5">
                                             {experience.isVisible !== false ? <Eye size={64} /> : <EyeOff size={64} />}
                                         </div>
@@ -280,7 +280,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
 
                                 {/* Verified Experience - Status Card */}
                                 {isVerified && (
-                                    <div className="p-5 mb-8 rounded-[24px] bg-gradient-to-br from-[#10b981]/10 to-transparent border border-[#10b981]/20 relative overflow-hidden group">
+                                    <div className="p-5 mb-6 rounded-[24px] bg-gradient-to-br from-[#10b981]/10 to-transparent border border-[#10b981]/20 relative overflow-hidden group">
                                         <div className="absolute -right-2 -top-2 opacity-10 group-hover:scale-110 transition-transform">
                                             <BadgeCheck size={80} className="text-[#10b981]" />
                                         </div>
@@ -308,13 +308,13 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                                 )}
 
                                 {/* Form Section Divider */}
-                                <div className="flex items-center gap-3 mb-8">
+                                <div className="flex items-center gap-3 mb-6">
                                     <span className="font-black text-[0.65rem] uppercase tracking-[0.2em] text-[var(--text-muted)] whitespace-nowrap">Experience Details</span>
                                     <div className="grow h-px bg-[var(--border-color)] opacity-50" />
                                 </div>
 
                                 {/* Form Fields */}
-                                <div className="flex flex-col gap-8">
+                                <div className="flex flex-col gap-6 md:gap-5">
                                     <div className="grid gap-6">
                                         <InputField
                                             label="Job Title / Role"
@@ -384,7 +384,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                                         name="description"
                                         value={formData.description}
                                         onChange={handleChange}
-                                        rows={5}
+                                        rows={4}
                                         placeholder="Briefly describe your core responsibilities and any significant achievements in this role..."
                                         disabled={!canEdit && !isAddMode}
                                         sm={true}
@@ -394,7 +394,7 @@ export default function WorkExperienceModal({ show, onClose, experience, onSave 
                         </div>
                         
                         {/* Sticky Footer */}
-                        <div className={`px-6 py-5 border-t border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 flex items-center gap-4 ${isMobile ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]' : ''}`}>
+                        <div className={`px-6 py-5 border-t border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 flex items-center gap-4 ${isMobile ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]' : 'rounded-b-[24px]'}`}>
                             {!isAddMode && canEdit && (
                                 <button
                                     className="w-12 h-12 rounded-2xl flex items-center justify-center text-red-500 border border-red-100 bg-red-50/30 hover:bg-red-50 hover:border-red-200 transition-all active:scale-90 group"

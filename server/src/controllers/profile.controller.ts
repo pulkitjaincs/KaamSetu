@@ -33,6 +33,8 @@ export const updateAvatarUrl = asyncHandler(async (req: Request, res: Response) 
             { upsert: true }
         );
         await invalidateCache(`profile:${req.user._id}`);
+        await invalidateCache(`profile:own:${req.user._id}`);
+        await invalidateCache(`avatar:key:${req.user._id}`);
         return res.status(200).json({ success: true, avatarKey: null, avatarUrl: null });
     }
 
@@ -47,6 +49,8 @@ export const updateAvatarUrl = asyncHandler(async (req: Request, res: Response) 
         { upsert: true }
     );
     await invalidateCache(`profile:${req.user._id}`);
+    await invalidateCache(`profile:own:${req.user._id}`);
+    await invalidateCache(`avatar:key:${req.user._id}`);
     const avatarUrl = await generateReadSignedUrl(avatarKey);
     res.status(200).json({ success: true, avatarKey, avatarUrl });
 });
@@ -92,22 +96,22 @@ export const resolveAvatarUrl = async <T extends SharedProfileFields>(profile: T
 
 export const getMyProfile = asyncHandler(async (req: Request, res: Response) => {
     const isEmployer = req.user.role === 'employer';
+    const cacheKey = `profile:own:${req.user._id}`;
 
-    if (isEmployer) {
-        const profile = await EmployerProfile.findOne({ user: req.user._id })
-            .populate({ path: "company", select: "name logo industry" })
+    const profileData = await cacheAside(cacheKey, 1800, async () => {
+        if (isEmployer) {
+            return await EmployerProfile.findOne({ user: req.user._id })
+                .populate({ path: "company", select: "name logo industry" })
+                .lean();
+        }
+        return await WorkerProfile.findOne({ user: req.user._id })
+            .populate({ path: "workHistory", populate: { path: "company", select: "name logo" } })
             .lean();
+    });
 
-        const resolved = await resolveAvatarUrl(profile, true);
-        return res.status(200).json({ success: true, data: { profile: assembleProfileResponse(resolved as Record<string, unknown> | null, req.user, 'employer') } });
-    }
-
-    const profile = await WorkerProfile.findOne({ user: req.user._id })
-        .populate({ path: "workHistory", populate: { path: "company", select: "name logo" } })
-        .lean();
-
-    const resolved = await resolveAvatarUrl(profile, true);
-    res.status(200).json({ success: true, data: { profile: assembleProfileResponse(resolved as Record<string, unknown> | null, req.user, 'worker') } });
+    const resolved = await resolveAvatarUrl(profileData, true);
+    const role = isEmployer ? 'employer' : 'worker';
+    res.status(200).json({ success: true, data: { profile: assembleProfileResponse(resolved as Record<string, unknown> | null, req.user, role) } });
 });
 
 export const updateMyProfile = asyncHandler(async (req: Request, res: Response) => {
@@ -132,6 +136,8 @@ export const updateMyProfile = asyncHandler(async (req: Request, res: Response) 
             { new: true, upsert: true, setDefaultsOnInsert: true }
         );
         await invalidateCache(`profile:${req.user._id}`);
+        await invalidateCache(`profile:own:${req.user._id}`);
+        await invalidateCache(`user:session:${req.user._id}`);
 
         return res.status(200).json({ success: true, data: { profile } });
     }
@@ -149,6 +155,8 @@ export const updateMyProfile = asyncHandler(async (req: Request, res: Response) 
         { new: true, upsert: true, setDefaultsOnInsert: true }
     );
     await invalidateCache(`profile:${req.user._id}`);
+    await invalidateCache(`profile:own:${req.user._id}`);
+    await invalidateCache(`user:session:${req.user._id}`);
     res.status(200).json({ success: true, data: { profile } });
 });
 

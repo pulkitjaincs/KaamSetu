@@ -86,7 +86,7 @@ export default function ApplicationDetailModal({ show, selectedApp, onClose, get
                         className={`relative flex flex-col z-10 bg-[var(--bg-card)] pointer-events-auto ${
                             isMobile 
                             ? 'w-full h-auto max-h-[85vh] rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]' 
-                            : 'w-[90%] max-w-[500px] rounded-[24px] shadow-2xl border border-[var(--border-color)]'
+                            : 'w-[90%] max-w-[500px] max-h-[90vh] rounded-[24px] shadow-2xl border border-[var(--border-color)]'
                         }`}
                         onClick={e => e.stopPropagation()}
                     >
@@ -94,7 +94,7 @@ export default function ApplicationDetailModal({ show, selectedApp, onClose, get
                         {isMobile && <div className="w-12 h-1.5 rounded-full bg-[var(--border-color)] opacity-30 mx-auto mt-4 mb-2 shrink-0" />}
 
                         {/* Header */}
-                        <div className="px-6 py-5 flex justify-between items-center border-b border-[var(--border-color)] shrink-0">
+                        <div className={`px-6 py-5 flex justify-between items-center border-b border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 ${!isMobile ? 'rounded-t-[24px]' : 'rounded-t-[32px]'}`}>
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-color)] flex items-center justify-center text-[var(--primary-main)]">
                                     <FileText size={20} />
@@ -166,7 +166,7 @@ export default function ApplicationDetailModal({ show, selectedApp, onClose, get
                         </div>
 
                         {/* Footer */}
-                        <div className={`px-6 py-5 border-t border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 ${isMobile ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]' : ''}`}>
+                        <div className={`px-6 py-5 border-t border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 ${isMobile ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]' : 'rounded-b-[24px]'}`}>
                             <Link 
                                 href={`/jobs/${selectedApp.job?._id}`} 
                                 className="relative overflow-hidden group auth-submit-btn !py-3.5 !px-10 rounded-2xl text-sm font-bold hover:opacity-90 active:scale-[0.98] shadow-xl shadow-[var(--primary-main)]/10 flex items-center justify-center gap-2 no-underline"

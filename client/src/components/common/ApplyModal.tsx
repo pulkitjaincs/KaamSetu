@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Send, X, MessageSquareQuote } from 'lucide-react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { TextAreaField } from '@/components/common/FormComponents';
@@ -15,8 +16,11 @@ interface ApplyModalProps {
 export default function ApplyModal({ show, onClose, onApply, applying }: ApplyModalProps) {
     const [coverNote, setCoverNote] = useState("");
     const [isMobile, setIsMobile] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
         const checkMobile = () => setIsMobile(window.innerWidth < 1024);
         checkMobile();
         window.addEventListener('resize', checkMobile);
@@ -26,7 +30,13 @@ export default function ApplyModal({ show, onClose, onApply, applying }: ApplyMo
     useEffect(() => {
         if (!show) return;
 
-        // Lock background scroll
+        // Only lock background scroll on mobile.
+        // On desktop, the fixed overlay + backdrop already blocks interaction.
+        // Locking body overflow on desktop causes framer-motion layout
+        // animations to misfire (the listing panel jumps upward).
+        const mobile = window.innerWidth < 1024;
+        if (!mobile) return;
+
         const originalHtmlOverflow = document.documentElement.style.overflow;
         const originalBodyOverflow = document.body.style.overflow;
 
@@ -61,7 +71,7 @@ export default function ApplyModal({ show, onClose, onApply, applying }: ApplyMo
         }
     };
 
-    return (
+    const modalContent = (
         <AnimatePresence>
             {show && (
                 <div className="fixed inset-0 z-[3000] flex items-end md:items-center justify-center overflow-hidden">
@@ -82,8 +92,8 @@ export default function ApplyModal({ show, onClose, onApply, applying }: ApplyMo
                         exit="exit"
                         variants={variants}
                         className={`relative flex flex-col z-10 bg-[var(--bg-card)] pointer-events-auto ${isMobile
-                                ? 'w-full h-auto max-h-[85vh] rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]'
-                                : 'w-[90%] max-w-[500px] rounded-[24px] shadow-2xl border border-[var(--border-color)]'
+                            ? 'w-full h-auto max-h-[85vh] rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]'
+                            : 'w-[90%] max-w-[500px] max-h-[90vh] rounded-[24px] shadow-2xl border border-[var(--border-color)]'
                             }`}
                         onClick={e => e.stopPropagation()}
                     >
@@ -91,7 +101,7 @@ export default function ApplyModal({ show, onClose, onApply, applying }: ApplyMo
                         {isMobile && <div className="w-12 h-1.5 rounded-full bg-[var(--border-color)] opacity-30 mx-auto mt-4 mb-2 shrink-0" />}
 
                         {/* Sticky Header */}
-                        <div className="px-6 py-5 flex justify-between items-center border-b border-[var(--border-color)] shrink-0">
+                        <div className={`px-6 py-5 flex justify-between items-center border-b border-[var(--border-color)] shrink-0 ${!isMobile ? 'rounded-t-[24px]' : ''}`}>
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-xl bg-[var(--primary-main)]/10 flex items-center justify-center text-[var(--primary-main)]">
                                     <Send size={20} />
@@ -147,7 +157,7 @@ export default function ApplyModal({ show, onClose, onApply, applying }: ApplyMo
                         </div>
 
                         {/* Footer */}
-                        <div className={`px-6 py-5 border-t border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 flex items-center gap-4 ${isMobile ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]' : ''}`}>
+                        <div className={`px-6 py-5 border-t border-[var(--border-color)] bg-[var(--bg-card)] shrink-0 flex items-center gap-4 ${isMobile ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]' : 'rounded-b-[24px]'}`}>
                             <button
                                 className="px-6 py-3 text-[0.8rem] font-black uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors"
                                 onClick={onClose}
@@ -173,4 +183,7 @@ export default function ApplyModal({ show, onClose, onApply, applying }: ApplyMo
             )}
         </AnimatePresence>
     );
+
+    if (!mounted) return null;
+    return createPortal(modalContent, document.body);
 }

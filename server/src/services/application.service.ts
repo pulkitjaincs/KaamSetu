@@ -3,6 +3,7 @@ import Job from "../models/Job.model.js";
 import WorkerProfile from "../models/WorkerProfile.model.js";
 import { generateReadSignedUrl } from "../config/s3.js";
 import { AppError } from "../types/error.js";
+import { cacheAside, invalidateCache } from "../utils/cache.js";
 import mongoose, { QueryFilter } from "mongoose";
 import { hiredQueue } from "../queues/hired.queue.js";
 import type { PopulatedJob, PopulatedApplication } from "../types/index.js";
@@ -29,6 +30,11 @@ export const applyToJob = async (jobId: string, workerId: string, coverNote?: st
         await Job.findByIdAndUpdate(jobId, { $inc: { applicationsCount: 1 } }, { session });
 
         await session.commitTransaction();
+
+        // Invalidate after successful commit
+        await invalidateCache(`applicants:${jobId}`);
+        await invalidateCache(`job:detail:${jobId}`);
+
         return application;
     } catch (error) {
         await session.abortTransaction();
@@ -58,42 +64,49 @@ export const getMyApplications = async (workerId: string, filters: { limit?: num
 export const getJobApplicants = async (jobId: string, employerId: string, filters: { limit?: number, cursor?: string }) => {
     const { limit = 10, cursor } = filters;
 
+    // Authorization check must always hit DB
     const job = await Job.findById(jobId);
     if (!job) return { notFound: true };
     if (job.employer.toString() !== employerId) return { notAuthorized: true };
 
-    const query: QueryFilter<IApplication> = { job: jobId };
-    if (cursor && mongoose.isValidObjectId(cursor)) query._id = { $lt: new mongoose.Types.ObjectId(cursor) };
+    const cacheKey = `applicants:${jobId}:${cursor || 'first'}:${limit}`;
 
-    const applications = await Application.find(query)
-        .populate("applicant", "name phone email")
-        .sort({ _id: -1 })
-        .limit(limit + 1)
-        .lean() as unknown as (Omit<IApplication, 'applicant'> & { _id: mongoose.Types.ObjectId; applicant: { _id: mongoose.Types.ObjectId; name: string; phone?: string; email?: string; avatarUrl?: string | null } })[];
+    const data = await cacheAside(cacheKey, 300, async () => {
+        const query: QueryFilter<IApplication> = { job: jobId };
+        if (cursor && mongoose.isValidObjectId(cursor)) query._id = { $lt: new mongoose.Types.ObjectId(cursor) };
 
-    const hasMore = applications.length > limit;
-    if (hasMore) applications.pop();
-    const nextCursor = hasMore && applications.length > 0 ? applications[applications.length - 1]?._id : null;
+        const applications = await Application.find(query)
+            .populate("applicant", "name phone email")
+            .sort({ _id: -1 })
+            .limit(limit + 1)
+            .lean() as unknown as (Omit<IApplication, 'applicant'> & { _id: mongoose.Types.ObjectId; applicant: { _id: mongoose.Types.ObjectId; name: string; phone?: string; email?: string; avatarUrl?: string | null } })[];
 
-    const applicantIds = applications.map(app => app.applicant?._id).filter(id => id);
-    const profiles = await WorkerProfile.find({ user: { $in: applicantIds } }, "user avatar isAvatarHidden").lean();
+        const hasMore = applications.length > limit;
+        if (hasMore) applications.pop();
+        const nextCursor = hasMore && applications.length > 0 ? applications[applications.length - 1]?._id : null;
 
-    const avatarMap: Record<string, string> = {};
-    for (const profile of profiles) {
-        if (profile.avatar && !profile.isAvatarHidden) {
-            avatarMap[profile.user.toString()] = profile.avatar.startsWith('http') 
-                ? profile.avatar 
-                : await generateReadSignedUrl(profile.avatar);
+        const applicantIds = applications.map(app => app.applicant?._id).filter(id => id);
+        const profiles = await WorkerProfile.find({ user: { $in: applicantIds } }, "user avatar isAvatarHidden").lean();
+
+        const avatarMap: Record<string, string> = {};
+        for (const profile of profiles) {
+            if (profile.avatar && !profile.isAvatarHidden) {
+                avatarMap[profile.user.toString()] = profile.avatar.startsWith('http') 
+                    ? profile.avatar 
+                    : await generateReadSignedUrl(profile.avatar);
+            }
         }
-    }
 
-    for (const app of applications) {
-        if (app.applicant) {
-            app.applicant.avatarUrl = avatarMap[app.applicant._id.toString()] || null;
+        for (const app of applications) {
+            if (app.applicant) {
+                app.applicant.avatarUrl = avatarMap[app.applicant._id.toString()] || null;
+            }
         }
-    }
 
-    return { data: { applications, hasMore, nextCursor } };
+        return { applications, hasMore, nextCursor };
+    }, `applicants:${jobId}`);
+
+    return { data };
 };
 
 export const updateStatus = async (applicationId: string, employerId: string, status: string, requestId?: string) => {
@@ -112,6 +125,10 @@ export const updateStatus = async (applicationId: string, employerId: string, st
         },
         { new: true }
     );
+
+    // Invalidate applicant list cache for this job
+    const jobId = application.job._id || application.job;
+    await invalidateCache(`applicants:${jobId}`);
 
     if (status === "hired") {
         await hiredQueue.add(
@@ -136,6 +153,12 @@ export const withdraw = async (applicationId: string, workerId: string) => {
         await Application.findByIdAndDelete(applicationId, { session });
 
         await session.commitTransaction();
+
+        // Invalidate after successful commit
+        const jobId = application.job.toString();
+        await invalidateCache(`applicants:${jobId}`);
+        await invalidateCache(`job:detail:${jobId}`);
+
         return { success: true };
     } catch (error) {
         await session.abortTransaction();
